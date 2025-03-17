@@ -1,5 +1,7 @@
 import pandas as pd
 import re
+import psycopg2
+from datetime import datetime
 
 def clean_numeric_value(value):
     """ Nettoie et convertit une valeur en float en supprimant les espaces et la devise. """
@@ -100,5 +102,4 @@ def extract_data(file_path):
 
 
 file_path = "2.xlsx" 
-#data = extract_data(file_path)
-print("Données extraites :", extract_data(file_path))
+data = extract_data(file_path)
