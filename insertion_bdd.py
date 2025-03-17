@@ -27,11 +27,12 @@ def process_and_insert_data(user_id, file_path, projet_id):
 
         #requete pour l'insertion du rapport journalier
         query = """
-        INSERT INTO rapport_journalier (id_projet,date,daily_cost,profondeur,fichier_excel,userid)
-        VALUES (%s, %s, %s,%s, %s, %s) RETURNING id;
+        INSERT INTO rapport_journalier (id_projet,date,daily_cost,profondeur,fichier_excel,userid,phase)
+        VALUES (%s, %s, %s,%s, %s, %s,%s) RETURNING id;
         """
-        cur.execute(query, (projet_id,data["Date"],data["Daily Cost"],data["Depth @ 24h"],file_data,user_id))
+        cur.execute(query, (projet_id,data["Date"],data["Daily Cost"],data["Depth @ 24h"],file_data,user_id,data["BIT SIZE"]))
         rapport_journalier_id = cur.fetchone()[0]
+        print(data["BIT SIZE"])
         print(f"Fichier inséré avec succès ! ID du rapport journalier: {rapport_journalier_id}")
 
     #insertion des operations du rapport journalier
