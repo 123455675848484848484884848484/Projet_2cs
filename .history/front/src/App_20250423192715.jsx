@@ -1,10 +1,10 @@
 import './App.css';
 import React from "react";
-import LancerPuit from './LancerPuit';
-import InformationPuit from './InformationPuit';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import MesPuits from './MesPuits'; 
+import LancerPuit from './LancerPuit';
+import InformationPuit from './InformationPuit';
+import MesPuits from './MesPuits'; // ✅ assure-toi que ce fichier existe
 
 function App() {
   return (
