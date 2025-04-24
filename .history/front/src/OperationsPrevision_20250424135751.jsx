@@ -1,0 +1,132 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+
+const OperationsPrevision = () => {
+  const [operations, setOperations] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Simule les opérations ramenées de la BDD
+    const fetchedOperations = [
+      { nom: "Pompage", cout: '', delai: '' },
+      { nom: "Carottage", cout: '', delai: '' },
+      { nom: "Nettoyage", cout: '', delai: '' },
+      { nom: "Test de pression", cout: '', delai: '' },
+    ];
+    setOperations(fetchedOperations);
+  }, []);
+
+  const handleInputChange = (index, field, value) => {
+    const updatedOperations = [...operations];
+    updatedOperations[index][field] = value;
+    setOperations(updatedOperations);
+  };
+
+  const handleValider = () => {
+    console.log("Opérations soumises :", operations);
+    // navigate("/prochaine-etape");
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f9f9f9] px-28 pt-12 pb-20">
+      <h1 className="text-[54px] font-bold text-orange-600 leading-[60px] mb-12">
+        Vos prévisions
+      </h1>
+
+      <div className="flex items-start gap-16">
+        {/* Étapes à gauche */}
+        <div className="flex flex-col items-start gap-6">
+          <Link to="/phasepre" className="flex items-center gap-4">
+            <div className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
+              location.pathname === "/phasepre"
+                ? "bg-gray-200 border-orange-500 text-black"
+                : "bg-gray-100 text-gray-400 border-gray-300"
+            }`}>
+              1
+            </div>
+            <span className={`font-semibold text-2xl ${
+              location.pathname === "/phasepre"
+                ? "text-orange-600"
+                : "text-gray-400"
+            }`}>
+              Phases
+            </span>
+          </Link>
+
+          <div className="h-[60px] w-[2px] bg-orange-500 ml-8" />
+
+          <Link to="/operations" className="flex items-center gap-4">
+            <div className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
+              location.pathname === "/operations"
+                ? "bg-gray-200 border-orange-500 text-black"
+                : "bg-gray-100 text-gray-400 border-gray-300"
+            }`}>
+              2
+            </div>
+            <span className={`font-semibold text-2xl ${
+              location.pathname === "/operations"
+                ? "text-orange-600"
+                : "text-gray-400"
+            }`}>
+              Opérations
+            </span>
+          </Link>
+        </div>
+
+        {/* Tableau à droite */}
+        <div className="flex-1">
+          <div className="bg-[#f3f8fa] rounded-md shadow-md overflow-hidden">
+            <table className="w-full text-left text-[16px]">
+              <thead className="bg-white">
+                <tr className="text-gray-800">
+                  <th className="p-4 font-semibold">Opération</th>
+                  <th className="p-4 font-semibold">Coût prévu</th>
+                  <th className="p-4 font-semibold">Délai</th>
+                </tr>
+              </thead>
+              <tbody>
+                {operations.map((op, index) => (
+                  <tr key={index} className="border-t border-gray-300">
+                    <td className="p-4">{op.nom}</td>
+                    <td className="p-4">
+                      <input
+                        type="number"
+                        value={op.cout}
+                        onChange={(e) => handleInputChange(index, "cout", e.target.value)}
+                        className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-0"
+                        placeholder="DA"
+                        required
+                      />
+                    </td>
+                    <td className="p-4">
+                      <input
+                        type="number"
+                        value={op.delai}
+                        onChange={(e) => handleInputChange(index, "delai", e.target.value)}
+                        className="w-full px-2 py-1 border rounded focus:outline-none focus:ring-0"
+                        placeholder="jours"
+                        required
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="flex justify-end mt-8">
+          <button
+  onClick={() => navigate("/mespuits")}
+  className="bg-orange-600 hover:bg-orange-700 text-white font-semibold text-[16px] px-10 py-3 rounded-md"
+>
+  Valider
+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default OperationsPrevision;

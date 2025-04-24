@@ -8,7 +8,7 @@ import MesPuits from './MesPuits';
 import PhasesPrevision from './PhasesPrevision';
 import OperationsPrevision from "./OperationsPrevision";
 import FichierJournalier from './FichierJournalier';
-import SignalerProbleme from './SignalerProbleme'
+import SIgnalerProbleme from './SignalerProbleme'
 
 function App() {
   return (

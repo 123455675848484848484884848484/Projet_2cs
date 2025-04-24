@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);

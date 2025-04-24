@@ -8,7 +8,6 @@ import MesPuits from './MesPuits';
 import PhasesPrevision from './PhasesPrevision';
 import OperationsPrevision from "./OperationsPrevision";
 import FichierJournalier from './FichierJournalier';
-import SignalerProbleme from './SignalerProbleme'
 
 function App() {
   return (
@@ -21,7 +20,7 @@ function App() {
      <Route path="/operations" element={<OperationsPrevision />} />
      <Route path="/login" element={<Login />} />
      <Route path="/file" element={<FichierJournalier />} />
-     <Route path="/signal" element={<SignalerProbleme />} />
+
   </Routes>
     </Router> 
  

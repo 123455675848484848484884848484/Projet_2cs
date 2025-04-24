@@ -34,14 +34,14 @@ const InformationPuit = () => {
   return (
     <div className="flex h-screen px-20 bg-[#f9f9f9] items-center">
       {/* Colonne gauche : texte */}
-      <div className="w-1/2 pr-10 h-full flex flex-col justify-center">
-  <h1 className="text-[48px] font-bold leading-[56px] text-orange-600 mb-6">
-    Information sur <br /> le puit
-  </h1>
-  <p className="text-[16px] text-gray-700 leading-[24px]">
-    For marketplace sellers looking to grow their business, metaverse offers the best platform.
-  </p>
-</div>
+      <div className="w-1/2 pr-10">
+        <h1 className="text-[48px] font-bold leading-[56px] text-orange-600 mb-6">
+          Information sur <br /> le puit
+        </h1>
+        <p className="text-[16px] text-gray-700 leading-[24px]">
+          For marketplace sellers looking to grow their business, metaverse offers the best platform.
+        </p>
+      </div>
 
       {/* Colonne droite : formulaire */}
       <form onSubmit={handleSubmit} className="w-1/2 flex flex-col gap-6 max-w-[480px]">
