@@ -116,12 +116,21 @@ const OperationsPrevision = () => {
           </div>
 
           <div className="flex justify-end mt-8">
-            <button
-              onClick={handleValider}
-              className="bg-orange-600 hover:bg-orange-700 text-white px-10 py-3 rounded-md font-semibold text-[16px]"
-            >
-              Valider
-            </button>
+          <button
+  onClick={() => {
+    const tousChampsRemplis = operations.every(
+      (op) => op.nom && op.cout && op.delai
+    );
+    if (tousChampsRemplis) {
+      navigate("/mespuits");
+    } else {
+      alert("Veuillez remplir tous les champs pour chaque opération.");
+    }
+  }}
+  className="bg-orange-600 hover:bg-orange-700 text-white font-semibold text-[16px] px-10 py-3 rounded-md"
+>
+  Valider
+</button>
           </div>
         </div>
       </div>
