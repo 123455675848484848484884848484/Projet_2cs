@@ -24,8 +24,16 @@ const PhasesPrevision = () => {
   };
 
   const handleValider = () => {
-    console.log("Prévisions soumises :", phases);
-    navigate("/operations");
+    const tousChampsRemplis = phases.every(
+      (phase) => phase.cout && phase.delai && phase.profondeur
+    );
+  
+    if (tousChampsRemplis) {
+      console.log("Prévisions soumises :", phases);
+      navigate("/operations");
+    } else {
+      alert("Veuillez remplir tous les champs pour chaque phase.");
+    }
   };
 
   return (
@@ -125,6 +133,7 @@ const PhasesPrevision = () => {
               onClick={handleValider}
               className="bg-orange-600 hover:bg-orange-700 text-white px-10 py-3 rounded-md font-semibold text-[16px]"
             >
+                
               Valider
             </button>
           </div>

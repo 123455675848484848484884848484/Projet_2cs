@@ -88,12 +88,7 @@ const MesPuits = () => {
         </table>
       </div>
 
-      {/* Bouton suivant */}
-      <div className="flex justify-end mt-10">
-        <button className="w-[150px] h-[52px] bg-orange-600 hover:bg-orange-700 text-white text-[16px] font-semibold rounded-md transition">
-          Suivant
-        </button>
-      </div>
+      
     </div>
   );
 };
