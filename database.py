@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker , declarative_base
 
 # Remplace par ta vraie URL Oracle
-DATABASE_URL = "oracle+oracledb://SYSTEM:loveyourself1@localhost:1522/?service_name=XE"
+DATABASE_URL = "oracle+oracledb://SYSTEM:root@localhost:1521/?service_name=XE"
 
 
 engine = create_engine(DATABASE_URL)
