@@ -128,7 +128,7 @@ const SignalerProbleme = () => {
                     type="text"
                     value={row.probleme}
                     onChange={(e) => handleChange(index, "probleme", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600"
+                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600 focus:text-orange-600"
                   />
                 </td>
                 <td className="px-4 py-2 align-top">
@@ -136,7 +136,7 @@ const SignalerProbleme = () => {
                     type="text"
                     value={row.solution}
                     onChange={(e) => handleChange(index, "solution", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600"
+                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600 focus:text-orange-600"
                   />
                 </td>
                 <td className="px-4 py-2 align-top">
@@ -165,8 +165,8 @@ const SignalerProbleme = () => {
 
       <h2 className="text-xl font-semibold mb-2">Autres problèmes</h2>
       <textarea
-  className="w-full h-24 border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600"
-  placeholder=""
+        className="w-full h-24 border border-gray-300 rounded-md p-3 mb-8 focus:outline-none focus:ring-0 focus:border-orange-600 focus:text-orange-600"
+        placeholder=""
         value={autresProblemes}
         onChange={(e) => setAutresProblemes(e.target.value)}
       ></textarea>

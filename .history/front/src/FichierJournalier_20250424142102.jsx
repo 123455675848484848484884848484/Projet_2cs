@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
-const SignalerProbleme = () => {
+const FichierJournalier = () => {
   const [problems, setProblems] = useState([
     { operation: [], probleme: "", solution: "", file: null },
   ]);
   const [autresProblemes, setAutresProblemes] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [openRows, setOpenRows] = useState([false]);
 
   const handleChange = (index, field, value) => {
@@ -64,11 +65,17 @@ const SignalerProbleme = () => {
   return (
     <div className="min-h-screen px-24 py-12 bg-[#f4f4f4]">
       <h1 className="text-[54px] font-bold text-orange-600 leading-[60px] mb-2">
-        Signaler un problème
+        Fichier journalier
       </h1>
       <p className="text-gray-700 mb-8">
         For marketplace sellers looking to grow their business, metaverse offers the best platform.
       </p>
+
+      <label className="bg-[#2f5744] cursor-pointer text-white text-center text-[20px] font-semibold py-5 rounded-md flex justify-center items-center gap-4 mb-10">
+        <img src="/file.png" alt="icon" className="w-6 h-6" />
+        Importer le fichier journalier
+        <input type="file" className="hidden" onChange={(e) => setSelectedFiles([...selectedFiles, e.target.files[0]])} />
+      </label>
 
       <h2 className="text-xl font-semibold mb-4">Indiquer un problème</h2>
       <div className="overflow-x-auto mb-6">
@@ -128,7 +135,7 @@ const SignalerProbleme = () => {
                     type="text"
                     value={row.probleme}
                     onChange={(e) => handleChange(index, "probleme", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600"
+                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600 focus:text-orange-600"
                   />
                 </td>
                 <td className="px-4 py-2 align-top">
@@ -136,7 +143,7 @@ const SignalerProbleme = () => {
                     type="text"
                     value={row.solution}
                     onChange={(e) => handleChange(index, "solution", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600"
+                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600 focus:text-orange-600"
                   />
                 </td>
                 <td className="px-4 py-2 align-top">
@@ -165,8 +172,8 @@ const SignalerProbleme = () => {
 
       <h2 className="text-xl font-semibold mb-2">Autres problèmes</h2>
       <textarea
-  className="w-full h-24 border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600"
-  placeholder=""
+        className="w-full h-24 border border-gray-300 rounded-md p-3 mb-8 focus:outline-none focus:ring-0 focus:border-orange-600 focus:text-orange-600"
+        placeholder=""
         value={autresProblemes}
         onChange={(e) => setAutresProblemes(e.target.value)}
       ></textarea>
@@ -183,4 +190,4 @@ const SignalerProbleme = () => {
   );
 };
 
-export default SignalerProbleme;
+export default FichierJournalier;
