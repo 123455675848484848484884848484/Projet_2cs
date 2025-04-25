@@ -19,3 +19,5 @@ def create_utilisateur(user: UtilisateurCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
