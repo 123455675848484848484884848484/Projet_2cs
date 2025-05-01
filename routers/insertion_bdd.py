@@ -4,18 +4,21 @@ sys.path.append(r"C:/Users/User/Desktop/projet/Projet_2cs")
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 import pandas as pd
-from fastapi import APIRouter,UploadFile,Form,File,HTTPException
+from fastapi import APIRouter, UploadFile, Form, File, HTTPException, Depends
 from routers.extraction_op import extract_costs_and_operations
 from routers.extraction_rapport import extract_data
 from database import get_db
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker , declarative_base
-from models import RapportJournalier,OperationJournaliere,Phase,Operation
+from models import RapportJournalier,OperationJournaliere,Phase,Operation,Incident
 from datetime import datetime
 from sqlalchemy import func
-import os
 
+# Routes
+router_probleme = APIRouter(prefix="/probleme", tags=["probleme"])
+router_extraction = APIRouter(prefix="/extraction", tags=["extraction"])
+router_recup = APIRouter(prefix="/recuperation", tags=["recuperation"])
+router_incident = APIRouter(prefix="/incident",tags=["incident"])
 
+#Functions and apis 
 def get_or_create_operation(db: Session, designation: str):
     existing_operation = db.query(Operation).filter(func.to_char(Operation.designation) == designation).first()
     
@@ -29,16 +32,10 @@ def get_or_create_operation(db: Session, designation: str):
         db.refresh(new_operation)  
         return new_operation.id
     
-router_extraction = APIRouter(prefix="/extraction",
-    tags=["extraction"]
-)
 
-router_recup = APIRouter(prefix="/recuperation",
-    tags=["recuperation"]
-)
 
 @router_extraction.post("/")
-async def process_and_insert_data(
+async def inserer_rapport_journalier(
     user_id: int = Form(...),  
     projet_id: int = Form(...),  
     file: UploadFile = File(...)  
@@ -74,7 +71,6 @@ async def process_and_insert_data(
         except ValueError:
             profondeur = None
 
-    print("Profondeur:", profondeur)
 
     rapport_journalier = RapportJournalier(
         id_projet=projet_id,
@@ -126,7 +122,7 @@ async def process_and_insert_data(
 
 
 @router_recup.get("/")
-def send_excel_file(rapport_id: int):
+def recuperer_rapport_excel(rapport_id: int):
     try:
         db: Session = next(get_db())
         rapport = db.query(RapportJournalier).filter(RapportJournalier.id == rapport_id).first()
@@ -146,3 +142,65 @@ def send_excel_file(rapport_id: int):
     except Exception as e:
         print(f"❌ Erreur lors de l'envoi du fichier : {e}")
         raise HTTPException(status_code=500, detail="Erreur interne lors de l'envoi du fichier.")
+    
+
+
+@router_probleme.post("/")
+async def inserer_probleme_operation_journaliere(
+    operation_journaliere_id: int = Form(...),
+    probleme: str = Form(...),
+    solution: str = Form(...),
+    fichier_joint: UploadFile = File(None) 
+):
+    db: Session = next(get_db())
+    try:
+        contenu_fichier = await fichier_joint.read() if fichier_joint else None
+
+        daily_op = db.query(OperationJournaliere).filter(OperationJournaliere.id == operation_journaliere_id).first()
+        if not daily_op:
+            raise HTTPException(status_code=404, detail="Operation journaliere non trouvé.")
+
+        daily_op.probleme = probleme
+        daily_op.solution = solution
+        daily_op.fichier_joint = contenu_fichier
+
+        db.commit()
+        return {"message": "📝 Problème ajouté avec succès."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur serveur : {e}")
+ 
+
+@router_incident.post("/")
+async def inserer_incident(
+    id_projet: int = Form(...),
+    utilisateur: int = Form(...),
+    date_incident: str = Form(...),  # Format attendu : "YYYY-MM-DD"
+    fichier_joint: UploadFile = File(None)
+):
+    db: Session = next(get_db())
+    try:
+        print(date_incident)
+        contenu_fichier = await fichier_joint.read() if fichier_joint else None
+
+        # Vérification et conversion de la date
+        try:
+            date_incident_parsed = datetime.strptime(date_incident, "%Y-%m-%d").date()
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Format de date invalide. Utilisez YYYY-MM-DD.")
+
+        nouvel_incident = Incident(
+            id_projet=id_projet,
+            utilisateur=utilisateur,
+            date_incident=date_incident_parsed,
+            fichier_joint=contenu_fichier
+        )
+
+        db.add(nouvel_incident)
+        db.commit()
+        db.refresh(nouvel_incident)
+
+        return {"message": "🚨 Incident inséré avec succès.", "id_incident": nouvel_incident.id}
+    
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Erreur lors de l'insertion : {str(e)}")
