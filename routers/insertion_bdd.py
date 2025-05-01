@@ -17,6 +17,7 @@ router_probleme = APIRouter(prefix="/probleme", tags=["probleme"])
 router_extraction = APIRouter(prefix="/extraction", tags=["extraction"])
 router_recup = APIRouter(prefix="/recuperation", tags=["recuperation"])
 router_incident = APIRouter(prefix="/incident",tags=["incident"])
+router_operation_journaliere=APIRouter(prefix="/op_journaliere",tags=["op_journaliere"])
 
 #Functions and apis 
 def get_or_create_operation(db: Session, designation: str):
@@ -116,7 +117,7 @@ async def inserer_rapport_journalier(
             print(f"Erreur lors de l'ajout de l'opération : {e}")
 
     print("Insertion réussie ✅")
-    return {"message": "Données traitées avec succès", "user_id": user_id, "projet_id": projet_id}
+    return {"message": "Données traitées avec succès", "user_id": user_id, "projet_id": projet_id, "rapport_id":rapport_journalier.id}
 
 
 
@@ -204,3 +205,28 @@ async def inserer_incident(
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Erreur lors de l'insertion : {str(e)}")
+
+
+@router_operation_journaliere.get("/")
+def get_operation_journaliere_id_route(
+    id_rapport: int,
+    designation_operation: str,
+):
+    db: Session = next(get_db())
+    # Étape 1 : Récupérer l'opération par sa désignation
+    operation = db.query(Operation).filter(Operation.designation == designation_operation).first()
+    if not operation:
+        raise HTTPException(status_code=404, detail="Opération introuvable")
+
+    # Étape 2 : Récupérer l'opération journalière
+    op_journaliere = db.query(OperationJournaliere).filter(
+        OperationJournaliere.id_rapport == id_rapport,
+        OperationJournaliere.id_operation == operation.id
+    ).first()
+
+    if not op_journaliere:
+        raise HTTPException(status_code=404, detail="Opération journalière non trouvée")
+
+    return {"id": op_journaliere.id}
+
+

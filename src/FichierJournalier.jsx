@@ -4,6 +4,7 @@ const FichierJournalier = () => {
   const [problems, setProblems] = useState([
     { operation: [], probleme: "", solution: "", file: null },
   ]);
+
   const [autresProblemes, setAutresProblemes] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [openRows, setOpenRows] = useState([false]);
@@ -19,10 +20,57 @@ const FichierJournalier = () => {
     setOpenRows([...openRows, false]);
   };
 
-  const handleSubmit = () => {
-    console.log("Problèmes:", problems);
-    console.log("Autres:", autresProblemes);
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+      const fichierExcel = selectedFiles[0];
+      formData.append("user_id", 12); // A FAIRE PASSER APRES !!!
+      formData.append("projet_id", 2); // A FAIRE PASSER APRES !!!
+      formData.append("file", fichierExcel);
+  
+      const res = await fetch("http://127.0.0.1:8000/extraction", {
+        method: "POST",
+        body: formData,
+      });
+  
+      const data = await res.json();
+      const rapportId = data.rapport_id; 
+      console.log(rapportId)
+  
+      for (const p of problems) {
+        const res = await fetch(`http://127.0.0.1:8000/op_journaliere?id_rapport=${rapportId}&designation_operation=${encodeURIComponent(p.operation[0])}`);
+        
+        if (!res.ok) {
+          console.error("Échec récupération opération journalière pour :", p.operation[0]);
+          continue;
+        }
+      
+        const { id: operationJournaliereId } = await res.json();
+      
+        const problemForm = new FormData();
+        problemForm.append("probleme", p.probleme);
+        problemForm.append("solution", p.solution);
+        problemForm.append("operation_journaliere_id", operationJournaliereId);
+        if (p.file) {
+          problemForm.append("fichier_joint", p.file);
+        }
+      
+        await fetch("http://127.0.0.1:8000/probleme", {
+          method: "POST",
+          body: problemForm,
+        });
+      }
+      
+  
+      alert("Fichier journalier et problèmes envoyés !");
+    } catch (err) {
+      console.error(err);
+      alert("Erreur lors de l’enregistrement");
+    }
   };
+  
+
+
 
   const handleFileUpload = (index, file) => {
     const updated = [...problems];
@@ -39,7 +87,7 @@ const FichierJournalier = () => {
       label: "Logging, Completion & Post-Drill",
       items: [
         "Coring",
-        "Mud Logging",
+        "MUD LOGGING",
         "Wire Line Logging",
         "Completion",
         "Fracturation",
@@ -58,7 +106,7 @@ const FichierJournalier = () => {
     },
     {
       label: "Non principales",
-      items: ["Transport", "Security", "Telecom", "Rig Move", "Drilling", "DST"],
+      items: ["Transport", "SECURITY", "TELECOM", "Rig Move", "Drilling", "DST"],
     },
   ];
 
