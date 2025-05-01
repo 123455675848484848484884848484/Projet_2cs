@@ -4,6 +4,10 @@
 /node_modules
 /.pnp
 .pnp.js
+/venv
+/.idea
+/__pycache__
+/routers/__pycache__
 
 # testing
 /coverage
