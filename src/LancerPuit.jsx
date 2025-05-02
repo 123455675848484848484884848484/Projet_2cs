@@ -1,14 +1,35 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+import React, { useState , useEffect } from "react";
+import { useNavigate  } from "react-router-dom";
 
 const LancerPuit = () => {
     const [dateDebut, setDateDebut] = useState("");
     const navigate = useNavigate(); // ✅ déplacer ici
+    const userid = localStorage.getItem('user_id');
+    
+      useEffect(() => {
+        const verifyToken = async () => {
+          const token = localStorage.getItem('token');
+            console.log(token)
+          try {
+            const response = await fetch(`http://127.0.0.1:8001/auth/verify_token/${token}`);
+    
+            if (!response.ok) {
+              throw new Error('Token verification failed');
+            }
+          } catch (error) {
+            localStorage.removeItem('token');
+            navigate('/login');
+          }
+        };
+    
+        verifyToken();
+      }, [navigate]);
   
     const handleSubmit = (e) => {
       e.preventDefault();
       if (dateDebut) {
-        navigate("/info-puit"); // ✅ navigation OK
+        navigate("/info-puit", { state: { dateDebut } });
       } else {
         alert("Veuillez sélectionner une date !");
       }

@@ -1,7 +1,30 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MesPuits = () => {
   const [puits, setPuits] = useState([]);
+  const userid = localStorage.getItem('user_id');
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      const token = localStorage.getItem('token');
+        console.log(token)
+      try {
+        const response = await fetch(`http://127.0.0.1:8001/auth/verify_token/${token}`);
+
+        if (!response.ok) {
+          throw new Error('Token verification failed');
+        }
+      } catch (error) {
+        localStorage.removeItem('token');
+        navigate('/login');
+      }
+    };
+
+    verifyToken();
+  }, [navigate]);
 
   // Simulation d'une récupération depuis une BDD / API
   useEffect(() => {

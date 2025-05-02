@@ -1,20 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
+ 
 const OperationsPrevision = () => {
   const [operations, setOperations] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+  const { projetid } = location.state || {}; 
+
+  
 
   useEffect(() => {
-    // Simule les opérations ramenées de la BDD
-    const fetchedOperations = [
-      { nom: "Pompage", cout: '', delai: '' },
-      { nom: "Carottage", cout: '', delai: '' },
-      { nom: "Nettoyage", cout: '', delai: '' },
-      { nom: "Test de pression", cout: '', delai: '' },
-    ];
-    setOperations(fetchedOperations);
+    // Appel API pour récupérer les opérations
+    const fetchOperations = async () => {
+      try {
+        const response = await fetch(" http://127.0.0.1:8001/operation");
+        const data = await response.json();
+        console.log(data) ;
+        setOperations(data);
+      } catch (error) {
+        console.error("Erreur de récupération des opérations:", error);
+      }
+    };
+
+    fetchOperations();
   }, []);
 
   const handleInputChange = (index, field, value) => {
@@ -23,10 +32,32 @@ const OperationsPrevision = () => {
     setOperations(updatedOperations);
   };
 
-  const handleValider = () => {
-    console.log("Opérations soumises :", operations);
-    // navigate("/prochaine-etape");
+  const handleSave = async () => {
+    const operationsData = operations.map((op) => ({
+      id_operation: op.id,
+      cout_prevu: parseFloat(op.cout),
+      delais: parseInt(op.delai),
+    }));
+  
+    try {
+      const response = await fetch(`http://127.0.0.1:8001/previsions/operations/${projetid}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(operationsData),
+       
+
+      });
+      console.log(JSON.stringify(operationsData));
+      const result = await response.json();
+      console.log("Opérations enregistrées:", result);
+      navigate("/mespuits");
+    } catch (error) {
+      console.error("Erreur lors de l'enregistrement des opérations:", error);
+    }
   };
+  
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] px-28 pt-12 pb-20">
@@ -88,7 +119,7 @@ const OperationsPrevision = () => {
               <tbody>
                 {operations.map((op, index) => (
                   <tr key={index} className="border-t border-gray-300">
-                    <td className="p-4">{op.nom}</td>
+                    <td className="p-4">{op.designation}</td>
                     <td className="p-4">
                       <input
                         type="number"
@@ -119,10 +150,11 @@ const OperationsPrevision = () => {
           <button
   onClick={() => {
     const tousChampsRemplis = operations.every(
-      (op) => op.nom && op.cout && op.delai
+      (op) =>  op.cout && op.delai
     );
     if (tousChampsRemplis) {
-      navigate("/mespuits");
+      handleSave();
+      
     } else {
       alert("Veuillez remplir tous les champs pour chaque opération.");
     }

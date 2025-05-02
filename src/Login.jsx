@@ -1,108 +1,137 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("Kr_guefaifia@esi.dz");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState(""); 
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!email.includes("@")) {
-      setError("L'adresse email doit contenir un '@'");
-      return;
+  const validateForm = () => {
+    if (!email || !password) {
+        setError('Email and password are required');
+        return false;
     }
-    setError("");
-    alert("Connexion réussie !");
+    setError(''); 
+    return true;
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!validateForm()) return;
+    setLoading(true);
+  
+    const formDetails = new URLSearchParams();
+    formDetails.append('username', email);
+    formDetails.append('password', password);
+  
+    try {
+      const response = await fetch('http://localhost:8001/auth/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formDetails,
+      });
+  
+      setLoading(false);
+      
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('user_id', data.user_id);
+        const userid = localStorage.getItem('user_id');
+        console.log(data.user_id);
+        navigate('/MesPuits');
+      } else {
+        const errorData = await response.json();
+        // Si errorData est un objet, on le convertit en une chaîne de caractères
+        const errorMessage = typeof errorData === 'object' 
+          ? JSON.stringify(errorData) // Convertir en chaîne si c'est un objet
+          : errorData.detail || 'Authentication failed!';
+        setError(errorMessage);
+      }
+    } catch (error) {
+      setLoading(false);
+      setError('An error occurred. Please try again later.');
+    }
+  };
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-    <div className="flex w-[900px] overflow-hidden shadow-md rounded-[30px] bg-white">
-      {/* Image gauche */}
-      <div className="w-1/2">
-        <img
-          src="/login.png"
-          alt="worker"
-          className="h-full w-full object-cover"
-          id="login-image"
-        />
-      </div>
+      <div className="flex w-[900px] overflow-hidden shadow-md rounded-[30px] bg-white">
+        {/* Left image */}
+        <div className="w-1/2">
+          <img
+            src="/login.png"
+            alt="worker"
+            className="h-full w-full object-cover"
+            id="login-image"
+          />
+        </div>
   
-      {/* Formulaire */}
-      <div className="w-1/2 flex flex-col justify-center px-10 py-12">
-        <h2
-          className="text-2xl font-bold text-orange-500 mb-8 text-center"
-          id="login-title"
-        >
-          Connectez-vous
-        </h2>
+        {/* Form */}
+        <div className="w-1/2 flex flex-col justify-center px-10 py-12">
+          <h2 className="text-2xl font-bold text-orange-500 mb-8 text-center">
+            Connectez-vous
+          </h2>
   
-        <form className="space-y-6" onSubmit={handleSubmit} id="login-form">
-          {/* Email */}
-          <div>
-            <label htmlFor="email-input" className="sr-only">Email</label>
-            <input
-              id="email-input"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-            />
-            {error && (
-              <p className="text-red-500 text-sm mt-1" id="email-error">
-                {error}
-              </p>
-            )}
-          </div>
-  
-          {/* Mot de passe */}
-          <div className="relative">
-            <label htmlFor="password-input" className="sr-only">Mot de passe</label>
-            <input
-              id="password-input"
-              type={showPassword ? "text" : "password"}
-              placeholder="Mot de passe"
-              defaultValue="password"
-              className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-            />
-            <span
-              id="toggle-password-visibility"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-            >
-              {showPassword ? (
-                <span className="text-gray-500 text-lg">👁️</span>
-              ) : (
-                <img
-                  src="/icon.png"
-                  alt="hidden"
-                  className="w-5 h-5"
-                  id="hidden-icon"
-                />
+          <form className="space-y-6" onSubmit={handleSubmit} id="login-form">
+            {/* Email */}
+            <div>
+              <label htmlFor="email-input" className="sr-only">Email</label>
+              <input
+                id="email-input"
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+              />
+              {error && (
+                <p className="text-red-500 text-sm mt-1">
+                  {error}
+                </p>
               )}
-            </span>
-          </div>
+            </div>
   
-          {/* Lien oublié */}
-          <div className="text-right text-sm text-gray-500">
-            <a href="#" className="hover:underline" id="forgot-password-link">
-              Mot de passe oublié?
-            </a>
-          </div>
+            {/* Password */}
+            <div className="relative">
+              <label htmlFor="password-input" className="sr-only">Mot de passe</label>
+              <input
+                id="password-input"
+                type={showPassword ? "text" : "password"}
+                placeholder="Mot de passe"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+              />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+              >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </span>
+            </div>
   
-          {/* Bouton */}
-          <button
-            id="submit-login-button"
-            type="submit"
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-md transition"
-          >
-            Se connecter
-          </button>
-        </form>
+            {/* Forgot password */}
+            <div className="text-right text-sm text-gray-500">
+              <a href="#" className="hover:underline">Mot de passe oublié?</a>
+            </div>
+  
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-md transition"
+            >
+              Se connecter
+            </button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 

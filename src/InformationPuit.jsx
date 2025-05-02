@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate  , useLocation} from "react-router-dom";
 const InformationPuit = () => {
   const [formData, setFormData] = useState({
     wilaya: "",
@@ -8,16 +8,53 @@ const InformationPuit = () => {
     budget: "",
   });
   const navigate = useNavigate();
+  const location = useLocation();
+  const { dateDebut } = location.state || {};
+  const userid = localStorage.getItem('user_id');
+  
+  
+   
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Formulaire envoyé :", formData);
-    navigate("/phasepre"); // redirige vers la page PhasePrevision
+    
+    // Prepare data for the POST request
+    const dataToSend = {
+      lieu: formData.adresse, // Mapping form data fields to your API structure
+      duree_prevue: formData.duree,
+      adresse: formData.adresse,
+      budget_total: parseFloat(formData.budget),
+      date_debut: dateDebut, // From location.state
+      created_by: userid, // Example: this could be dynamically retrieved if necessary
+      wilaya: formData.wilaya,
+      closed: "False" // Assuming "False" is a string; adjust as necessary
+    };
+  
+    try {
+      const response = await fetch(" http://127.0.0.1:8001/projets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToSend),
+      });
+      if (!response.ok) {
+        throw new Error("Erreur lors de la création du projet");
+      }
+
+      const data = await response.json();
+      
+      const projetId = data.id; // ID du projet créé
+
+      // Redirection vers la page des phases en passant l'ID du projet via le state
+      navigate("/phasepre", { state: { id: projetId } }); // Envoie l'ID dans le state
+    } catch (error) {
+      console.error("Erreur :", error);
+    }
   };
   const wilayas = [
     "Adrar", "Chlef", "Laghouat", "Oum El Bouaghi", "Batna", "Béjaïa", "Biskra", "Béchar",
@@ -37,6 +74,7 @@ const InformationPuit = () => {
       <div className="w-1/2 pr-10 h-full flex flex-col justify-center">
   <h1 className="text-[48px] font-bold leading-[56px] text-orange-600 mb-6">
     Information sur <br /> le puit
+    <p>{userid} </p>
   </h1>
   <p className="text-[16px] text-gray-700 leading-[24px]">
     For marketplace sellers looking to grow their business, metaverse offers the best platform.
