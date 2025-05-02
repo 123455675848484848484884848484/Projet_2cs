@@ -12,7 +12,7 @@ class OperationOut(OperationCreate):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attribute = True
 
 
 # -------------------- UTILISATEUR --------------------
@@ -26,7 +26,7 @@ class UtilisateurOut(UtilisateurCreate):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attribute = True
 
 
 # -------------------- PROJET --------------------
@@ -44,7 +44,7 @@ class ProjetOut(ProjetCreate):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attribute = True
 
 
 # -------------------- USER_PROJET --------------------
@@ -83,7 +83,7 @@ class RapportJournalierOut(RapportJournalierCreate):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attribute = True
 
 
 # -------------------- OPERATION JOURNALIERE --------------------
@@ -100,7 +100,7 @@ class OperationJournaliereOut(OperationJournaliereCreate):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attribute = True
 
 
 # -------------------- PREVISION OPERATION --------------------
@@ -114,7 +114,7 @@ class PrevisionOperationOut(PrevisionOperationCreate):
     id: int
 
     class Config:
-        orm_mode = True
+       from_attribute = True
 
 
 # -------------------- PREVISION PHASE --------------------
@@ -129,7 +129,7 @@ class PrevisionPhaseOut(PrevisionPhaseCreate):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attribute = True
 
 
 # -------------------- INCIDENT --------------------
@@ -143,4 +143,4 @@ class IncidentOut(IncidentCreate):
     id: int
 
     class Config:
-        orm_mode = True
+       from_attribute = True

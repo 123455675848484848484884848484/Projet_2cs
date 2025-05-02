@@ -1,12 +1,12 @@
 from io import BytesIO
 import sys
-sys.path.append(r"C:/Users/User/Desktop/projet/Projet_2cs")
+sys.path.append(r"C:/Users/User/Desktop/projet/Projet_2cs/backend")
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 import pandas as pd
 from fastapi import APIRouter, UploadFile, Form, File, HTTPException, Depends
-from routers.extraction_op import extract_costs_and_operations
-from routers.extraction_rapport import extract_data
+from extraction_op import extract_costs_and_operations
+from extraction_rapport import extract_data
 from database import get_db
 from models import RapportJournalier,OperationJournaliere,Phase,Operation,Incident
 from datetime import datetime
