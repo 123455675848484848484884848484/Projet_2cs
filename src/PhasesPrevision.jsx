@@ -4,17 +4,52 @@ import { Link, useLocation } from "react-router-dom";
 
 const PhasesPrevision = () => {
   const [phases, setPhases] = useState([]);
+  const [loading, setLoading] = useState(true); 
   const navigate = useNavigate();
   const location = useLocation();
+  const { id } = location.state || {}; 
+
+  
+  
+    useEffect(() => {
+      const verifyToken = async () => {
+        const token = localStorage.getItem('token');
+          console.log(token)
+        try {
+          const response = await fetch(`http://127.0.0.1:8001/auth/verify_token/${token}`);
+  
+          if (!response.ok) {
+            throw new Error('Token verification failed');
+          }
+        } catch (error) {
+          localStorage.removeItem('token');
+          navigate('/login');
+        }
+      };
+  
+      verifyToken();
+    }, [navigate]);
+  
 
   useEffect(() => {
-    const fetchedPhases = [
-      { nom: "26' ", cout: '', delai: '', profondeur: '' },
-      { nom: "24' ", cout: '', delai: '', profondeur: '' },
-      { nom: "12' ", cout: '', delai: '', profondeur: '' },
-      { nom: "8' ", cout: '', delai: '', profondeur: '' },
-    ];
-    setPhases(fetchedPhases);
+    fetch("http://127.0.0.1:8001/phase")
+      .then((response) => response.json())
+      .then((data) => {
+        const fetchedPhases = data.map((item) => ({
+          id: item.id,
+          nom: item.designation,
+          cout: "",
+          delai: "",
+          profondeur: "",
+        }));
+        setPhases(fetchedPhases);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la récupération des phases:", error);
+        alert("Une erreur s'est produite lors du chargement des phases. Veuillez réessayer.");
+        setLoading(false);
+      });
   }, []);
 
   const handleInputChange = (index, field, value) => {
@@ -27,56 +62,88 @@ const PhasesPrevision = () => {
     const tousChampsRemplis = phases.every(
       (phase) => phase.cout && phase.delai && phase.profondeur
     );
-  
+
     if (tousChampsRemplis) {
-      console.log("Prévisions soumises :", phases);
-      navigate("/operations");
+      const phasesToSend = phases.map((phase) => ({
+        id_phase: phase.id,        // Correction ici : clé correcte attendue par l'API
+        cout_prevu: parseFloat(phase.cout),      // cast en float si nécessaire
+        delais: parseInt(phase.delai),            // cast en int
+        profondeur: parseFloat(phase.profondeur)  // cast en float
+      }));
+
+      fetch(`http://127.0.0.1:8000/previsions/phases/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(phasesToSend), // ici directement le tableau sans { phases: ... }
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Réponse de l'API:", data);
+        navigate("/operations",{ state: { projetid:id } })})
+        .catch((error) => {
+          console.error("Erreur lors de l'envoi des données:", error);
+          alert("Une erreur s'est produite lors de l'envoi des prévisions. Veuillez réessayer.");
+        });
     } else {
       alert("Veuillez remplir tous les champs pour chaque phase.");
     }
   };
 
+  
+
+
+
   return (
     <div className="min-h-screen bg-[#f9f9f9] px-28 pt-12 pb-20">
-      {/* Titre en haut */}
       <h1 className="text-[54px] font-bold text-orange-600 leading-[60px] mb-12">
         Vos prévisions
       </h1>
 
       <div className="flex items-start gap-16">
-        {/* Étapes à gauche */}
         <div className="flex flex-col items-start gap-6">
-  {/* Étape 1 : Phases */}
-  <Link to="/phasepre" className="flex items-center gap-4">
-    <div className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
-      location.pathname === "/phasepre" ? "bg-gray-200 border-orange-500 text-black" : "bg-gray-100 text-gray-400 border-gray-300"
-    }`}>
-      1
-    </div>
-    <span className={`font-semibold text-2xl ${
-      location.pathname === "/phasepre" ? "text-orange-600" : "text-gray-400"
-    }`}>
-      Phases
-    </span>
-  </Link>
+          <Link to="/phasepre" className="flex items-center gap-4">
+            <div
+              className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
+                location.pathname === "/phasepre"
+                  ? "bg-gray-200 border-orange-500 text-black"
+                  : "bg-gray-100 text-gray-400 border-gray-300"
+              }`}
+            >
+              1
+            </div>
+            <span
+              className={`font-semibold text-2xl ${
+                location.pathname === "/phasepre" ? "text-orange-600" : "text-gray-400"
+              }`}
+            >
+              Phases
+            </span>
+          </Link>
 
-  <div className="h-[60px] w-[2px] bg-orange-500 ml-8" />
+          <div className="h-[60px] w-[2px] bg-orange-500 ml-8" />
 
-  {/* Étape 2 : Opérations */}
-  <Link to="/operations" className="flex items-center gap-4">
-    <div className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
-      location.pathname === "/operations" ? "bg-gray-200 border-orange-500 text-black" : "bg-gray-100 text-gray-400 border-gray-300"
-    }`}>
-      2
-    </div>
-    <span className={`font-semibold text-2xl ${
-      location.pathname === "/operations" ? "text-orange-600" : "text-gray-400"
-    }`}>
-      Opérations
-    </span>
-  </Link>
-</div>
-        {/* Tableau à droite */}
+          <Link to="/operations" className="flex items-center gap-4">
+            <div
+              className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
+                location.pathname === "/operations"
+                  ? "bg-gray-200 border-orange-500 text-black"
+                  : "bg-gray-100 text-gray-400 border-gray-300"
+              }`}
+            >
+              2
+            </div>
+            <span
+              className={`font-semibold text-2xl ${
+                location.pathname === "/operations" ? "text-orange-600" : "text-gray-400"
+              }`}
+            >
+              Opérations
+            </span>
+          </Link>
+        </div>
+
         <div className="flex-1">
           <div className="bg-[#f3f8fa] rounded-md shadow-md overflow-hidden">
             <table className="w-full text-left text-[16px]">
@@ -133,7 +200,6 @@ const PhasesPrevision = () => {
               onClick={handleValider}
               className="bg-orange-600 hover:bg-orange-700 text-white px-10 py-3 rounded-md font-semibold text-[16px]"
             >
-                
               Valider
             </button>
           </div>
