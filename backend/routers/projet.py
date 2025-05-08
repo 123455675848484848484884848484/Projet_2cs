@@ -22,3 +22,26 @@ def create_projet(projet: ProjetCreate, db: Session = Depends(get_db)):
 def get_projets(db: Session = Depends(get_db)):
     projets = db.query(Projet).all()
     return projets
+
+
+
+@router.post("/affecter")
+def affecter_utilisateur_a_projet(id_utilisateur: int, id_projet: int, db: Session = Depends(get_db)):
+
+    association_existante = db.query(UserProjet).filter_by(
+        id_utilisateur=id_utilisateur,
+        id_projet=id_projet
+    ).first()
+
+    if association_existante:
+        raise HTTPException(status_code=400, detail="Utilisateur déjà affecté à ce projet.")
+
+   # Si pas encore affecté, affecter
+    nouvelle_affectation = UserProjet(id_utilisateur=id_utilisateur, id_projet=id_projet)
+    db.add(nouvelle_affectation)
+    db.commit()
+
+    return {"message": "Utilisateur affecté avec succès.", "id_utilisateur": id_utilisateur, "id_projet": id_projet}
+
+
+
