@@ -1,17 +1,18 @@
-import React, { useState  } from "react";
-
-
-
-
-  
-
+import React, { useState, useEffect } from "react";
 
 const SignalerProbleme = () => {
   const [problems, setProblems] = useState([
-    { operation: [], probleme: "", solution: "", file: null },
+    { puit: "", probleme: "", solution: "", file: null },
   ]);
   const [autresProblemes, setAutresProblemes] = useState("");
-  const [openRows, setOpenRows] = useState([false]);
+  const [puits, setPuits] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/puits") // Remplace cette URL par ton endpoint réel
+      .then((res) => res.json())
+      .then((data) => setPuits(data))
+      .catch((err) => console.error("Erreur lors du chargement des puits", err));
+  }, []);
 
   const handleChange = (index, field, value) => {
     const updated = [...problems];
@@ -21,7 +22,6 @@ const SignalerProbleme = () => {
 
   const handleAddRow = () => {
     setProblems([...problems, { operation: [], probleme: "", solution: "", file: null }]);
-    setOpenRows([...openRows, false]);
   };
 
   const handleSubmit = () => {
@@ -34,38 +34,6 @@ const SignalerProbleme = () => {
     updated[index].file = file;
     setProblems(updated);
   };
-
-  const operationsGroups = [
-    {
-      label: "Preparation & Infrastructure",
-      items: ["Civil Work", "Water Supply", "Environmental", "Supervision"],
-    },
-    {
-      label: "Logging, Completion & Post-Drill",
-      items: [
-        "Coring",
-        "Mud Logging",
-        "Wire Line Logging",
-        "Completion",
-        "Fracturation",
-      ],
-    },
-    {
-      label: "Drilling Operations & Equipment",
-      items: [
-        "Drilling Mud",
-        "Cementing",
-        "Well Head",
-        "Csg, Tubing, Liner",
-        "DHT, Csg access, run Casing",
-        "Drilling Bits",
-      ],
-    },
-    {
-      label: "Non principales",
-      items: ["Transport", "Security", "Telecom", "Rig Move", "Drilling", "DST"],
-    },
-  ];
 
   return (
     <div className="min-h-screen px-24 py-12 bg-[#f4f4f4]">
@@ -81,7 +49,7 @@ const SignalerProbleme = () => {
         <table className="w-full text-left border-separate border-spacing-y-2">
           <thead>
             <tr className="bg-gray-200 text-sm text-gray-700">
-              <th className="px-4 py-2">Opération</th>
+              <th className="px-4 py-2">Nom du puit</th>
               <th className="px-4 py-2">Quel est le problème détecté ?</th>
               <th className="px-4 py-2">Quelle solution a été proposée ou appliquée ?</th>
               <th className="px-4 py-2">Pièce jointe</th>
@@ -91,43 +59,18 @@ const SignalerProbleme = () => {
             {problems.map((row, index) => (
               <tr key={index} className="bg-white rounded-md">
                 <td className="px-4 py-2 align-top">
-                  <div
-                    className="flex items-center justify-between cursor-pointer"
-                    onClick={() => {
-                      const newOpenRows = [...openRows];
-                      newOpenRows[index] = !newOpenRows[index];
-                      setOpenRows(newOpenRows);
-                    }}
+                  <select
+                    value={row.operation[0] || ""}
+                    onChange={(e) => handleChange(index, "operation", [e.target.value])}
+                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:border-orange-600"
                   >
-                    <span className="text-gray-800">
-                      {row.operation.length > 0 ? row.operation[0] : "Sélectionner une opération"}
-                    </span>
-                    <span className="text-xl">{openRows[index] ? "▲" : "▼"}</span>
-                  </div>
-                  {openRows[index] && (
-                    <div className="grid grid-cols-4 gap-6 mt-4">
-                      {operationsGroups.map((group) => (
-                        <div key={group.label}>
-                          <h4 className="text-xs text-orange-600 font-semibold mb-2">
-                            {group.label}
-                          </h4>
-                          {group.items.map((item) => (
-                            <label key={item} className="block text-sm text-gray-800">
-                              <input
-                                type="radio"
-                                name={`operation-${index}`}
-                                value={item}
-                                checked={row.operation.includes(item)}
-                                onChange={(e) => handleChange(index, "operation", [e.target.value])}
-                                className="mr-2"
-                              />
-                              {item}
-                            </label>
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                    <option value="">Sélectionner un puit</option>
+                    {puits.map((puit) => (
+                      <option key={puit.id} value={puit.nom}>
+                        {puit.nom}
+                      </option>
+                    ))}
+                  </select>
                 </td>
                 <td className="px-4 py-2 align-top">
                   <input
@@ -171,8 +114,7 @@ const SignalerProbleme = () => {
 
       <h2 className="text-xl font-semibold mb-2">Autres problèmes</h2>
       <textarea
-  className="w-full h-24 border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600"
-  placeholder=""
+        className="w-full h-24 border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600"
         value={autresProblemes}
         onChange={(e) => setAutresProblemes(e.target.value)}
       ></textarea>

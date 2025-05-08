@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate  , useLocation} from "react-router-dom";
 const InformationPuit = () => {
   const [formData, setFormData] = useState({
+    nom: "",
     wilaya: "",
     adresse: "",
     duree: "",
@@ -83,6 +84,20 @@ const InformationPuit = () => {
 
       {/* Colonne droite : formulaire */}
       <form onSubmit={handleSubmit} className="w-1/2 flex flex-col gap-6 max-w-[480px]">
+ {/* Nom */}
+      <div>
+  <label htmlFor="adresse" className="flex items-center gap-2 text-sm font-medium text-gray-900 mb-1">
+   Nom du puit
+  </label>
+  <input
+    type="text"
+    id="nom"
+    name="nom"
+    onChange={handleChange}
+    className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-orange-600 focus:ring-0 focus:text-orange-600"
+    required
+  />
+</div>
        {/* Wilaya */}
 <div>
   <label htmlFor="wilaya" className="flex items-center gap-2 text-sm font-medium text-gray-900 mb-1">
