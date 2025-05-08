@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
 from models import Projet, UserProjet
-from pys_models import ProjetCreate, ProjetOut
+from pys_models import ProjetCreate, ProjetOut,AffectationCreate
 
 router = APIRouter(prefix="/projets", tags=["Projets"])
 
@@ -26,22 +26,26 @@ def get_projets(db: Session = Depends(get_db)):
 
 
 @router.post("/affecter")
-def affecter_utilisateur_a_projet(id_utilisateur: int, id_projet: int, db: Session = Depends(get_db)):
-
+def affecter_utilisateur_a_projet(affectation: AffectationCreate, db: Session = Depends(get_db)):
+    # Vérifie si l'association existe
     association_existante = db.query(UserProjet).filter_by(
-        id_utilisateur=id_utilisateur,
-        id_projet=id_projet
+        id_utilisateur=affectation.id_utilisateur,
+        id_projet=affectation.id_projet
     ).first()
 
     if association_existante:
         raise HTTPException(status_code=400, detail="Utilisateur déjà affecté à ce projet.")
 
-   # Si pas encore affecté, affecter
-    nouvelle_affectation = UserProjet(id_utilisateur=id_utilisateur, id_projet=id_projet)
+    # Affectation
+    nouvelle_affectation = UserProjet(
+        id_utilisateur=affectation.id_utilisateur,
+        id_projet=affectation.id_projet
+    )
     db.add(nouvelle_affectation)
     db.commit()
 
-    return {"message": "Utilisateur affecté avec succès.", "id_utilisateur": id_utilisateur, "id_projet": id_projet}
-
-
-
+    return {
+        "message": "Utilisateur affecté avec succès.",
+        "id_utilisateur": affectation.id_utilisateur,
+        "id_projet": affectation.id_projet
+    }

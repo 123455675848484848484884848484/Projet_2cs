@@ -145,3 +145,8 @@ class IncidentOut(IncidentCreate):
 
     class Config:
        from_attribute = True
+
+#----------------- Affecter agent a un projet --------------------------------------
+class AffectationCreate(BaseModel):
+    id_utilisateur: int
+    id_projet: int
