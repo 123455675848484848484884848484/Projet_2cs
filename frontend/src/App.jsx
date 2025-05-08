@@ -11,6 +11,7 @@ import FichierJournalier from './FichierJournalier';
 import SignalerProbleme from './SignalerProbleme';
 import Homeagent from './Homeagent';
 import Homemanager from './Homemanager';
+import Dashglobal from './Dashglobal';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
      <Route path="/signal" element={<SignalerProbleme />} />
      <Route path="/agent" element={<Homeagent />} />
      <Route path="/manager" element={<Homemanager />} />
+     <Route path="/dashglo" element={<Dashglobal />} />
   </Routes>
     </Router> 
  
