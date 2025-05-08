@@ -98,7 +98,7 @@ class PrevisionPhase(Base):
     cout_prevu = Column(Numeric(15, 2))
     delais = Column(Integer)
     profondeur = Column(Numeric(19))
-
+# comment
 
 class Incident(Base):
     __tablename__ = "incidents"
