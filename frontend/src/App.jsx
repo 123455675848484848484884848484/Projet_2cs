@@ -9,6 +9,8 @@ import PhasesPrevision from './PhasesPrevision';
 import OperationsPrevision from "./OperationsPrevision";
 import FichierJournalier from './FichierJournalier';
 import SignalerProbleme from './SignalerProbleme';
+import Homeagent from './Homeagent';
+import Homemanager from './Homemanager';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
      <Route path="/login" element={<Login />} />
      <Route path="/file" element={<FichierJournalier />} />
      <Route path="/signal" element={<SignalerProbleme />} />
+     <Route path="/agent" element={<Homeagent />} />
+     <Route path="/manager" element={<Homemanager />} />
   </Routes>
     </Router> 
  
