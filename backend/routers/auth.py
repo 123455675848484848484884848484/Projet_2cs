@@ -1,7 +1,7 @@
 
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer , OAuth2PasswordRequestForm
-from passlib.context import CryptContext
+from passlib.context import CryptContext # type: ignore
 from models import Utilisateur
 from pys_models import UtilisateurCreate , UtilisateurOut
 from database import get_db
