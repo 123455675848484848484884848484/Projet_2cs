@@ -24,6 +24,5 @@ app.include_router(operation.router,tags=["operation"] )
 app.include_router(phase.router,tags=["phase"])
 app.include_router(previsions.router,tags=["prévisions"])
 app.include_router(projet.router,tags=["projet"])
-app.include_router(projet.router,tags=["globaldash"])
-app.include_router(globaldash.router_user_projet,tags=["delais_projets"])
+app.include_router(globaldash.router,tags=["globaldash"])
 
