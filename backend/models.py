@@ -27,6 +27,7 @@ class Projet(Base):
     __tablename__ = "projet"
 
     id = Column(Integer, primary_key=True)
+    name = Column(String(255))
     date_debut = Column(Date)
     created_by = Column(Integer, ForeignKey('utilisateur.id'))
     lieu = Column(String(100))
