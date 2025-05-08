@@ -14,7 +14,7 @@ const OperationsPrevision = () => {
     // Appel API pour récupérer les opérations
     const fetchOperations = async () => {
       try {
-        const response = await fetch(" http://127.0.0.1:8001/operation");
+        const response = await fetch(" http://127.0.0.1:8000/operation");
         const data = await response.json();
         console.log(data) ;
         setOperations(data);
@@ -40,7 +40,7 @@ const OperationsPrevision = () => {
     }));
   
     try {
-      const response = await fetch(`http://127.0.0.1:8001/previsions/operations/${projetid}`, {
+      const response = await fetch(`http://127.0.0.1:8000/previsions/operations/${projetid}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

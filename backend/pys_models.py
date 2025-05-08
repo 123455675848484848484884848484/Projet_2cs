@@ -31,6 +31,7 @@ class UtilisateurOut(UtilisateurCreate):
 
 # -------------------- PROJET --------------------
 class ProjetCreate(BaseModel):
+    name: str 
     date_debut: date
     created_by: int
     lieu: str
@@ -54,7 +55,7 @@ class UserProjetCreate(BaseModel):
 
 class UserProjetOut(UserProjetCreate):
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # -------------------- PHASE --------------------
@@ -65,7 +66,7 @@ class PhaseOut(PhaseCreate):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # -------------------- RAPPORT JOURNALIER --------------------
