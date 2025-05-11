@@ -11,6 +11,8 @@ from database import get_db
 from models import RapportJournalier,OperationJournaliere,Phase,Operation,Incident
 from datetime import datetime
 from sqlalchemy import func
+from fastapi import Query
+from datetime import date
 
 # Routes
 router_probleme = APIRouter(prefix="/probleme", tags=["probleme"])
@@ -18,8 +20,11 @@ router_extraction = APIRouter(prefix="/extraction", tags=["extraction"])
 router_recup = APIRouter(prefix="/recuperation", tags=["recuperation"])
 router_incident = APIRouter(prefix="/incident",tags=["incident"])
 router_operation_journaliere=APIRouter(prefix="/op_journaliere",tags=["op_journaliere"])
+router_excel=APIRouter(prefix="/excel", tags=["excel"])
 
+router = APIRouter(prefix="/fichier_excel",tags=["fichier_excel"])
 #Functions and apis 
+
 def get_or_create_operation(db: Session, designation: str):
     existing_operation = db.query(Operation).filter(func.to_char(Operation.designation) == designation).first()
     
@@ -34,8 +39,8 @@ def get_or_create_operation(db: Session, designation: str):
         return new_operation.id
     
 
-
-@router_extraction.post("/")
+#Importer le fichier excel
+@router.post("/importer")
 async def inserer_rapport_journalier(
     user_id: int = Form(...),  
     projet_id: int = Form(...),  
@@ -121,8 +126,8 @@ async def inserer_rapport_journalier(
 
 
 
-
-@router_recup.get("/")
+# Recuperer le rapport journalier a travers l'id 
+@router.get("/recuperer/{rapport_id}")
 def recuperer_rapport_excel(rapport_id: int):
     try:
         db: Session = next(get_db())
@@ -146,7 +151,7 @@ def recuperer_rapport_excel(rapport_id: int):
     
 
 
-@router_probleme.post("/")
+@router.post("/signaler_probleme")
 async def inserer_probleme_operation_journaliere(
     operation_journaliere_id: int = Form(...),
     probleme: str = Form(...),
@@ -171,11 +176,11 @@ async def inserer_probleme_operation_journaliere(
         raise HTTPException(status_code=500, detail=f"Erreur serveur : {e}")
  
 
-@router_incident.post("/")
+@router.post("/signaler_incident")
 async def inserer_incident(
     id_projet: int = Form(...),
     utilisateur: int = Form(...),
-    date_incident: str = Form(...),  # Format attendu : "YYYY-MM-DD"
+    date_incident: str = Form(...),  # Format attendu : "YYYY-MM-DD" !!!!
     fichier_joint: UploadFile = File(None)
 ):
     db: Session = next(get_db())
@@ -183,7 +188,6 @@ async def inserer_incident(
         print(date_incident)
         contenu_fichier = await fichier_joint.read() if fichier_joint else None
 
-        # Vérification et conversion de la date
         try:
             date_incident_parsed = datetime.strptime(date_incident, "%Y-%m-%d").date()
         except ValueError:
@@ -207,18 +211,18 @@ async def inserer_incident(
         raise HTTPException(status_code=500, detail=f"Erreur lors de l'insertion : {str(e)}")
 
 
-@router_operation_journaliere.get("/")
+
+#Recupere l'id de loperation journaliere a partir de l'id du rapport + la designation de l'operation
+@router.get("/recuperer_id_operation/{id_rapport}/{designation_operation}")
 def get_operation_journaliere_id_route(
     id_rapport: int,
     designation_operation: str,
 ):
     db: Session = next(get_db())
-    # Étape 1 : Récupérer l'opération par sa désignation
     operation = db.query(Operation).filter(Operation.designation == designation_operation).first()
     if not operation:
         raise HTTPException(status_code=404, detail="Opération introuvable")
 
-    # Étape 2 : Récupérer l'opération journalière
     op_journaliere = db.query(OperationJournaliere).filter(
         OperationJournaliere.id_rapport == id_rapport,
         OperationJournaliere.id_operation == operation.id
@@ -230,3 +234,32 @@ def get_operation_journaliere_id_route(
     return {"id": op_journaliere.id}
 
 
+
+@router.get("/recuperer/{id_projet}/{date_rapport}")
+def recuperer_rapport_excel_date(
+    id_projet: int ,
+    date_rapport: date
+):
+    try:
+        db: Session = next(get_db())
+        date_formatee = date_rapport.strftime("%d/%m/%y")
+        rapport = db.query(RapportJournalier).filter(
+            RapportJournalier.id_projet == id_projet,
+            RapportJournalier.date_rapport == date_formatee
+        ).first()
+
+        if not rapport or not rapport.fichier_excel:
+            raise HTTPException(status_code=404, detail="Fichier non trouvé pour ce projet à cette date.")
+
+        file_like = BytesIO(rapport.fichier_excel)
+        filename = f"rapport_{id_projet}_{date_rapport}.xlsv"
+
+        return StreamingResponse(
+            file_like,
+            media_type="application/vnd.ms-excel",
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+
+    except Exception as e:
+        print(f"❌ Erreur lors de l'envoi du fichier : {e}")
+        raise HTTPException(status_code=500, detail="Erreur interne lors de l'envoi du fichier.")

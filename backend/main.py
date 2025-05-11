@@ -14,15 +14,13 @@ app.add_middleware(
 )
 
 app.include_router(utilisateur.router, tags=["Utilisateur"])
-app.include_router(insertion_bdd.router_extraction,tags=["extraction"])
-app.include_router(insertion_bdd.router_recup,tags=["recuperation"])
-app.include_router(insertion_bdd.router_probleme,tags=["probleme"])
-app.include_router(insertion_bdd.router_incident,tags=["incident"])
-app.include_router(insertion_bdd.router_operation_journaliere,tags=["op_journaliere"])
+app.include_router(insertion_bdd.router,tags=["fichier_excel"])
+
 app.include_router(auth.router,tags=["Authentification"] )
 app.include_router(operation.router,tags=["operation"] )
 app.include_router(phase.router,tags=["phase"])
 app.include_router(previsions.router,tags=["prévisions"])
 app.include_router(projet.router,tags=["projet"])
 app.include_router(globaldash.router,tags=["globaldash"])
+
 

@@ -28,7 +28,7 @@ const FichierJournalier = () => {
       formData.append("projet_id", 2); // A FAIRE PASSER APRES !!!
       formData.append("file", fichierExcel);
   
-      const res = await fetch("http://127.0.0.1:8000/extraction", {
+      const res = await fetch("http://127.0.0.1:8000/fichier_excel/importer", {
         method: "POST",
         body: formData,
       });
@@ -38,7 +38,7 @@ const FichierJournalier = () => {
       console.log(rapportId)
   
       for (const p of problems) {
-        const res = await fetch(`http://127.0.0.1:8000/op_journaliere?id_rapport=${rapportId}&designation_operation=${encodeURIComponent(p.operation[0])}`);
+        const res = await fetch(`http://127.0.0.1:8000/fichier_excel/recuperer_id_operation/${rapportId}/${encodeURIComponent(p.operation[0])}`);
         
         if (!res.ok) {
           console.error("Échec récupération opération journalière pour :", p.operation[0]);
@@ -55,7 +55,7 @@ const FichierJournalier = () => {
           problemForm.append("fichier_joint", p.file);
         }
       
-        await fetch("http://127.0.0.1:8000/probleme", {
+        await fetch("http://127.0.0.1:8000/fichier_excel/signaler_probleme", {
           method: "POST",
           body: problemForm,
         });
