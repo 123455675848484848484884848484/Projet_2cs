@@ -37,9 +37,9 @@ const MesPuits = () => {
       }
 
       try {
-        const response = await fetch(`http://127.0.0.1:8000/projet/${userId}`, {
+        const response = await fetch(`http://127.0.0.1:8000/projets/${userId}`, {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            
           },
         });
 

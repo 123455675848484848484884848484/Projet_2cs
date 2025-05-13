@@ -44,7 +44,7 @@ def create_prevision_phases(
     db.commit()
     return {"message": "Prévisions de phases ajoutées avec succès"}
 
-@router.get("/phases", response_model=list[PrevisionPhaseOut])
+@router.get("/phases")
 def get_phases(db: Session = Depends(get_db)):
     return db.query(PrevisionPhase).all()
 

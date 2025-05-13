@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
-from models import Projet, UserProjet, Utilisateur
+from models import Projet, UserProjet, Utilisateur , PrevisionPhase ,RapportJournalier
 from pys_models import ProjetCreate, ProjetOut,AffectationCreate
+from datetime import timedelta
 
 router = APIRouter(prefix="/projets", tags=["Projets"])
 
@@ -106,3 +107,45 @@ def get_projet_avec_equipe(id_projet: int, db: Session = Depends(get_db)):
         "equipe": noms_equipes
     }
 
+
+@router.get("/{projet_id}/dates")
+def calculer_dates(projet_id: int, db: Session = Depends(get_db)):
+    
+    projet = db.query(Projet).filter(Projet.id == projet_id).first()
+    if not projet:
+        raise HTTPException(status_code=404, detail="Projet non trouvé")
+
+    date_debut = projet.date_debut
+    duree_prevue = projet.duree_prevue
+
+
+    date_fin_previsionnelle = date_debut + timedelta(days=duree_prevue)
+
+    # 3. Calcul des retards
+    retard_total = 0
+    previsions = db.query(PrevisionPhase).filter(PrevisionPhase.id_projet == projet_id).all()
+
+    for prev in previsions:
+        id_phase = prev.id_phase
+        duree_prevue_phase = prev.delais
+
+        # Compter les rapports journaliers pour cette phase et ce projet
+        nb_rapports = db.query(RapportJournalier)\
+                        .filter(RapportJournalier.id_projet == projet_id)\
+                        .filter(RapportJournalier.phase == id_phase)\
+                        .count()
+
+        # Si on dépasse la durée prévue, on a un retard
+        retard = max(0, nb_rapports - duree_prevue_phase)
+        retard_total += retard
+
+    # 4. Calculer la date réelle estimée
+    date_fin_estimee = date_fin_previsionnelle + timedelta(days=retard_total)
+
+    return {
+        "projet": projet.name,
+        "date_debut": date_debut,
+        "date_fin_previsionnelle": date_fin_previsionnelle,
+        "retard_total_jours": retard_total,
+        "date_fin_estimee": date_fin_estimee
+    }

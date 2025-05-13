@@ -65,12 +65,13 @@ const PhasesPrevision = () => {
 
     if (tousChampsRemplis) {
       const phasesToSend = phases.map((phase) => ({
+        
         id_phase: phase.id,        // Correction ici : clé correcte attendue par l'API
         cout_prevu: parseFloat(phase.cout),      // cast en float si nécessaire
         delais: parseInt(phase.delai),            // cast en int
         profondeur: parseFloat(phase.profondeur)  // cast en float
       }));
-
+     console.log(phasesToSend)
       fetch(`http://127.0.0.1:8000/previsions/phases/${id}`, {
         method: "POST",
         headers: {
@@ -99,6 +100,7 @@ const PhasesPrevision = () => {
     <div className="min-h-screen bg-[#f9f9f9] px-28 pt-12 pb-20">
       <h1 className="text-[54px] font-bold text-orange-600 leading-[60px] mb-12">
         Vos prévisions
+        {id}
       </h1>
 
       <div className="flex items-start gap-16">
