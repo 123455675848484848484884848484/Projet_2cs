@@ -3,22 +3,22 @@ import { useNavigate } from "react-router-dom";
 
 const MesPuits = () => {
   const [puits, setPuits] = useState([]);
-  const userid = localStorage.getItem('user_id');
-
   const navigate = useNavigate();
 
   useEffect(() => {
     const verifyToken = async () => {
       const token = localStorage.getItem('token');
-        console.log(token)
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
       try {
         const response = await fetch(`http://127.0.0.1:8000/auth/verify_token/${token}`);
-
-        if (!response.ok) {
-          throw new Error('Token verification failed');
-        }
+        if (!response.ok) throw new Error('Token invalide');
       } catch (error) {
         localStorage.removeItem('token');
+        localStorage.removeItem('user_id');
         navigate('/login');
       }
     };
@@ -26,34 +26,47 @@ const MesPuits = () => {
     verifyToken();
   }, [navigate]);
 
-  // Simulation d'une récupération depuis une BDD / API
   useEffect(() => {
-    // À remplacer par une vraie requête API si besoin
-    const fakeData = [
-      {
-        id: "000369",
-        dateDebut: "07/11/2023",
-        wilaya: "Guelma",
-        adresse: "Cité 150 logements",
-        duree: "30",
-        budget: "8750000 DZD",
-      },
-      {
-        id: "000370",
-        dateDebut: "01/02/2024",
-        wilaya: "Alger",
-        adresse: "Bir Mourad Rais",
-        duree: "45",
-        budget: "12500000 DZD",
-      },
-    ];
+    const fetchPuits = async () => {
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('user_id');
 
-    setPuits(fakeData);
+      if (!userId) {
+        console.error("Utilisateur non connecté");
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/projet/${userId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) throw new Error("Erreur lors de la récupération des puits");
+
+        const data = await response.json();
+
+        const formattedData = data.map((projet) => ({
+          name: projet.name, // remplacera id
+          dateDebut: projet.date_debut,
+          wilaya: projet.wilaya,
+          adresse: projet.adresse,
+          duree: projet.duree_prevue,
+          budget: `${parseFloat(projet.budget_total || 0).toLocaleString()} DZD`,
+        }));
+
+        setPuits(formattedData);
+      } catch (error) {
+        console.error("Erreur:", error);
+      }
+    };
+
+    fetchPuits();
   }, []);
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] px-20 py-12">
-      {/* Titre */}
       <h1 className="text-[48px] font-bold text-orange-600 leading-[56px] mb-4">
         Mes Puits
       </h1>
@@ -61,7 +74,6 @@ const MesPuits = () => {
         For marketplace sellers looking to grow their business, metaverse offers the best platform.
       </p>
 
-      {/* Barre de recherche */}
       <div className="flex justify-end mb-4">
         <input
           type="text"
@@ -70,12 +82,11 @@ const MesPuits = () => {
         />
       </div>
 
-      {/* Tableau */}
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-left">
           <thead className="bg-gray-100">
             <tr className="text-gray-700">
-              <th className="p-4">ID</th>
+              <th className="p-4">Nom</th>
               <th className="p-4">Date début</th>
               <th className="p-4">Wilaya</th>
               <th className="p-4">Adresse</th>
@@ -87,7 +98,7 @@ const MesPuits = () => {
           <tbody>
             {puits.map((puit, index) => (
               <tr key={index} className="border-t border-gray-200">
-                <td className="p-4">› {puit.id}</td>
+                <td className="p-4">› {puit.name}</td>
                 <td className="p-4">{puit.dateDebut}</td>
                 <td className="p-4">{puit.wilaya}</td>
                 <td className="p-4">{puit.adresse}</td>
@@ -110,8 +121,6 @@ const MesPuits = () => {
           </tbody>
         </table>
       </div>
-
-      
     </div>
   );
 };

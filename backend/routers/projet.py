@@ -12,6 +12,7 @@ def create_projet(projet: ProjetCreate, db: Session = Depends(get_db)):
     db.add(db_projet)
     db.commit()
     db.refresh(db_projet)
+    print(db_projet)
     
     user_projet = UserProjet(id_utilisateur=projet.created_by, id_projet=db_projet.id)
     db.add(user_projet)

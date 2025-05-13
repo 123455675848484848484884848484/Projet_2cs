@@ -23,20 +23,23 @@ const InformationPuit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Prepare data for the POST request
+   const dateObj = new Date(dateDebut);
+   
     const dataToSend = {
-      lieu: formData.adresse, // Mapping form data fields to your API structure
-      duree_prevue: formData.duree,
+      name : formData.nom ,
+      duree_prevue:parseInt( formData.duree),
+      lieu: formData.adresse, 
       adresse: formData.adresse,
       budget_total: parseFloat(formData.budget),
       date_debut: dateDebut, // From location.state
-      created_by: userid, // Example: this could be dynamically retrieved if necessary
+      created_by: parseInt(userid), // Example: this could be dynamically retrieved if necessary
       wilaya: formData.wilaya,
-      closed: "False" // Assuming "False" is a string; adjust as necessary
+      closed: 'False' // Assuming "False" is a string; adjust as necessary
     };
+    console.log(dataToSend)
   
     try {
-      const response = await fetch(" http://127.0.0.1:8001/projets", {
+      const response = await fetch("http://127.0.0.1:8000/projets", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,6 +96,7 @@ const InformationPuit = () => {
     type="text"
     id="nom"
     name="nom"
+    value={formData.nom}
     onChange={handleChange}
     className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-orange-600 focus:ring-0 focus:text-orange-600"
     required
