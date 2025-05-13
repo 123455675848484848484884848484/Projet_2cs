@@ -136,51 +136,55 @@ const DashboardPuit = () => {
         </button>
       </div>
 
-      {/* GRAPHIQUE DÉLAIS */}
+      {/* SECTION DÉLAIS */}
       <section className="mb-12">
         <h2 className="text-3xl font-bold text-orange-600">
           Visualisation <br />
           <span className="text-green-900">des délais</span>
         </h2>
         <div className="bg-white border p-4 rounded mt-4 shadow">
-          <p className="font-semibold">Date de fin</p>
-          <p>Prévue : {delais.planned}</p>
-          <p>Estimée : {delais.expected}</p>
-          <p className="text-red-600">Le projet est en retard de 1 mois et 1 jour</p>
-          <p className="mt-2 bg-gray-100 inline-block px-3 py-1 rounded text-sm font-semibold">
-            Jours restants : {delais.remaining}
-          </p>
-          <div className="mt-6">
-            <Line
-              options={makeOptions("Profondeur (pieds)", "Progression (Profondeur en pieds) par rapport au temps")}
-              data={makeChartData(graphDelais.prevision, graphDelais.reel)}
-            />
+          <div className="flex flex-col items-end mb-4">
+            <div className="border border-orange-500 rounded-md p-4 mb-2 w-fit text-sm text-gray-800">
+              <p><strong>Date prévue :</strong> {delais.planned}</p>
+              <p><strong>Date estimée :</strong> {delais.expected}</p>
+            </div>
+            <p className="text-red-600 text-sm font-semibold mb-2">
+              Le projet est en retard de 1 mois et 1 jour
+            </p>
+            <div className="border border-orange-500 text-green-900 px-3 py-1 rounded text-sm font-semibold w-fit">
+              Jours restants : {delais.remaining}
+            </div>
           </div>
+          <Line
+            options={makeOptions("Profondeur (pieds)", "Progression (Profondeur en pieds) par rapport au temps")}
+            data={makeChartData(graphDelais.prevision, graphDelais.reel)}
+          />
         </div>
       </section>
 
-      {/* GRAPHIQUE COÛTS */}
+      {/* SECTION COÛTS */}
       <section>
         <h2 className="text-3xl font-bold text-orange-600">
           Visualisation <br />
           <span className="text-green-900">des coûts</span>
         </h2>
         <div className="bg-white border p-4 rounded mt-4 shadow">
-          <p className="font-semibold">Coût du projet</p>
-          <p>Prévu : {couts.planned.toLocaleString()} DA</p>
-          <p>Estimé : {couts.expected.toLocaleString()} DA</p>
-          <p className="text-red-600">
-            Le dépassement est de {(couts.expected - couts.planned).toLocaleString()} DA
-          </p>
-          <p className="mt-2 bg-gray-100 inline-block px-3 py-1 rounded text-sm font-semibold">
-            Montant restant : {couts.remaining.toLocaleString()} DA
-          </p>
-          <div className="mt-6">
-            <Line
-              options={makeOptions("Coût (DA)", "Coûts du projet (DA) par rapport au temps")}
-              data={makeChartData(graphCouts.prevision, graphCouts.reel)}
-            />
+          <div className="flex flex-col items-end mb-4">
+            <div className="border border-orange-500 rounded-md p-4 mb-2 w-fit text-sm text-gray-800">
+              <p><strong>Coût prévu :</strong> {couts.planned.toLocaleString()} DA</p>
+              <p><strong>Coût estimé :</strong> {couts.expected.toLocaleString()} DA</p>
+            </div>
+            <p className="text-red-600 text-sm font-semibold mb-2">
+              Le dépassement est de {(couts.expected - couts.planned).toLocaleString()} DA
+            </p>
+            <div className="border border-orange-500 text-green-900 px-3 py-1 rounded text-sm font-semibold w-fit">
+              Montant restant : {couts.remaining.toLocaleString()} DA
+            </div>
           </div>
+          <Line
+            options={makeOptions("Coût (DA)", "Coûts du projet (DA) par rapport au temps")}
+            data={makeChartData(graphCouts.prevision, graphCouts.reel)}
+          />
         </div>
       </section>
     </div>
