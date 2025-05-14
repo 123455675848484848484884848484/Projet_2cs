@@ -29,40 +29,83 @@ const DashboardPuit = () => {
   const [graphCouts, setGraphCouts] = useState({ prevision: [], reel: [] });
 
   useEffect(() => {
-    fetch("/api/puit/1")
+    // COÛTS
+    fetch(" http://127.0.0.1:8000/projets/107/dates")
+  .then((res) => res.json())
+  .then((data) => {
+    setPuit({ nom: data.projet, adresse: data.adresse });
+    setDelais({
+      planned: data.date_prevue,
+      expected: data.date_estimee,
+      remaining: data.jours_restants,
+    });
+    setCouts({
+      planned: data.cout_previsionnel,
+      expected: data.cout_reel,
+      remaining: data.montant_restant,
+    });
+  })
+  .catch((err) => console.error("Erreur récupération infos projet :", err));
+    fetch("http://127.0.0.1:8000/projets/107/prof_cout")
       .then((res) => res.json())
       .then((data) => {
-        setPuit({ nom: data.nom, adresse: data.adresse });
-        setDelais({
-          planned: data.date_planned,
-          expected: data.date_expected,
-          remaining: data.remaining_days,
-        });
-        setCouts({
-          planned: data.cost_planned,
-          expected: data.cost_expected,
-          remaining: data.remaining_money,
-        });
-        setGraphDelais({
-          prevision: data.graphDelaisPrevision,
-          reel: data.graphDelaisReel,
-        });
-        setGraphCouts({
-          prevision: data.graphCoutsPrevision,
-          reel: data.graphCoutsReel,
-        });
+        setGraphCouts((prev) => ({
+          ...prev,
+          prevision: data.map((item) => ({
+            jour: item.profondeur,
+            valeur: item.cout_cumule,
+          })),
+        }));
       })
-      .catch((err) => console.error("Erreur de récupération des données :", err));
+      .catch((err) => console.error("Erreur récupération coûts :", err));
+
+    fetch("http://127.0.0.1:8000/projets/107/prof_cout_realite")
+      .then((res) => res.json())
+      .then((data) => {
+        setGraphCouts((real) => ({
+          ...real,
+          reel: data.map((item) => ({
+            jour: item.profondeur,
+            valeur: item.cout,
+          })),
+        }));
+      })
+      .catch((err) => console.error("Erreur récupération coûts réels :", err));
+
+    // DÉLAIS
+    fetch("http://127.0.0.1:8000/projets/107/prof_date_realite")
+      .then((res) => res.json())
+      .then((data) => {
+        setGraphDelais((real) => ({
+          ...real,
+          reel: data.map((item) => ({
+            jour: item.date,
+            valeur: item.profondeur,
+            incident: item.incident,
+          })),
+        }));
+      })
+      .catch((err) => console.error("Erreur récupération délais réels :", err));
+
+    fetch("http://127.0.0.1:8000/projets/107/prof_date")
+      .then((res) => res.json())
+      .then((data) => {
+        setGraphDelais((prev) => ({
+          ...prev,
+          prevision: data.map((item) => ({
+            jour: item.date,
+            valeur: item.profondeur,
+          })),
+        }));
+      })
+      .catch((err) => console.error("Erreur récupération prévisions délais :", err));
   }, []);
 
-  const makeOptions = (titleY, titleChart) => ({
+  const makeOptions = (titleY, titleX, titleChart, isDate = false) => ({
     responsive: true,
     plugins: {
       legend: { position: "top" },
-      title: {
-        display: true,
-        text: titleChart,
-      },
+      title: { display: true, text: titleChart },
     },
     scales: {
       y: {
@@ -76,51 +119,73 @@ const DashboardPuit = () => {
       x: {
         title: {
           display: true,
-          text: "Temps (jours)",
+          text: titleX,
           color: "orangered",
           font: { size: 14 },
+        },
+        ticks: {
+          callback: function (value, index, ticks) {
+            const label = this.getLabelForValue(value);
+            if (!isDate) return label;
+            const date = new Date(label);
+            return isNaN(date.getTime())
+              ? label
+              : date.toLocaleDateString("fr-FR", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                });
+          },
         },
       },
     },
   });
 
-  const makeChartData = (prevision, reel) => ({
-    labels: prevision.map((p) => p.jour),
-    datasets: [
-      {
-        label: "Prévision",
-        data: prevision.map((p) => p.valeur),
-        borderColor: "green",
-        backgroundColor: "green",
-        borderWidth: 4,
-        tension: 0.3,
-        pointRadius: 0,
-        fill: false,
-      },
-      {
-        label: "Réalité",
-        data: reel.map((p) => p.valeur),
+  const makeChartData = (prevision, reel, useDates = false) => {
+    const allX = [...new Set([...prevision.map((p) => p.jour), ...reel.map((r) => r.jour)])];
+    const sortedX = allX.sort((a, b) =>
+      useDates ? new Date(a) - new Date(b) : a - b
+    );
+
+    return {
+      labels: sortedX,
+      datasets: [
+        {
+          label: "Prévisionnel",
+          data: prevision.map((p) => ({
+            x: p.jour,
+            y: p.valeur,
+          })),
+          borderColor: "green",
+          backgroundColor: "green",
+          borderWidth: 4,
+          tension: 0.3,
+          pointRadius: 0,
+          fill: false,
+        },
+        {
+        label: "Réalisé",
+        data: reel.map((r) => ({ x: r.jour, y: r.valeur })),
         borderColor: "orange",
         backgroundColor: "orange",
         borderWidth: 3,
         tension: 0.3,
-        pointRadius: 3,
+        pointbordercolor :reel.map((r) => r.incident ? "red" : "orange"),
+        pointRadius:  reel.map((r) => (r.incident ? 8 : 0)),
+        pointBackgroundColor: reel.map((r) => r.incident ? "red" : "orange"), // 👈 couleur dynamique des points
         fill: false,
-      },
-      {
+        },
+         {
         label: "Incident",
-        data: reel.map((p, i, arr) =>
-          i === 0 ? null : p.valeur <= arr[i - 1].valeur ? p.valeur : null
-        ),
         borderColor: "red",
         backgroundColor: "red",
-        borderWidth: 5,
+        borderWidth: 3,
         tension: 0.3,
-        pointRadius: 4,
-        fill: false,
-      },
-    ],
-  });
+         fill: false,
+        },
+      ],
+    };
+  };
 
   return (
     <div className="p-8">
@@ -136,7 +201,7 @@ const DashboardPuit = () => {
         </button>
       </div>
 
-      {/* SECTION DÉLAIS */}
+      {/* DÉLAIS */}
       <section className="mb-12">
         <h2 className="text-3xl font-bold text-orange-600">
           Visualisation <br />
@@ -148,21 +213,23 @@ const DashboardPuit = () => {
               <p><strong>Date prévue :</strong> {delais.planned}</p>
               <p><strong>Date estimée :</strong> {delais.expected}</p>
             </div>
-            <p className="text-red-600 text-sm font-semibold mb-2">
-              Le projet est en retard de 1 mois et 1 jour
-            </p>
+            {delais.expected !== delais.planned && (
+              <p className="text-red-600 text-sm font-semibold mb-2">
+                Le projet est en retard
+              </p>
+            )}
             <div className="border border-orange-500 text-green-900 px-3 py-1 rounded text-sm font-semibold w-fit">
               Jours restants : {delais.remaining}
             </div>
           </div>
           <Line
-            options={makeOptions("Profondeur (pieds)", "Progression (Profondeur en pieds) par rapport au temps")}
-            data={makeChartData(graphDelais.prevision, graphDelais.reel)}
+            options={makeOptions("Profondeur (pieds)", "Date", "Progression (Profondeur en pieds) par rapport au temps", true)}
+            data={makeChartData(graphDelais.prevision, graphDelais.reel, true)}
           />
         </div>
       </section>
 
-      {/* SECTION COÛTS */}
+      {/* COÛTS */}
       <section>
         <h2 className="text-3xl font-bold text-orange-600">
           Visualisation <br />
@@ -174,16 +241,18 @@ const DashboardPuit = () => {
               <p><strong>Coût prévu :</strong> {couts.planned.toLocaleString()} DA</p>
               <p><strong>Coût estimé :</strong> {couts.expected.toLocaleString()} DA</p>
             </div>
-            <p className="text-red-600 text-sm font-semibold mb-2">
-              Le dépassement est de {(couts.expected - couts.planned).toLocaleString()} DA
-            </p>
+            {couts.expected > couts.planned && (
+              <p className="text-red-600 text-sm font-semibold mb-2">
+                Le dépassement est de {(couts.expected - couts.planned).toLocaleString()} DA
+              </p>
+            )}
             <div className="border border-orange-500 text-green-900 px-3 py-1 rounded text-sm font-semibold w-fit">
               Montant restant : {couts.remaining.toLocaleString()} DA
             </div>
           </div>
           <Line
-            options={makeOptions("Coût (DA)", "Coûts du projet (DA) par rapport au temps")}
-            data={makeChartData(graphCouts.prevision, graphCouts.reel)}
+            options={makeOptions("Coût cumulé (DA)", "Profondeur (pieds)", "Coûts du projet (DA) par rapport à la profondeur (pieds)", false)}
+            data={makeChartData(graphCouts.prevision, graphCouts.reel, false)}
           />
         </div>
       </section>

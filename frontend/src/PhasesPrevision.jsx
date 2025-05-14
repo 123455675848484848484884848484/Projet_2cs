@@ -8,6 +8,8 @@ const PhasesPrevision = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = location.state || {}; 
+  const { cout} = location.state || {} ;
+  const {delai} = location.state || {} ;
 
   
   
@@ -59,9 +61,40 @@ const PhasesPrevision = () => {
   };
 
   const handleValider = () => {
+    
+
     const tousChampsRemplis = phases.every(
-      (phase) => phase.cout && phase.delai && phase.profondeur
-    );
+    (phase) => phase.cout && phase.delai && phase.profondeur
+  );
+
+  if (!tousChampsRemplis) {
+    alert("Veuillez remplir tous les champs pour chaque phase.");
+    return;
+  }
+
+  // Conversion + Somme
+  const totalCout = phases.reduce((sum, p) => sum + parseFloat(p.cout || 0), 0);
+  const totalDelai = phases.reduce((sum, p) => sum + parseInt(p.delai || 0), 0);
+
+  // Vérification d'égalité stricte
+  if (parseFloat(totalCout) !== parseFloat(cout)) {
+    alert(`La somme des coûts (${totalCout}) doit être égale au coût total (${cout})`);
+    return;
+  }
+
+  if (parseInt(totalDelai) !== parseInt(delai)) {
+    alert(`La somme des délais (${totalDelai}) doit être égale au délai total (${delai})`);
+    return;
+  }
+
+   for (let i = 1; i < phases.length; i++) {
+    const prev = parseFloat(phases[i - 1].profondeur);
+    const current = parseFloat(phases[i].profondeur);
+    if (current <= prev) {
+      alert(`La profondeur de la phase ${i + 1} (${current} m) doit être supérieure à celle de la phase ${i} (${prev} m).`);
+      return;
+    }
+  }
 
     if (tousChampsRemplis) {
       const phasesToSend = phases.map((phase) => ({
@@ -82,7 +115,7 @@ const PhasesPrevision = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Réponse de l'API:", data);
-        navigate("/operations",{ state: { projetid:id } })})
+        navigate("/operations",{ state: { projetid:id , cout , delai } })})
         .catch((error) => {
           console.error("Erreur lors de l'envoi des données:", error);
           alert("Une erreur s'est produite lors de l'envoi des prévisions. Veuillez réessayer.");
@@ -101,6 +134,8 @@ const PhasesPrevision = () => {
       <h1 className="text-[54px] font-bold text-orange-600 leading-[60px] mb-12">
         Vos prévisions
         {id}
+        {cout}
+        {delai}
       </h1>
 
       <div className="flex items-start gap-16">

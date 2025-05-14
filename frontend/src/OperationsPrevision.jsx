@@ -7,7 +7,8 @@ const OperationsPrevision = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { projetid } = location.state || {}; 
-
+  const {cout} = location.state || {}; 
+  const {delai} = location.state || {}; 
   
 
   useEffect(() => {
@@ -33,6 +34,25 @@ const OperationsPrevision = () => {
   };
 
   const handleSave = async () => {
+     const tousChampsRemplis = operations.every((op) => op.cout && op.delai);
+  const coutTotal = operations.reduce((sum, op) => sum + parseFloat(op.cout || 0), 0);
+  const delaiTotal = operations.reduce((sum, op) => sum + parseInt(op.delai || 0), 0);
+
+  if (!tousChampsRemplis) {
+    alert("Veuillez remplir tous les champs pour chaque opération.");
+    return;
+  }
+
+  if (coutTotal !== parseFloat(cout)) {
+    alert(`Le coût total doit être exactement égal à ${cout} DA. Coût actuel : ${coutTotal} DA`);
+    return;
+  }
+
+  if (delaiTotal !== parseInt(delai)) {
+    alert(`Le délai total doit être exactement égal à ${delai} jours. Délai actuel : ${delaiTotal} jours`);
+    return;
+  }
+
     const operationsData = operations.map((op) => ({
       id_operation: op.id,
       cout_prevu: parseFloat(op.cout),

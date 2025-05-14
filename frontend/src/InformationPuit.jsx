@@ -55,7 +55,7 @@ const InformationPuit = () => {
       const projetId = data.id; // ID du projet créé
 
       // Redirection vers la page des phases en passant l'ID du projet via le state
-      navigate("/phasepre", { state: { id: projetId } }); // Envoie l'ID dans le state
+      navigate("/phasepre", { state: { id: projetId , cout:formData.budget , delai :formData.duree} }); // Envoie l'ID dans le state
     } catch (error) {
       console.error("Erreur :", error);
     }
