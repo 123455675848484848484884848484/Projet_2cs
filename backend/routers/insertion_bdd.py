@@ -180,7 +180,7 @@ async def inserer_probleme_operation_journaliere(
 async def inserer_incident(
     id_projet: int = Form(...),
     utilisateur: int = Form(...),
-    date_incident: str = Form(...),  # Format attendu : "YYYY-MM-DD" !!!!
+    date_incident: str = Form(...),  
     fichier_joint: UploadFile = File(None)
 ):
     db: Session = next(get_db())
