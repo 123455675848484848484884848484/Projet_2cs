@@ -145,7 +145,7 @@ def get_resume_projet(projet_id: int, db: Session = Depends(get_db)):
         "date_estimee": date_fin_estimee,
         "jours_restants": (date_fin_estimee - datetime.now().date()).days,
         "cout_previsionnel": float(cout_previsionnel),
-        "cout_reel": float(cout_reel),
+        "cout_reel":float(cout_reel),
         "montant_restant":max(0, float(cout_previsionnel) - float(cout_reel))
     }
 
