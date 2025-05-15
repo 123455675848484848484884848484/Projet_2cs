@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Navbar from "./components/navbar"; 
 
 const SignalerProbleme = () => {
   const [problems, setProblems] = useState([
@@ -46,8 +47,10 @@ const SignalerProbleme = () => {
   };
 
   return (
+    <>
+      <Navbar role="agent" />
     <div className="min-h-screen px-24 py-12 bg-[#f4f4f4]">
-      <h1 className="text-[54px] font-bold text-orange-600 leading-[60px] mb-2">
+      <h1 className="text-[54px] font-bold text-[#EA5529] leading-[60px] mb-2">
         Signaler un incident
       </h1>
       <p className="text-gray-700 mb-8">
@@ -74,7 +77,7 @@ const SignalerProbleme = () => {
                     <select
                       value={row.puit || ""}
                       onChange={(e) => handleChange(index, "puit", e.target.value)}
-                      className="appearance-none w-full border border-gray-300 bg-white text-gray-700 py-2 pl-3 pr-8 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                      className="appearance-none w-full border border-gray-300 bg-white text-gray-700 py-2 pl-3 pr-8 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#EA5529] focus:border-[#EA5529]"
                     >
                       <option value="">Sélectionner un puit</option>
                       {puits.map((puit) => (
@@ -99,7 +102,7 @@ const SignalerProbleme = () => {
                     onChange={(e) =>
                       handleChange(index, "probleme", e.target.value)
                     }
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#EA5529] focus:border-[#EA5529]"
                     placeholder="Décrivez le problème"
                   />
                 </td>
@@ -111,7 +114,7 @@ const SignalerProbleme = () => {
                     onChange={(e) =>
                       handleChange(index, "date", e.target.value)
                     }
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#EA5529] focus:border-[#EA5529]"
                   />
                 </td>
 
@@ -120,7 +123,7 @@ const SignalerProbleme = () => {
   <select
     value={row.resolu}
     onChange={(e) => handleChange(index, "resolu", e.target.value)}
-    className="appearance-none w-full border border-gray-300 bg-white text-gray-700 py-2 pl-3 pr-8 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+    className="appearance-none w-full border border-gray-300 bg-white text-gray-700 py-2 pl-3 pr-8 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#EA5529] focus:border-[#EA5529]"
   >
     <option value="">Choisir</option>
     <option value="oui">Oui</option>
@@ -167,12 +170,13 @@ const SignalerProbleme = () => {
       <div className="flex justify-end mt-6">
         <button
           onClick={handleSubmit}
-          className="bg-orange-600 hover:bg-orange-700 text-white font-semibold text-[16px] px-10 py-3 rounded-md transition"
+          className="bg-[#EA5529] hover:bg-[#EA5529] text-white font-semibold text-[16px] px-10 py-3 rounded-md transition"
         >
           Valider
         </button>
       </div>
     </div>
+    </>
   );
 };
 

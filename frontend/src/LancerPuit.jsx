@@ -65,7 +65,7 @@ const LancerPuit = () => {
                 id="dateDebut"
                 value={dateDebut}
                 onChange={(e) => setDateDebut(e.target.value)}
-                className="w-full h-[52px] text-[16px] px-4 border-2 border-orange-500 rounded-md focus:outline-none focus:ring-2 focus:ring-[#EA5529]"
+                className="w-full h-[52px] text-[16px] px-4 border-2 border-[#EA5529] rounded-md focus:outline-none focus:ring-2 focus:ring-[#EA5529]"
                 required
               />
             </div>

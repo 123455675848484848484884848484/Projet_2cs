@@ -78,7 +78,7 @@ const Login = () => {
   
         {/* Form */}
         <div className="w-1/2 flex flex-col justify-center px-10 py-12">
-          <h2 className="text-2xl font-bold text-orange-500 mb-8 text-center">
+          <h2 className="text-2xl font-bold text-[#EA5529] mb-8 text-center">
             Connectez-vous
           </h2>
   
@@ -92,7 +92,7 @@ const Login = () => {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#EA5529]"
               />
               {error && (
                 <p className="text-red-500 text-sm mt-1">
@@ -110,7 +110,7 @@ const Login = () => {
                 placeholder="Mot de passe"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#EA5529]"
               />
               <span
                 onClick={() => setShowPassword(!showPassword)}
@@ -128,7 +128,7 @@ const Login = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-orange-500 hover:bg-[#EA5529] text-white font-medium py-3 rounded-md transition"
+              className="w-full bg-[#EA5529] hover:bg-[#EA5529] text-white font-medium py-3 rounded-md transition"
             >
               Se connecter
             </button>

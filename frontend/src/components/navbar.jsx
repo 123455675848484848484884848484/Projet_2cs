@@ -1,7 +1,9 @@
 import React from "react";
 import logo from './logo.png';
+import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ role }) => {
+  const navigate = useNavigate();
   return (
     <nav className="sticky top-0 z-50 w-full bg-white/20 shadow-md px-6 py-4 flex items-center justify-between">
       
@@ -34,10 +36,13 @@ const Navbar = ({ role }) => {
           </button>
         )}
         {role === "agent" && (
-          <button className="bg-[#EA5529] text-white px-4 py-2 rounded-lg hover:bg-[#d1441f] transition">
-            Insérer fichier journalier
-          </button>
-        )}
+  <button
+    onClick={() => navigate("/file")}
+    className="bg-[#EA5529] text-white px-4 py-2 rounded-lg hover:bg-[#d1441f] transition"
+  >
+    Insérer fichier journalier
+  </button>
+)}
       </div>
     </nav>
   );

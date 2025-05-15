@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import Navbar from "./components/navbar"; 
 const FichierJournalier = () => {
   const [problems, setProblems] = useState([
     { operation: [], probleme: "", solution: "", file: null },
@@ -111,6 +111,8 @@ const FichierJournalier = () => {
   ];
 
   return (
+      <>
+      <Navbar role="agent" />
     <div className="min-h-screen px-24 py-12 bg-[#f4f4f4]">
       <h1 className="text-[54px] font-bold text-[#EA5529] leading-[60px] mb-2">
         Fichier journalier
@@ -253,6 +255,7 @@ const FichierJournalier = () => {
         </button>
       </div>
     </div>
+    </>
   );
 };
 
