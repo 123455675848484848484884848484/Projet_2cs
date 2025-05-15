@@ -31,24 +31,24 @@ const DashboardPuit = () => {
   const [graphCouts, setGraphCouts] = useState({ prevision: [], reel: [] });
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/projets/107/dates")
-      .then((res) => res.json())
-      .then((data) => {
-        setPuit({ nom: data.projet, adresse: data.adresse });
-        setDelais({
-          planned: data.date_prevue,
-          expected: data.date_estimee,
-          remaining: data.jours_restants,
-        });
-        setCouts({
-          planned: data.cout_previsionnel,
-          expected: data.cout_reel,
-          remaining: data.montant_restant,
-        });
-      })
-      .catch((err) => console.error("Erreur récupération infos projet :", err));
-
-    fetch("http://127.0.0.1:8000/projets/107/prof_cout")
+    // COÛTS
+    fetch(" http://127.0.0.1:8000/projets/112/dates")
+  .then((res) => res.json())
+  .then((data) => {
+    setPuit({ nom: data.projet, adresse: data.adresse });
+    setDelais({
+      planned: data.date_prevue,
+      expected: data.date_estimee,
+      remaining: data.jours_restants,
+    });
+    setCouts({
+      planned: data.cout_previsionnel,
+      expected: data.cout_reel,
+      remaining: data.montant_restant,
+    });
+  })
+  .catch((err) => console.error("Erreur récupération infos projet :", err));
+    fetch("http://127.0.0.1:8000/projets/112/prof_cout")
       .then((res) => res.json())
       .then((data) => {
         setGraphCouts((prev) => ({
@@ -61,7 +61,7 @@ const DashboardPuit = () => {
       })
       .catch((err) => console.error("Erreur récupération coûts :", err));
 
-    fetch("http://127.0.0.1:8000/projets/107/prof_cout_realite")
+    fetch("http://127.0.0.1:8000/projets/112/prof_cout_realite")
       .then((res) => res.json())
       .then((data) => {
         setGraphCouts((real) => ({
@@ -74,7 +74,8 @@ const DashboardPuit = () => {
       })
       .catch((err) => console.error("Erreur récupération coûts réels :", err));
 
-    fetch("http://127.0.0.1:8000/projets/107/prof_date_realite")
+    // DÉLAIS
+    fetch("http://127.0.0.1:8000/projets/112/prof_date_realite")
       .then((res) => res.json())
       .then((data) => {
         setGraphDelais((real) => ({
@@ -88,7 +89,7 @@ const DashboardPuit = () => {
       })
       .catch((err) => console.error("Erreur récupération délais réels :", err));
 
-    fetch("http://127.0.0.1:8000/projets/107/prof_date")
+    fetch("http://127.0.0.1:8000/projets/112/prof_date")
       .then((res) => res.json())
       .then((data) => {
         setGraphDelais((prev) => ({
