@@ -106,6 +106,7 @@ class Incident(Base):
 
     id = Column(Integer, primary_key=True)
     id_projet = Column(Integer, ForeignKey('projet.id'))
-    utilisateur = Column(Integer, ForeignKey('utilisateur.id'))
     date_incident = Column(Date)
     fichier_joint = Column(BLOB)
+    id_utilisateur = Column(Integer, ForeignKey('utilisateur.id'))
+    resolu = Column(String(1), default='N')
