@@ -7,14 +7,20 @@ const SignalerProbleme = () => {
   const [autresProblemes, setAutresProblemes] = useState("");
   const [puits, setPuits] = useState([]);
 
-  useEffect(() => {
-    fetch("/api/puits") // Remplace cette URL par ton endpoint réel
-      .then((res) => res.json())
-      .then((data) => setPuits(data))
-      .catch((err) =>
-        console.error("Erreur lors du chargement des puits", err)
-      );
-  }, []);
+ useEffect(() => {
+  fetch("http://localhost:8000/projets/12")
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`Erreur HTTP: ${res.status}`);
+        console.log(puits);
+      }
+      return res.json();
+    })
+    .then((data) => setPuits(data))
+    .catch((err) =>
+      console.error("Erreur lors du chargement des projets", err)
+    );
+}, []);
 
   const handleChange = (index, field, value) => {
     const updated = [...problems];
@@ -66,17 +72,18 @@ const SignalerProbleme = () => {
                 <td className="px-4 py-2 align-top">
                   <div className="relative">
                     <select
-  value={row.puit || ""}
-  onChange={(e) => handleChange(index, "puit", e.target.value)}
-  className="appearance-none w-full border border-gray-300 bg-white text-gray-700 py-2 pl-3 pr-8 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
->
-  <option value="">Sélectionner un puit</option>
-  {puits.map((puit) => (
-    <option key={puit.id} value={puit.nom}>
-      {puit.nom}
-    </option>
-  ))}
-</select>
+                      value={row.puit || ""}
+                      onChange={(e) => handleChange(index, "puit", e.target.value)}
+                      className="appearance-none w-full border border-gray-300 bg-white text-gray-700 py-2 pl-3 pr-8 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    >
+                      <option value="">Sélectionner un puit</option>
+                      {puits.map((puit) => (
+                        <option key={puit.id} value={puit.name}>
+                          {puit.name}
+                        </option>
+                      ))}
+                    </select>
+
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                       <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
                         <path d="M7 7l3-3 3 3m0 6l-3 3-3-3" />
