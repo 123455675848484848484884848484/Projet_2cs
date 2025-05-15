@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar"; 
+
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -60,6 +62,8 @@ const Login = () => {
   };
   
   return (
+    <>
+    <Navbar role="guest" />
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex w-[900px] overflow-hidden shadow-md rounded-[30px] bg-white">
         {/* Left image */}
@@ -124,7 +128,7 @@ const Login = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-md transition"
+              className="w-full bg-orange-500 hover:bg-[#EA5529] text-white font-medium py-3 rounded-md transition"
             >
               Se connecter
             </button>
@@ -132,6 +136,7 @@ const Login = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -1,6 +1,8 @@
 
 import React, { useState , useEffect } from "react";
 import { useNavigate  } from "react-router-dom";
+import Navbar from "./components/navbar"; 
+
 
 const LancerPuit = () => {
     const [dateDebut, setDateDebut] = useState("");
@@ -35,11 +37,13 @@ const LancerPuit = () => {
       }
     };
   return (
+    <>
+      <Navbar role="manager" />
     <div className="flex h-screen overflow-hidden">
       {/* Colonne gauche */}
       <div className="w-1/2 bg-[#f9f9f9] flex items-center justify-center px-[80px]">
         <div className="w-full max-w-[400px]">
-          <h1 className="text-[48px] font-bold leading-[56px] text-orange-600">
+          <h1 className="text-[48px] font-bold leading-[56px] text-[#EA5529]">
             Lancer un <br /> Puit
           </h1>
 
@@ -61,7 +65,7 @@ const LancerPuit = () => {
                 id="dateDebut"
                 value={dateDebut}
                 onChange={(e) => setDateDebut(e.target.value)}
-                className="w-full h-[52px] text-[16px] px-4 border-2 border-orange-500 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-600"
+                className="w-full h-[52px] text-[16px] px-4 border-2 border-orange-500 rounded-md focus:outline-none focus:ring-2 focus:ring-[#EA5529]"
                 required
               />
             </div>
@@ -69,7 +73,7 @@ const LancerPuit = () => {
             <div className="text-right">
   <button
     type="submit"
-    className="w-[150px] h-[52px] bg-orange-600 hover:bg-orange-700 text-white text-[16px] font-semibold rounded-md transition"
+    className="w-[150px] h-[52px] bg-[#EA5529] hover:bg-[#EA5529] text-white text-[16px] font-semibold rounded-md transition"
   >
     Suivant
   </button>
@@ -87,6 +91,7 @@ const LancerPuit = () => {
         />
       </div>
     </div>
+    </>
   );
 };
 

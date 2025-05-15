@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import Navbar from "./components/navbar"; 
+
 
  
 const OperationsPrevision = () => {
@@ -80,8 +82,10 @@ const OperationsPrevision = () => {
   
 
   return (
+     <>
+      <Navbar role="manager" />
     <div className="min-h-screen bg-[#f9f9f9] px-28 pt-12 pb-20">
-      <h1 className="text-[54px] font-bold text-orange-600 leading-[60px] mb-12">
+      <h1 className="text-[54px] font-bold text-[#EA5529] leading-[60px] mb-12">
         Vos prévisions
       </h1>
 
@@ -91,33 +95,33 @@ const OperationsPrevision = () => {
           <Link to="/phasepre" className="flex items-center gap-4">
             <div className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
               location.pathname === "/phasepre"
-                ? "bg-gray-200 border-orange-500 text-black"
+                ? "bg-gray-200 border-[#EA5529] text-black"
                 : "bg-gray-100 text-gray-400 border-gray-300"
             }`}>
               1
             </div>
             <span className={`font-semibold text-2xl ${
               location.pathname === "/phasepre"
-                ? "text-orange-600"
+                ? "text-[#EA5529]"
                 : "text-gray-400"
             }`}>
               Phases
             </span>
           </Link>
 
-          <div className="h-[60px] w-[2px] bg-orange-500 ml-8" />
+          <div className="h-[60px] w-[2px] bg-[#EA5529] ml-8" />
 
           <Link to="/operations" className="flex items-center gap-4">
             <div className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
               location.pathname === "/operations"
-                ? "bg-gray-200 border-orange-500 text-black"
+                ? "bg-gray-200 border-[#EA5529] text-black"
                 : "bg-gray-100 text-gray-400 border-gray-300"
             }`}>
               2
             </div>
             <span className={`font-semibold text-2xl ${
               location.pathname === "/operations"
-                ? "text-orange-600"
+                ? "text-[#EA5529]"
                 : "text-gray-400"
             }`}>
               Opérations
@@ -179,7 +183,7 @@ const OperationsPrevision = () => {
       alert("Veuillez remplir tous les champs pour chaque opération.");
     }
   }}
-  className="bg-orange-600 hover:bg-orange-700 text-white font-semibold text-[16px] px-10 py-3 rounded-md"
+  className="bg-[#EA5529] hover:bg-[#EA5529] text-white font-semibold text-[16px] px-10 py-3 rounded-md"
 >
   Valider
 </button>
@@ -187,6 +191,7 @@ const OperationsPrevision = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate  , useLocation} from "react-router-dom";
+import Navbar from "./components/navbar"; 
 const InformationPuit = () => {
   const [formData, setFormData] = useState({
     nom: "",
@@ -73,10 +74,12 @@ const InformationPuit = () => {
   ];
 
   return (
+    <>
+    <Navbar role="manager" />
     <div className="flex h-screen px-20 bg-[#f9f9f9] items-center">
       {/* Colonne gauche : texte */}
       <div className="w-1/2 pr-10 h-full flex flex-col justify-center">
-  <h1 className="text-[48px] font-bold leading-[56px] text-orange-600 mb-6">
+  <h1 className="text-[48px] font-bold leading-[56px] text-[#EA5529] mb-6">
     Information sur <br /> le puit
     <p>{userid} </p>
   </h1>
@@ -98,7 +101,7 @@ const InformationPuit = () => {
     name="nom"
     value={formData.nom}
     onChange={handleChange}
-    className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-orange-600 focus:ring-0 focus:text-orange-600"
+    className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-[#EA5529] focus:ring-0 focus:text-[#EA5529]"
     required
   />
 </div>
@@ -113,7 +116,7 @@ const InformationPuit = () => {
     name="wilaya"
     value={formData.wilaya}
     onChange={handleChange}
-    className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-orange-600 focus:ring-0 focus:text-orange-600"
+    className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-[#EA5529] focus:ring-0 focus:text-[#EA5529]"
     required
   >
     <option value="">-- Choisir une wilaya --</option>
@@ -135,7 +138,7 @@ const InformationPuit = () => {
     name="adresse"
     value={formData.adresse}
     onChange={handleChange}
-    className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-orange-600 focus:ring-0 focus:text-orange-600"
+    className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-[#EA5529] focus:ring-0 focus:text-[#EA5529]"
     required
   />
 </div>
@@ -152,7 +155,7 @@ const InformationPuit = () => {
     name="duree"
     value={formData.duree}
     onChange={handleChange}
-    className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-orange-600 focus:ring-0 focus:text-orange-600"
+    className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-[#EA5529] focus:ring-0 focus:text-[#EA5529]"
     required
   />
 </div>
@@ -169,7 +172,7 @@ const InformationPuit = () => {
     name="budget"
     value={formData.budget}
     onChange={handleChange}
-    className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-orange-600 focus:ring-0 focus:text-orange-600"
+    className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-[#EA5529] focus:ring-0 focus:text-[#EA5529]"
     required
   />
 </div>
@@ -177,14 +180,18 @@ const InformationPuit = () => {
 <div className="text-right">
   <button
     type="submit"
-    className="w-[150px] h-[52px] bg-orange-600 hover:bg-orange-700 text-white text-[16px] font-semibold rounded-md transition"
+    className="w-[150px] h-[52px] bg-[#EA5529] hover:bg-[#EA5529] text-white text-[16px] font-semibold rounded-md transition"
   >
     Valider
   </button>
 </div>
       </form>
     </div>
+    </>
   );
+   
+ 
 };
+
 
 export default InformationPuit;

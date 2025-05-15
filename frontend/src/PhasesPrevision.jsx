@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
+import Navbar from "./components/navbar"; 
+
+
 
 const PhasesPrevision = () => {
   const [phases, setPhases] = useState([]);
@@ -130,8 +133,10 @@ const PhasesPrevision = () => {
 
 
   return (
+    <>
+    <Navbar role="manager" />
     <div className="min-h-screen bg-[#f9f9f9] px-28 pt-12 pb-20">
-      <h1 className="text-[54px] font-bold text-orange-600 leading-[60px] mb-12">
+      <h1 className="text-[54px] font-bold text-[#EA5529] leading-[60px] mb-12">
         Vos prévisions
         {id}
         {cout}
@@ -144,7 +149,7 @@ const PhasesPrevision = () => {
             <div
               className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
                 location.pathname === "/phasepre"
-                  ? "bg-gray-200 border-orange-500 text-black"
+                  ? "bg-gray-200 border-[#EA5529] text-black"
                   : "bg-gray-100 text-gray-400 border-gray-300"
               }`}
             >
@@ -152,20 +157,20 @@ const PhasesPrevision = () => {
             </div>
             <span
               className={`font-semibold text-2xl ${
-                location.pathname === "/phasepre" ? "text-orange-600" : "text-gray-400"
+                location.pathname === "/phasepre" ? "text-[#EA5529]" : "text-gray-400"
               }`}
             >
               Phases
             </span>
           </Link>
 
-          <div className="h-[60px] w-[2px] bg-orange-500 ml-8" />
+          <div className="h-[60px] w-[2px] bg-[#EA5529] ml-8" />
 
           <Link to="/operations" className="flex items-center gap-4">
             <div
               className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
                 location.pathname === "/operations"
-                  ? "bg-gray-200 border-orange-500 text-black"
+                  ? "bg-gray-200 border-[#EA5529] text-black"
                   : "bg-gray-100 text-gray-400 border-gray-300"
               }`}
             >
@@ -173,7 +178,7 @@ const PhasesPrevision = () => {
             </div>
             <span
               className={`font-semibold text-2xl ${
-                location.pathname === "/operations" ? "text-orange-600" : "text-gray-400"
+                location.pathname === "/operations" ? "text-[#EA5529]" : "text-gray-400"
               }`}
             >
               Opérations
@@ -235,7 +240,7 @@ const PhasesPrevision = () => {
           <div className="flex justify-end mt-8">
             <button
               onClick={handleValider}
-              className="bg-orange-600 hover:bg-orange-700 text-white px-10 py-3 rounded-md font-semibold text-[16px]"
+              className="bg-[#EA5529] hover:bg-[#EA5529] text-white px-10 py-3 rounded-md font-semibold text-[16px]"
             >
               Valider
             </button>
@@ -243,6 +248,7 @@ const PhasesPrevision = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
