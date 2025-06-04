@@ -27,7 +27,7 @@ function App() {
      <Route path="/signal" element={<SignalerProbleme />} />
      <Route path="/agent" element={<Homeagent />} />
      <Route path="/manager" element={<Homemanager />} />
-     <Route path="/dashp" element={<DashboardPuit />} />
+     <Route path="/dashp/:id" element={<DashboardPuit />} />
   </Routes>
     </Router> 
  

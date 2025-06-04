@@ -23,7 +23,7 @@ export default function Homemanager() {
         <div className="flex flex-col space-y-4 w-full max-w-sm">
           <button
             className="bg-[#EA5529] text-white py-3 rounded-md font-semibold hover:bg-[#EA5529] transition"
-            onClick={() => navigate("/mespuits")}
+            onClick={() => navigate("/mespuits") }
           >
             Consulter les Puits
           </button>

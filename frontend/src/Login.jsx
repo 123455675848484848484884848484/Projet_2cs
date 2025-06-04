@@ -46,7 +46,7 @@ const Login = () => {
         localStorage.setItem('user_id', data.user_id);
         const userid = localStorage.getItem('user_id');
         console.log(data.user_id);
-        navigate('/MesPuits');
+        navigate('/manager');
       } else {
         const errorData = await response.json();
         // Si errorData est un objet, on le convertit en une chaîne de caractères

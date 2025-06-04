@@ -22,9 +22,10 @@ const FichierJournalier = () => {
 
   const handleSubmit = async () => {
     try {
+      const userId = localStorage.getItem("user_id");
       const formData = new FormData();
       const fichierExcel = selectedFiles[0];
-      formData.append("user_id", 12); // A FAIRE PASSER APRES !!!
+      formData.append("user_id", userId); // A FAIRE PASSER APRES  ( c'est bon c'est fait )!!!
       formData.append("projet_id", 2); // A FAIRE PASSER APRES !!!
       formData.append("file", fichierExcel);
   

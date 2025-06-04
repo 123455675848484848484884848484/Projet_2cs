@@ -69,7 +69,7 @@ def get_projets_par_utilisateur(id_utilisateur: int, db: Session = Depends(get_d
     projets = db.query(Projet).filter(Projet.id.in_(projets_ids)).all()
 
     return [  
-        {
+        {   "id":projet.id,
             "name": projet.name,
             "date_debut": projet.date_debut,
             "budget_total": projet.budget_total,
@@ -110,7 +110,9 @@ def get_projet_avec_equipe(id_projet: int, db: Session = Depends(get_db)):
         "closed": projet.closed,
         "equipe": noms_equipes
     }
+ 
 
+ #dashboard de projet 
 
 @router.get("/{projet_id}/dates")
 def get_resume_projet(projet_id: int, db: Session = Depends(get_db)):
@@ -360,3 +362,37 @@ def get_profondeur_par_date(projet_id: int, db: Session = Depends(get_db)):
         print(f"Erreur : {str(e)}")
         print(traceback.format_exc())
         return {"error": "Une erreur est survenue, veuillez réessayer plus tard."}
+
+
+# fin du dashboard 
+
+
+
+@router.get("/recherche/{user_id}/{mot_cle}")
+def rechercher_projets(user_id: int, mot_cle: str, db: Session = Depends(get_db)):
+    # Étape 1 : récupérer les IDs de projets auxquels l'utilisateur a accès
+    projets_ids = db.query(UserProjet.id_projet).filter(UserProjet.id_utilisateur == user_id).all()
+    projets_ids = [p[0] for p in projets_ids]  # extraire les IDs
+
+    # Étape 2 : requête de base
+    query = db.query(Projet).filter(Projet.id.in_(projets_ids))
+
+    # Étape 3 : filtrer par mot-clé si ce n'est pas "_"
+    if mot_cle != "_":
+        query = query.filter(Projet.name.ilike(f"%{mot_cle}%"))
+
+    projets = query.all()
+
+    # Étape 4 : format de sortie personnalisé
+    return [
+        {
+            "id": p.id,
+            "name": p.name,
+            "date_debut": p.date_debut,
+            "wilaya": p.wilaya,
+            "adresse": p.adresse,
+            "duree_prevue": f"{p.duree_prevue} jours",
+            "budget_total": f"{p.budget_total} DZD"
+        }
+        for p in projets
+    ]

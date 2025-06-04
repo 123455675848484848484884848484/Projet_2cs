@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Line } from "react-chartjs-2";
+import { useParams } from "react-router-dom";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -29,10 +32,11 @@ const DashboardPuit = () => {
   const [couts, setCouts] = useState({ planned: 0, expected: 0, remaining: 0 });
   const [graphDelais, setGraphDelais] = useState({ prevision: [], reel: [] });
   const [graphCouts, setGraphCouts] = useState({ prevision: [], reel: [] });
+  const { id } = useParams();
 
   useEffect(() => {
     // COÛTS
-    fetch(" http://127.0.0.1:8000/projets/112/dates")
+    fetch(`http://127.0.0.1:8000/projets/${id}/dates`)
   .then((res) => res.json())
   .then((data) => {
     setPuit({ nom: data.projet, adresse: data.adresse });
@@ -48,7 +52,7 @@ const DashboardPuit = () => {
     });
   })
   .catch((err) => console.error("Erreur récupération infos projet :", err));
-    fetch("http://127.0.0.1:8000/projets/112/prof_cout")
+    fetch(`http://127.0.0.1:8000/projets/${id}/prof_cout`)
       .then((res) => res.json())
       .then((data) => {
         setGraphCouts((prev) => ({
@@ -61,7 +65,7 @@ const DashboardPuit = () => {
       })
       .catch((err) => console.error("Erreur récupération coûts :", err));
 
-    fetch("http://127.0.0.1:8000/projets/112/prof_cout_realite")
+    fetch(`http://127.0.0.1:8000/projets/${id}/prof_cout_realite`)
       .then((res) => res.json())
       .then((data) => {
         setGraphCouts((real) => ({
@@ -75,7 +79,7 @@ const DashboardPuit = () => {
       .catch((err) => console.error("Erreur récupération coûts réels :", err));
 
     // DÉLAIS
-    fetch("http://127.0.0.1:8000/projets/112/prof_date_realite")
+    fetch(`http://127.0.0.1:8000/projets/${id}/prof_date_realite`)
       .then((res) => res.json())
       .then((data) => {
         setGraphDelais((real) => ({
@@ -89,7 +93,7 @@ const DashboardPuit = () => {
       })
       .catch((err) => console.error("Erreur récupération délais réels :", err));
 
-    fetch("http://127.0.0.1:8000/projets/112/prof_date")
+    fetch(`http://127.0.0.1:8000/projets/${id}/prof_date`)
       .then((res) => res.json())
       .then((data) => {
         setGraphDelais((prev) => ({

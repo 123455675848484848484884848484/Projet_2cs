@@ -81,7 +81,6 @@ const InformationPuit = () => {
       <div className="w-1/2 pr-10 h-full flex flex-col justify-center">
   <h1 className="text-[48px] font-bold leading-[56px] text-[#EA5529] mb-6">
     Information sur <br /> le puit
-    <p>{userid} </p>
   </h1>
   <p className="text-[16px] text-gray-700 leading-[24px]">
     For marketplace sellers looking to grow their business, metaverse offers the best platform.

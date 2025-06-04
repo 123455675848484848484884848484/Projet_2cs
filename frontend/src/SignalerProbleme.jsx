@@ -9,7 +9,7 @@ const SignalerProbleme = () => {
   const [puits, setPuits] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/projets/12")
+    fetch("http://localhost:8000/projets/26")
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Erreur HTTP: ${res.status}`);
