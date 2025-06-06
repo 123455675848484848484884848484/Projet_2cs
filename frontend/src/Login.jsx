@@ -63,7 +63,7 @@ const Login = () => {
   
   return (
     <>
-    <Navbar role="guest" />
+    
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex w-[900px] overflow-hidden shadow-md rounded-[30px] bg-white">
         {/* Left image */}

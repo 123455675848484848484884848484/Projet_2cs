@@ -39,7 +39,9 @@ const FichierJournalier = () => {
       console.log(rapportId)
   
       for (const p of problems) {
-        const res = await fetch(`http://127.0.0.1:8000/fichier_excel/recuperer_id_operation/${rapportId}/${encodeURIComponent(p.operation[0])}`);
+        const operationClean = p.operation[0]?.trim().toUpperCase();
+
+        const res = await fetch(`http://127.0.0.1:8000/fichier_excel/recuperer_id_operation/${rapportId}/${encodeURIComponent(operationClean)}`);
         
         if (!res.ok) {
           console.error("Échec récupération opération journalière pour :", p.operation[0]);

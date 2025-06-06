@@ -181,6 +181,7 @@ async def inserer_incident(
     id_projet: int = Form(...),
     utilisateur: int = Form(...),
     date_incident: str = Form(...),  
+    description : str = Form(...) ,
     fichier_joint: UploadFile = File(None)
 ):
     db: Session = next(get_db())
@@ -195,9 +196,11 @@ async def inserer_incident(
 
         nouvel_incident = Incident(
             id_projet=id_projet,
-            utilisateur=utilisateur,
+            id_utilisateur=utilisateur,
             date_incident=date_incident_parsed,
-            fichier_joint=contenu_fichier
+            fichier_joint=contenu_fichier, 
+            description = description 
+
         )
 
         db.add(nouvel_incident)

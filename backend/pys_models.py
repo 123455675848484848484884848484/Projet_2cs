@@ -138,13 +138,13 @@ class IncidentCreate(BaseModel):
     utilisateur: int
     date_incident: date
     fichier_joint: Optional[bytes]
+    description: Optional[str] = None  # ✅ Ajout du champ description
 
 class IncidentOut(IncidentCreate):
     id: int
 
     class Config:
-       from_attribute = True
-
+        from_attribute = True 
 #----------------- Affecter agent a un projet --------------------------------------
 class AffectationCreate(BaseModel):
     id_utilisateur: int
