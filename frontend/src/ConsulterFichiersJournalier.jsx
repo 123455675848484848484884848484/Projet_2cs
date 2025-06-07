@@ -44,10 +44,8 @@ const ConsulterFichiersJournalier = () => {
                       <a
                         href={fichier.url}
                         target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-[#EA5529] hover:bg-[#d3471f] text-white py-2 px-4 rounded-md text-sm font-medium transition"
-                      >
-                        Voir le fichier
+                        rel="noopener noreferrer"                      >
+                       <img src="/file.png" alt="icon" className="w-6 h-6" />
                       </a>
                     </td>
                   </tr>
