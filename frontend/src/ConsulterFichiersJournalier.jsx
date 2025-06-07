@@ -5,19 +5,35 @@ const ConsulterFichiersJournalier = () => {
   const [fichiers, setFichiers] = useState([]);
 
   useEffect(() => {
-    // ⚠️ Mock de données : remplacer l'appel API par un tableau local
+    // Exemple : on ne stocke que la date, pas d'URL
     const fichiersMock = [
-      {
-        date: "2025-06-07",
-        url: "https://example.com/fichier-journalier-2025-06-07.xlsx",
-      },
-      {
-        date: "2025-06-06",
-        url: "https://example.com/fichier-journalier-2025-06-06.xlsx",
-      },
+      { date: "2025-06-07" },
+      { date: "2025-06-06" },
     ];
     setFichiers(fichiersMock);
   }, []);
+
+  const handleDownload = async (date) => {
+    try {
+      const response = await fetch(`/api/fichiers-journaliers/${date}`, {
+        method: "GET",
+      });
+
+      if (!response.ok) throw new Error("Erreur lors du téléchargement");
+
+      const blob = await response.blob();
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `fichier-journalier-${date}.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    } catch (error) {
+      console.error("Erreur :", error);
+      alert("Échec du téléchargement.");
+    }
+  };
 
   return (
     <>
@@ -41,12 +57,12 @@ const ConsulterFichiersJournalier = () => {
                   <tr key={index} className="border-b hover:bg-gray-50">
                     <td className="p-3 text-gray-800">{fichier.date}</td>
                     <td className="p-3">
-                      <a
-                        href={fichier.url}
-                        target="_blank"
-                        rel="noopener noreferrer"                      >
-                       <img src="/file.png" alt="icon" className="w-6 h-6" />
-                      </a>
+                      <img
+                        src="/file.png"
+                        alt="Télécharger"
+                        className="w-6 h-6 cursor-pointer"
+                        onClick={() => handleDownload(fichier.date)}
+                      />
                     </td>
                   </tr>
                 ))}

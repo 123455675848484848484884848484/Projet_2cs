@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import Navbar from "./components/navbar"; 
+
 const FichierJournalier = () => {
   const [problems, setProblems] = useState([
     { operation: [], probleme: "", solution: "", file: null },
   ]);
-
   const [autresProblemes, setAutresProblemes] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [openRows, setOpenRows] = useState([false]);
@@ -20,60 +19,10 @@ const FichierJournalier = () => {
     setOpenRows([...openRows, false]);
   };
 
-  const handleSubmit = async () => {
-    try {
-      const userId = localStorage.getItem("user_id");
-      const formData = new FormData();
-      const fichierExcel = selectedFiles[0];
-      formData.append("user_id", userId); // A FAIRE PASSER APRES  ( c'est bon c'est fait )!!!
-      formData.append("projet_id", 2); // A FAIRE PASSER APRES !!!
-      formData.append("file", fichierExcel);
-  
-      const res = await fetch("http://127.0.0.1:8000/fichier_excel/importer", {
-        method: "POST",
-        body: formData,
-      });
-  
-      const data = await res.json();
-      const rapportId = data.rapport_id; 
-      console.log(rapportId)
-  
-      for (const p of problems) {
-        const operationClean = p.operation[0]?.trim().toUpperCase();
-
-        const res = await fetch(`http://127.0.0.1:8000/fichier_excel/recuperer_id_operation/${rapportId}/${encodeURIComponent(operationClean)}`);
-        
-        if (!res.ok) {
-          console.error("Échec récupération opération journalière pour :", p.operation[0]);
-          continue;
-        }
-      
-        const { id: operationJournaliereId } = await res.json();
-      
-        const problemForm = new FormData();
-        problemForm.append("probleme", p.probleme);
-        problemForm.append("solution", p.solution);
-        problemForm.append("operation_journaliere_id", operationJournaliereId);
-        if (p.file) {
-          problemForm.append("fichier_joint", p.file);
-        }
-      
-        await fetch("http://127.0.0.1:8000/fichier_excel/signaler_probleme", {
-          method: "POST",
-          body: problemForm,
-        });
-      }
-      
-  
-      alert("Fichier journalier et problèmes envoyés !");
-    } catch (err) {
-      console.error(err);
-      alert("Erreur lors de l’enregistrement");
-    }
+  const handleSubmit = () => {
+    console.log("Problèmes:", problems);
+    console.log("Autres:", autresProblemes);
   };
-  
-
-
 
   const handleFileUpload = (index, file) => {
     const updated = [...problems];
@@ -90,7 +39,7 @@ const FichierJournalier = () => {
       label: "Logging, Completion & Post-Drill",
       items: [
         "Coring",
-        "MUD LOGGING",
+        "Mud Logging",
         "Wire Line Logging",
         "Completion",
         "Fracturation",
@@ -109,15 +58,13 @@ const FichierJournalier = () => {
     },
     {
       label: "Non principales",
-      items: ["Transport", "SECURITY", "TELECOM", "Rig Move", "Drilling", "DST"],
+      items: ["Transport", "Security", "Telecom", "Rig Move", "Drilling", "DST"],
     },
   ];
 
   return (
-      <>
-      <Navbar role="agent" />
     <div className="min-h-screen px-24 py-12 bg-[#f4f4f4]">
-      <h1 className="text-[54px] font-bold text-[#EA5529] leading-[60px] mb-2">
+      <h1 className="text-[54px] font-bold text-orange-600 leading-[60px] mb-2">
         Fichier journalier
       </h1>
       <p className="text-gray-700 mb-8">
@@ -179,7 +126,7 @@ const FichierJournalier = () => {
                     <div className="grid grid-cols-4 gap-6 mt-4">
                       {operationsGroups.map((group) => (
                         <div key={group.label}>
-                          <h4 className="text-xs text-[#EA5529] font-semibold mb-2">
+                          <h4 className="text-xs text-orange-600 font-semibold mb-2">
                             {group.label}
                           </h4>
                           {group.items.map((item) => (
@@ -205,14 +152,14 @@ const FichierJournalier = () => {
                     type="text"
                     value={row.probleme}
                     onChange={(e) => handleChange(index, "probleme", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-[#EA5529]"                  />
+                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600"                  />
                 </td>
                 <td className="px-4 py-2 align-top">
                   <input
                     type="text"
                     value={row.solution}
                     onChange={(e) => handleChange(index, "solution", e.target.value)}
-                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-[#EA5529]"                  />
+                    className="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600"                  />
                 </td>
                 <td className="px-4 py-2 align-top">
   {!row.file ? (
@@ -243,7 +190,7 @@ const FichierJournalier = () => {
 
       <h2 className="text-xl font-semibold mb-2">Autres problèmes</h2>
       <textarea
-  className="w-full h-24 border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-[#EA5529]"
+  className="w-full h-24 border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-orange-600"
   placeholder=""
         value={autresProblemes}
         onChange={(e) => setAutresProblemes(e.target.value)}
@@ -252,13 +199,12 @@ const FichierJournalier = () => {
       <div className="flex justify-end">
         <button
           onClick={handleSubmit}
-          className="bg-[#EA5529] hover:bg-[#EA5529] text-white font-semibold text-[16px] px-10 py-3 rounded-md"
+          className="bg-orange-600 hover:bg-orange-700 text-white font-semibold text-[16px] px-10 py-3 rounded-md"
         >
           Valider
         </button>
       </div>
     </div>
-    </>
   );
 };
 
