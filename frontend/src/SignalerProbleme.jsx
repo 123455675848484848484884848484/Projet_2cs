@@ -8,7 +8,8 @@ const SignalerProbleme = () => {
   const [puits, setPuits] = useState([]);
 
   useEffect(() => {
-    const userId = localStorage.getItem("user_id");
+    // const userId = localStorage.getItem("user_id");
+    const userId = 12;
     fetch(`http://localhost:8000/projets/${userId}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);

@@ -17,7 +17,6 @@ from datetime import date
 # Routes
 router_probleme = APIRouter(prefix="/probleme", tags=["probleme"])
 router_extraction = APIRouter(prefix="/extraction", tags=["extraction"])
-router_recup = APIRouter(prefix="/recuperation", tags=["recuperation"])
 router_incident = APIRouter(prefix="/incident",tags=["incident"])
 router_operation_journaliere=APIRouter(prefix="/op_journaliere",tags=["op_journaliere"])
 router_excel=APIRouter(prefix="/excel", tags=["excel"])
@@ -126,29 +125,6 @@ async def inserer_rapport_journalier(
 
 
 
-# Recuperer le rapport journalier a travers l'id 
-@router.get("/recuperer/{rapport_id}")
-def recuperer_rapport_excel(rapport_id: int):
-    try:
-        db: Session = next(get_db())
-        rapport = db.query(RapportJournalier).filter(RapportJournalier.id == rapport_id).first()
-
-        if not rapport or not rapport.fichier_excel:
-            raise HTTPException(status_code=404, detail="Fichier non trouvé dans la base de données.")
-
-        file_like = BytesIO(rapport.fichier_excel)
-        filename = f"rapport_{rapport_id}.xlsv"
-
-        return StreamingResponse(
-            file_like,
-            media_type="application/vnd.ms-excel",
-            headers={"Content-Disposition": f"attachment; filename={filename}"}
-        )
-
-    except Exception as e:
-        print(f"❌ Erreur lors de l'envoi du fichier : {e}")
-        raise HTTPException(status_code=500, detail="Erreur interne lors de l'envoi du fichier.")
-    
 
 
 @router.post("/signaler_probleme")

@@ -82,9 +82,16 @@ class RapportJournalierCreate(BaseModel):
 
 class RapportJournalierOut(RapportJournalierCreate):
     id: int
+    id_projet: int
+    date_rapport: date
+    daily_cost: float
+    commentaire: str | None
+    profondeur: float | None
+    userid: int | None
+    phase: int | None
 
     class Config:
-        from_attribute = True
+        orm_mode = True
 
 
 # -------------------- OPERATION JOURNALIERE --------------------
@@ -135,7 +142,7 @@ class PrevisionPhaseOut(PrevisionPhaseCreate):
 # -------------------- INCIDENT --------------------
 class IncidentCreate(BaseModel):
     id_projet: int
-    utilisateur: int
+    id_utilisateur: int
     date_incident: date
     fichier_joint: Optional[bytes]
     description: Optional[str] = None  # ✅ Ajout du champ description

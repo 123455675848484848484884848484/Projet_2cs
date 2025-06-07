@@ -28,6 +28,7 @@ export default function Homemanager() {
             Consulter les Puits
           </button>
         </div>
+        
       </div>
 
       <div className="w-1/2 h-full">
