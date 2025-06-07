@@ -4,6 +4,7 @@ import Navbar from "./components/navbar";
 const InformationPuit = () => {
   const [formData, setFormData] = useState({
     nom: "",
+    type: "",
     wilaya: "",
     adresse: "",
     duree: "",
@@ -61,17 +62,7 @@ const InformationPuit = () => {
       console.error("Erreur :", error);
     }
   };
-  const wilayas = [
-    "Adrar", "Chlef", "Laghouat", "Oum El Bouaghi", "Batna", "Béjaïa", "Biskra", "Béchar",
-    "Blida", "Bouira", "Tamanrasset", "Tébessa", "Tlemcen", "Tiaret", "Tizi Ouzou", "Alger",
-    "Djelfa", "Jijel", "Sétif", "Saïda", "Skikda", "Sidi Bel Abbès", "Annaba", "Guelma",
-    "Constantine", "Médéa", "Mostaganem", "M'Sila", "Mascara", "Ouargla", "El Bayadh",
-    "Illizi", "Bordj Bou Arréridj", "Boumerdès", "El Tarf", "Tindouf", "Tissemsilt",
-    "El Oued", "Khenchela", "Souk Ahras", "Tipaza", "Mila", "Aïn Defla", "Naâma",
-    "Aïn Témouchent", "Ghardaïa", "Relizane", "Timimoun", "Bordj Badji Mokhtar",
-    "Ouled Djellal", "Béni Abbès", "In Salah", "In Guezzam", "Touggourt", "Djanet",
-    "El M'Ghair", "El Meniaa"
-  ];
+ 
 
   return (
     <>
@@ -104,25 +95,40 @@ const InformationPuit = () => {
     required
   />
 </div>
-       {/* Wilaya */}
+
+{/* Type de puit */}
+          <div>
+            <label htmlFor="type" className="text-sm font-medium text-gray-900 mb-1">
+              Type de puit
+            </label>
+            <input
+              type="text"
+              id="type"
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-[#EA5529]"
+              required
+            />
+          </div>
+
+
+       {/* Région  */}
 <div>
   <label htmlFor="wilaya" className="flex items-center gap-2 text-sm font-medium text-gray-900 mb-1">
     <img src="/lieu.png" alt="lieu" className="w-5 h-5" />
-    Wilaya
+    Région  
   </label>
-  <select
+  <input
+    type="text"
     id="wilaya"
     name="wilaya"
     value={formData.wilaya}
     onChange={handleChange}
     className="w-full h-[52px] border-2 border-gray-800 rounded-md px-4 text-[16px] text-gray-900 focus:outline-none focus:border-[#EA5529] focus:ring-0 focus:text-[#EA5529]"
+    placeholder="Saisir une région"
     required
-  >
-    <option value="">-- Choisir une wilaya --</option>
-    {wilayas.map((wilaya) => (
-      <option key={wilaya} value={wilaya}>{wilaya}</option>
-    ))}
-  </select>
+  />
 </div>
 
 {/* Adresse */}
