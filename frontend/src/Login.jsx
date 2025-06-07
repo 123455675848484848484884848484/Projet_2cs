@@ -44,8 +44,11 @@ const Login = () => {
         const data = await response.json();
         localStorage.setItem('token', data.access_token);
         localStorage.setItem('user_id', data.user_id);
+        localStorage.setItem('role', data.role);
         const userid = localStorage.getItem('user_id');
+        const role = localStorage.getItem('role');
         console.log(data.user_id);
+        console.log(data.role);
         navigate('/manager');
       } else {
         const errorData = await response.json();

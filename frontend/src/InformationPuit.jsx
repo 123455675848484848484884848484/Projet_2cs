@@ -30,6 +30,7 @@ const InformationPuit = () => {
     const dataToSend = {
       name : formData.nom ,
       duree_prevue:parseInt( formData.duree),
+      type : formData.type,
       lieu: formData.adresse, 
       adresse: formData.adresse,
       budget_total: parseFloat(formData.budget),

@@ -115,7 +115,7 @@ class OperationJournaliereOut(OperationJournaliereCreate):
 # -------------------- PREVISION OPERATION --------------------
 class PrevisionOperationCreate(BaseModel):
     
-    id_operation: int
+    nom_operation: str
     cout_prevu: float
     delais: int
 
@@ -128,7 +128,7 @@ class PrevisionOperationOut(PrevisionOperationCreate):
 
 # -------------------- PREVISION PHASE --------------------
 class PrevisionPhaseCreate(BaseModel):
-    id_phase: int
+    nom_phase: str
     cout_prevu: float
     delais: int
     profondeur: float

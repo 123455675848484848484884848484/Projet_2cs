@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./components/navbar";
+import { useParams } from "react-router-dom";
+
 
 const ConsulterFichiersJournalier = () => {
   const [fichiers, setFichiers] = useState([]);
-
+  const { id } = useParams(); // ce ci c'est l'id du projet by nesrine 
   useEffect(() => {
     // Exemple : on ne stocke que la date, pas d'URL
     const fichiersMock = [

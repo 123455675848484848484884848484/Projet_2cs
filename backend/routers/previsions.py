@@ -2,7 +2,7 @@ from fastapi import FastAPI, Path, Depends ,HTTPException,APIRouter
 from sqlalchemy.orm import Session
 from typing import List
 
-from models import PrevisionOperation ,PrevisionPhase
+from models import PrevisionOperation ,PrevisionPhase ,Operation , Phase
 from pys_models import PrevisionOperationCreate ,PrevisionPhaseCreate , PrevisionPhaseOut , PrevisionOperationOut
 from database import get_db
 
@@ -51,4 +51,26 @@ def get_phases(db: Session = Depends(get_db)):
 @router.get("/operations", response_model=list[PrevisionOperationOut])
 def get_phases(db: Session = Depends(get_db)):
     return db.query(PrevisionOperation).all()
+
+
+
+
+
+@router.get("/prevision_phases/{projet_id}", response_model=List[PrevisionPhaseOut])
+
+def get_previsions_phase(projet_id: int, db: Session = Depends(get_db)):
+    previsions = db.query(PrevisionPhase).filter(PrevisionPhase.id_projet == projet_id).all()
+    for p in previsions:
+        phase = db.query(Phase).filter(Phase.id == p.id_phase).first()
+        p.nom_phase = phase.designation if phase else None
+    return previsions
+
+
+@router.get("/prevision_operations/{id_projet}", response_model=List[PrevisionOperationOut])
+def get_prevision_operations(id_projet: int, db: Session = Depends(get_db)):
+    previsions = db.query(PrevisionOperation).filter(PrevisionOperation.id_projet == id_projet).all()
+    for p in previsions:
+        operation = db.query(Operation).filter(Operation.id == p.id_operation).first()
+        p.nom_operation = operation.designation if operation else None
+    return previsions
 

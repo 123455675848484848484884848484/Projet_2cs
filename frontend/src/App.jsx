@@ -32,10 +32,10 @@ function App() {
      <Route path="/agent" element={<Homeagent />} />
      <Route path="/manager" element={<Homemanager />} />
      <Route path="/dashp/:id" element={<DashboardPuit />} />
-     <Route path="/afficher" element={<ConsulterFichiersJournalier />} />
-     <Route path="/afficherincident" element={<ConsulterIncident />} />
-      <Route path="/afficherphase" element={<ConsulterPrevisionPhase />} />
-       <Route path="/afficheroperations" element={<ConsulterPrevisionOperation />} />
+     <Route path="/afficherfichierjouralier/:id" element={<ConsulterFichiersJournalier />} />
+     <Route path="/afficherincident/:id" element={<ConsulterIncident />} />
+      <Route path="/afficherphase/:id" element={<ConsulterPrevisionPhase />} />
+       <Route path="/afficheroperations/:id" element={<ConsulterPrevisionOperation />} />
   </Routes>
     </Router> 
  

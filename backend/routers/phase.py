@@ -50,4 +50,8 @@ def create_phases(
         )
 @router.get("/", response_model=list[PhaseOut])
 def get_phases(db: Session = Depends(get_db)):
-    return db.query(Phase).all()
+    return db.query(Phase).limit(4).all()
+
+
+
+

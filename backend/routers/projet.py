@@ -71,6 +71,7 @@ def get_projets_par_utilisateur(id_utilisateur: int, db: Session = Depends(get_d
     return [  
         {   "id":projet.id,
             "name": projet.name,
+            "type":projet.type,
             "date_debut": projet.date_debut,
             "budget_total": projet.budget_total,
             "duree_prevue": projet.duree_prevue,
@@ -388,6 +389,7 @@ def rechercher_projets(user_id: int, mot_cle: str, db: Session = Depends(get_db)
         {
             "id": p.id,
             "name": p.name,
+            "type":p.type,
             "date_debut": p.date_debut,
             "wilaya": p.wilaya,
             "adresse": p.adresse,

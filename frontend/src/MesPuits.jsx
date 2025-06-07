@@ -42,17 +42,19 @@ const MesPuits = () => {
       if (!response.ok) throw new Error("Erreur lors de la récupération des puits");
 
       const data = await response.json();
+      console.log(data);
 
       const formattedData = data.map((projet) => ({
         id: projet.id,
         name: projet.name,
+        type: projet.type ,
         dateDebut: projet.date_debut,
         wilaya: projet.wilaya,
         adresse: projet.adresse,
         duree: projet.duree_prevue,
         budget: `${parseFloat(projet.budget_total || 0).toLocaleString()} DZD`,
       }));
-
+       
       setPuits(formattedData);
     } catch (error) {
       console.error("Erreur:", error);
@@ -95,9 +97,9 @@ const MesPuits = () => {
             <thead className="bg-gray-100">
               <tr className="text-gray-700">
                 <th className="p-4">Nom</th>
-                <th className="p-4">ID</th>
                 <th className="p-4">Date début</th>
-                <th className="p-4">Wilaya</th>
+                <th className="p-4">Région</th>
+                 <th className="p-4">Type</th>
                 <th className="p-4">Adresse</th>
                 <th className="p-4">Durée prévue</th>
                 <th className="p-4">Coût total</th>
@@ -108,11 +110,11 @@ const MesPuits = () => {
               {puits.map((puit, index) => (
                 <tr key={index} className="border-t border-gray-200">
                   <td className="p-4">› {puit.name}</td>
-                  <td className="p-4">› {puit.id}</td>
                   <td className="p-4">{puit.dateDebut}</td>
                   <td className="p-4">{puit.wilaya}</td>
+                  <td className="p-4">{puit.type}</td>
                   <td className="p-4">{puit.adresse}</td>
-                  <td className="p-4">{puit.duree} jours</td>
+                  <td className="p-4">{puit.duree} </td>
                   <td className="p-4">{puit.budget}</td>
                   <td className="p-4">
                     <button

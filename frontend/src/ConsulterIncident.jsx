@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./components/navbar";
+import { useParams } from "react-router-dom";
+
 
 const ConsulterIncident = () => {
   const [incidents, setIncidents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate();
+  const { id } = useParams(); // ce ci c'est l'id du projet by nesrine 
 
   const fetchIncidents = async (query = "_") => {
     try {

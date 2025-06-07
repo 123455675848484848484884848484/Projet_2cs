@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import Navbar from "./components/navbar";
+import { useParams } from "react-router-dom";
+
 
 const ConsulterPrevisionPhase = () => {
   const [phases, setPhases] = useState([]);
   const location = useLocation();
-  const { projetid } = location.state || {};
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchPhases = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/previsions/phases/${projetid}`);
+        const response = await fetch(`http://127.0.0.1:8000/previsions/prevision_phases/${id}`);
         const data = await response.json();
         setPhases(data);
       } catch (error) {
@@ -19,7 +21,7 @@ const ConsulterPrevisionPhase = () => {
     };
 
     fetchPhases();
-  }, [projetid]);
+  }, [id]);
 
   return (
     <>
@@ -32,16 +34,16 @@ const ConsulterPrevisionPhase = () => {
         <div className="flex items-start gap-16">
           {/* Navigation étapes à gauche */}
           <div className="flex flex-col items-start gap-6">
-            <Link to="/afficherphase" className="flex items-center gap-4">
+             <Link to={`/afficherphase/${id}`} className="flex items-center gap-4">
               <div className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
-                location.pathname === "/afficherphase"
+                location.pathname === `/afficherphase/${id}`
                   ? "bg-gray-200 border-[#EA5529] text-black"
                   : "bg-gray-100 text-gray-400 border-gray-300"
               }`}>
                 1
               </div>
               <span className={`font-semibold text-2xl ${
-                location.pathname === "/afficherphase"
+                location.pathname === `/afficherphase/${id}`
                   ? "text-[#EA5529]"
                   : "text-gray-400"
               }`}>
@@ -51,9 +53,10 @@ const ConsulterPrevisionPhase = () => {
 
             <div className="h-[60px] w-[2px] bg-[#EA5529] ml-8" />
 
-            <Link to="/afficheroperations" className="flex items-center gap-4">
+           
+           <Link to={`/afficheroperations/${id}`} className="flex items-center gap-4">
               <div className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
-                location.pathname === "/afficheroperations"
+                location.pathname === `/afficheroperations/${id}`
                   ? "bg-gray-200 border-[#EA5529] text-black"
                   : "bg-gray-100 text-gray-400 border-gray-300"
               }`}>
@@ -84,7 +87,7 @@ const ConsulterPrevisionPhase = () => {
                 <tbody>
                   {phases.map((phase, index) => (
                     <tr key={index} className="border-t border-gray-300">
-                      <td className="p-4">{phase.designation}</td>
+                      <td className="p-4">{phase.nom_phase}</td>
                       <td className="p-4">{phase.cout_prevu}</td>
                       <td className="p-4">{phase.delais}</td>
                       <td className="p-4">{phase.profondeur}</td>

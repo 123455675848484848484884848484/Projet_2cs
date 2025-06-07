@@ -206,13 +206,13 @@ const DashboardPuit = () => {
         <p className="text-gray-700 mb-4">{puit.adresse}</p>
 
         <div className="flex justify-center gap-20 mb-8">
-          <button onClick={() => navigate('/afficher')} className="bg-[#EA5529] text-white px-4 py-2 rounded">
+          <button onClick={() => navigate(`/afficherfichierjouralier/${id}`)} className="bg-[#EA5529] text-white px-4 py-2 rounded">
             Consulter les fichiers journaliers
           </button>
-          <button onClick={() => navigate('/afficherincident')} className="bg-[#EA5529] text-white px-4 py-2 rounded">
+          <button onClick={() => navigate(`/afficherincident/${id}`)} className="bg-[#EA5529] text-white px-4 py-2 rounded">
             Consulter les incidents
           </button>
-          <button onClick={() => navigate('/afficherphase')} className="bg-[#EA5529] text-white px-4 py-2 rounded">
+          <button onClick={() => navigate(`/afficherphase/${id}`)} className="bg-[#EA5529] text-white px-4 py-2 rounded">
             Consulter les prévisions
           </button>
         </div>

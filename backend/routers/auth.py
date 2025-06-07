@@ -112,7 +112,8 @@ def login_for_access_token(
         content={
             "access_token": access_token,
             "token_type": "bearer",  # Ensure this is included
-            "user_id": user.id
+            "user_id": user.id,
+            "role": user.role
         }
     )
 
