@@ -1,0 +1,103 @@
+import React, { useEffect, useState } from "react";
+import { useLocation, Link } from "react-router-dom";
+import Navbar from "./components/navbar";
+
+const ConsulterPrevisionPhase = () => {
+  const [phases, setPhases] = useState([]);
+  const location = useLocation();
+  const { projetid } = location.state || {};
+
+  useEffect(() => {
+    const fetchPhases = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/previsions/phases/${projetid}`);
+        const data = await response.json();
+        setPhases(data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des prévisions de phases :", error);
+      }
+    };
+
+    fetchPhases();
+  }, [projetid]);
+
+  return (
+    <>
+      <Navbar role="manager" />
+      <div className="min-h-screen bg-[#f9f9f9] px-28 pt-12 pb-20">
+        <h1 className="text-[54px] font-bold text-[#EA5529] leading-[60px] mb-12">
+          Prévisions des phases
+        </h1>
+
+        <div className="flex items-start gap-16">
+          {/* Navigation étapes à gauche */}
+          <div className="flex flex-col items-start gap-6">
+            <Link to="/afficherphase" className="flex items-center gap-4">
+              <div className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
+                location.pathname === "/afficherphase"
+                  ? "bg-gray-200 border-[#EA5529] text-black"
+                  : "bg-gray-100 text-gray-400 border-gray-300"
+              }`}>
+                1
+              </div>
+              <span className={`font-semibold text-2xl ${
+                location.pathname === "/afficherphase"
+                  ? "text-[#EA5529]"
+                  : "text-gray-400"
+              }`}>
+                Phases
+              </span>
+            </Link>
+
+            <div className="h-[60px] w-[2px] bg-[#EA5529] ml-8" />
+
+            <Link to="/afficheroperations" className="flex items-center gap-4">
+              <div className={`w-16 h-16 rounded-sm flex items-center justify-center text-2xl font-bold border-2 ${
+                location.pathname === "/afficheroperations"
+                  ? "bg-gray-200 border-[#EA5529] text-black"
+                  : "bg-gray-100 text-gray-400 border-gray-300"
+              }`}>
+                2
+              </div>
+              <span className={`font-semibold text-2xl ${
+                location.pathname === "/afficheroperations"
+                  ? "text-[#EA5529]"
+                  : "text-gray-400"
+              }`}>
+                Opérations
+              </span>
+            </Link>
+          </div>
+
+          {/* Tableau des phases à droite */}
+          <div className="flex-1">
+            <div className="bg-[#f3f8fa] rounded-md shadow-md overflow-hidden">
+              <table className="w-full text-left text-[16px]">
+                <thead className="bg-white">
+                  <tr className="text-gray-800">
+                    <th className="p-4 font-semibold">Phase</th>
+                    <th className="p-4 font-semibold">Coût prévu (DA)</th>
+                    <th className="p-4 font-semibold">Délai (jours)</th>
+                    <th className="p-4 font-semibold">Profondeur (m)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {phases.map((phase, index) => (
+                    <tr key={index} className="border-t border-gray-300">
+                      <td className="p-4">{phase.designation}</td>
+                      <td className="p-4">{phase.cout_prevu}</td>
+                      <td className="p-4">{phase.delais}</td>
+                      <td className="p-4">{phase.profondeur}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default ConsulterPrevisionPhase;

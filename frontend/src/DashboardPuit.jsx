@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { Line } from "react-chartjs-2";
 import { useParams } from "react-router-dom";
+
 
 import {
   Chart as ChartJS,
@@ -26,6 +28,7 @@ ChartJS.register(
   Legend
 );
 
+
 const DashboardPuit = () => {
   const [puit, setPuit] = useState({ nom: "", adresse: "" });
   const [delais, setDelais] = useState({ planned: "", expected: "", remaining: "" });
@@ -33,6 +36,8 @@ const DashboardPuit = () => {
   const [graphDelais, setGraphDelais] = useState({ prevision: [], reel: [] });
   const [graphCouts, setGraphCouts] = useState({ prevision: [], reel: [] });
   const { id } = useParams();
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     // COÛTS
@@ -201,10 +206,13 @@ const DashboardPuit = () => {
         <p className="text-gray-700 mb-4">{puit.adresse}</p>
 
         <div className="flex justify-center gap-20 mb-8">
-          <button className="bg-[#EA5529] text-white px-4 py-2 rounded">
+          <button onClick={() => navigate('/afficher')} className="bg-[#EA5529] text-white px-4 py-2 rounded">
             Consulter les fichiers journaliers
           </button>
-          <button className="bg-[#EA5529] text-white px-4 py-2 rounded">
+          <button onClick={() => navigate('/afficherincident')} className="bg-[#EA5529] text-white px-4 py-2 rounded">
+            Consulter les incidents
+          </button>
+          <button onClick={() => navigate('/afficherphase')} className="bg-[#EA5529] text-white px-4 py-2 rounded">
             Consulter les prévisions
           </button>
         </div>

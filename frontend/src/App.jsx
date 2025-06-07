@@ -12,6 +12,10 @@ import SignalerProbleme from './SignalerProbleme';
 import Homeagent from './Homeagent';
 import Homemanager from './Homemanager';
 import DashboardPuit from './DashboardPuit';
+import ConsulterFichiersJournalier from './ConsulterFichiersJournalier';
+import ConsulterIncident from './ConsulterIncident';
+import ConsulterPrevisionPhase from './ConsulterPrevisionPhase';
+import ConsulterPrevisionOperation from './ConsulterPrevisionOperation';
 
 function App() {
   return (
@@ -28,6 +32,10 @@ function App() {
      <Route path="/agent" element={<Homeagent />} />
      <Route path="/manager" element={<Homemanager />} />
      <Route path="/dashp/:id" element={<DashboardPuit />} />
+     <Route path="/afficher" element={<ConsulterFichiersJournalier />} />
+     <Route path="/afficherincident" element={<ConsulterIncident />} />
+      <Route path="/afficherphase" element={<ConsulterPrevisionPhase />} />
+       <Route path="/afficheroperations" element={<ConsulterPrevisionOperation />} />
   </Routes>
     </Router> 
  
