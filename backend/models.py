@@ -29,6 +29,7 @@ class Projet(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(255))
     date_debut = Column(Date)
+    type= Column(String(500))  
     created_by = Column(Integer, ForeignKey('utilisateur.id'))
     lieu = Column(String(100))
     budget_total = Column(Numeric(15, 2))

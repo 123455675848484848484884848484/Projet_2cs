@@ -33,6 +33,7 @@ class UtilisateurOut(UtilisateurCreate):
 class ProjetCreate(BaseModel):
     name: str 
     date_debut: date
+    type : str
     created_by: int
     lieu: str
     budget_total: float
