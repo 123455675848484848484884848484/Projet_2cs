@@ -74,6 +74,7 @@ def get_incidents_by_projet(id_projet: int, db: Session = Depends(get_db)):
                 date_incident=incident.date_incident,
                 description=incident.description,
                 fichier_joint=fichier_base64,
+                resolu =incident.resolu,
             )
         )
     return incidents_out

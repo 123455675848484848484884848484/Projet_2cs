@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./components/navbar";
 import { useParams } from "react-router-dom";
+import { FaDownload } from "react-icons/fa"; // si tu utilises react-icons
 
 
 const ConsulterIncident = () => {
@@ -9,15 +10,22 @@ const ConsulterIncident = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { id } = useParams(); // ce ci c'est l'id du projet by nesrine 
 
-  const fetchIncidents = async (query = "_") => {
-    try {
-      const response = await fetch(`/api/incidents/${query}`);
-      const data = await response.json();
-      setIncidents(data);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des incidents :", error);
+  const fetchIncidents = async (projectId = "_") => {
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/incident/projet/${id}`);
+    
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP: ${response.status}`);
     }
-  };
+
+    const data = await response.json();
+    setIncidents(data);
+    console.log(data)
+  } catch (error) {
+    console.error("Erreur lors de la récupération des incidents :", error);
+  }
+};
+
 
   useEffect(() => {
     fetchIncidents();
@@ -63,31 +71,33 @@ const ConsulterIncident = () => {
             <tbody>
               {incidents.map((incident, index) => (
                 <tr key={index} className="border-t border-gray-200">
-                  <td className="p-4">› {incident.id}</td>
-                  <td className="p-4">{incident.dateIncident}</td>
+                  <td className="p-4">› {incident.description}</td>
+                  <td className="p-4">{incident.date_incident}</td>
                   <td className="p-4">
                     <span
                       className={`px-3 py-1 rounded-full font-medium ${
-                        incident.resolu
+                        incident.resolu === "Y"
                           ? "bg-green-100 text-green-800"
                           : "bg-red-100 text-red-800"
                       }`}
+                      
                     >
-                      {incident.resolu ? "Résolu" : "Non résolu"}
+                      {incident.resolu === "Y" ? "Résolu" : "Non résolu"}
                     </span>
+
+
                   </td>
-                  <td className="p-4">
-                    {incident.pieceJointe ? (
+                  <td className="p-4 text-center">
+                    {incident.fichier_joint ? (
                       <a
-                        href={incident.pieceJointe}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 underline hover:text-blue-800"
+                        href={`http://127.0.0.1:8000/incident/download/${incident.id}`}
+                        title="Télécharger la pièce jointe"
+                        className="cursor-pointer bg-[#2f5744] text-white px-2 py-1 rounded text-xs font-medium inline-block"
                       >
-                        Voir la pièce jointe
+                        <FaDownload size={20} />
                       </a>
                     ) : (
-                      <span className="text-gray-500">Aucune</span>
+                      <span className="text-gray-400">—</span>
                     )}
                   </td>
                 </tr>
