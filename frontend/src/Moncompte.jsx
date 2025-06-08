@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar"; 
+
 
 const Moncompte = () => {
   const [userData, setUserData] = useState({
@@ -58,6 +60,8 @@ const Moncompte = () => {
   };
 
   return (
+    <>
+    <Navbar role="manager" />
     <div className="w-full flex">
       {/* Left Column */}
       <div className="w-9/12 p-8 bg-[#f9f9f9] flex items-start justify-center">
@@ -151,6 +155,7 @@ const Moncompte = () => {
         />
       </div>
     </div>
+    </>
   );
 };
 

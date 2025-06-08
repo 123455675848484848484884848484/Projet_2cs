@@ -16,12 +16,15 @@ import ConsulterFichiersJournalier from './ConsulterFichiersJournalier';
 import ConsulterIncident from './ConsulterIncident';
 import ConsulterPrevisionPhase from './ConsulterPrevisionPhase';
 import ConsulterPrevisionOperation from './ConsulterPrevisionOperation';
-
+import CreerUser from './Creeruser';
+import Moncompte from './Moncompte';
 function App() {
   return (
    <Router>
    <Routes>
      <Route path="/" element={<LancerPuit />} />
+     <Route path="/creeruser" element={<CreerUser />} />
+     <Route path="/moncompte" element={<Moncompte />} />
      <Route path="/info-puit" element={<InformationPuit />} />
      <Route path="/mespuits" element={<MesPuits />} />
      <Route path="/phasepre" element={<PhasesPrevision />} />
