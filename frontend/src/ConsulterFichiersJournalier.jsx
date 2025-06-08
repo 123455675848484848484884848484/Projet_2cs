@@ -2,22 +2,30 @@ import React, { useEffect, useState } from "react";
 import Navbar from "./components/navbar";
 import { useParams } from "react-router-dom";
 
-
 const ConsulterFichiersJournalier = () => {
   const [fichiers, setFichiers] = useState([]);
-  const { id } = useParams(); // ce ci c'est l'id du projet by nesrine 
-  useEffect(() => {
-    // Exemple : on ne stocke que la date, pas d'URL
-    const fichiersMock = [
-      { date: "2025-06-07" },
-      { date: "2025-06-06" },
-    ];
-    setFichiers(fichiersMock);
-  }, []);
+  const { id } = useParams(); // id du projet
 
-  const handleDownload = async (date) => {
+  useEffect(() => {
+    const fetchFichiers = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/rapports/${id}`);
+        if (!response.ok) throw new Error("Erreur lors de la récupération");
+        const data = await response.json();
+        setFichiers(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Erreur de chargement :", error);
+        alert("Impossible de charger les fichiers.");
+      }
+    };
+
+    fetchFichiers();
+  }, [id]);
+
+  const handleDownload = async (rapportId) => {
     try {
-      const response = await fetch(`/api/fichiers-journaliers/${date}`, {
+      const response = await fetch(`http://127.0.0.1:8000/rapports/recuperer/${rapportId}`, {
         method: "GET",
       });
 
@@ -26,7 +34,7 @@ const ConsulterFichiersJournalier = () => {
       const blob = await response.blob();
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `fichier-journalier-${date}.xlsx`;
+      link.download = `fichier-journalier-${rapportId}.xlsx`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -51,19 +59,25 @@ const ConsulterFichiersJournalier = () => {
               <thead>
                 <tr className="bg-gray-100 text-gray-700 text-sm">
                   <th className="p-3">Date</th>
+                  <th className="p-3">Utilisateur</th>
+                  <th className="p-3">Profondeur</th>
+                  <th className="p-3">Coût Journalier</th>
                   <th className="p-3">Fichier</th>
                 </tr>
               </thead>
               <tbody>
                 {fichiers.map((fichier, index) => (
                   <tr key={index} className="border-b hover:bg-gray-50">
-                    <td className="p-3 text-gray-800">{fichier.date}</td>
+                    <td className="p-3 text-gray-800">{fichier.date_rapport}</td>
+                    <td className="p-3 text-gray-800">{fichier.utilisateur}</td>
+                    <td className="p-3 text-gray-800">{fichier.profondeur ?? "-"}</td>
+                    <td className="p-3 text-gray-800">{fichier.daily_cost ?? "-"}</td>
                     <td className="p-3">
                       <img
                         src="/file.png"
                         alt="Télécharger"
-                        className="w-6 h-6 cursor-pointer"
-                        onClick={() => handleDownload(fichier.date)}
+                        className="w-5 h-5 cursor-pointer"
+                        onClick={() => handleDownload(fichier.id)}
                       />
                     </td>
                   </tr>

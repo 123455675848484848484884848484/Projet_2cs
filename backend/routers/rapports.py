@@ -1,35 +1,41 @@
 from io import BytesIO
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from models import RapportJournalier
+from models import RapportJournalier,Utilisateur
 from database import get_db
 from fastapi.responses import StreamingResponse
 
 router = APIRouter(prefix="/rapports", tags=["Rapports"])
 
-#Recuperer tous les rapports journaliers d'un projet
+
 @router.get("/{id_projet}")
 def get_rapports_journaliers(id_projet: int, db: Session = Depends(get_db)):
-    rapports = db.query(RapportJournalier).filter(RapportJournalier.id_projet == id_projet).all()
-    
+    rapports = (
+        db.query(RapportJournalier, Utilisateur.name)
+        .join(Utilisateur, RapportJournalier.userid == Utilisateur.id)
+        .filter(RapportJournalier.id_projet == id_projet)
+        .all()
+    )
+
     if not rapports:
         raise HTTPException(status_code=404, detail="Aucun rapport trouvé pour ce projet")
 
     result = []
-    for r in rapports:
+    for rapport, nom_utilisateur in rapports:
         rapport_dict = {
-            "id": r.id,
-            "id_projet": r.id_projet,
-            "date_rapport": r.date_rapport,
-            "daily_cost": float(r.daily_cost),
-            "commentaire": r.commentaire,
-            "profondeur": float(r.profondeur) if r.profondeur is not None else None,
-            "userid": r.userid,
-            "phase": r.phase
+            "id": rapport.id,
+            "id_projet": rapport.id_projet,
+            "date_rapport": rapport.date_rapport,
+            "daily_cost": float(rapport.daily_cost),
+            "commentaire": rapport.commentaire,
+            "profondeur": float(rapport.profondeur) if rapport.profondeur is not None else None,
+            "utilisateur": nom_utilisateur,
+            "phase": rapport.phase
         }
         result.append(rapport_dict)
 
     return result
+
 
 # Recuperer le rapport journalier a travers l'id  (pour le telechargement : fichier xlsv)
 @router.get("/recuperer/{rapport_id}")

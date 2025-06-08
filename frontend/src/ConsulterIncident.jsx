@@ -88,18 +88,23 @@ const ConsulterIncident = () => {
 
                   </td>
                   <td className="p-4 text-center">
-                    {incident.fichier_joint ? (
-                      <a
-                        href={`http://127.0.0.1:8000/incident/download/${incident.id}`}
-                        title="Télécharger la pièce jointe"
-                        className="cursor-pointer bg-[#2f5744] text-white px-2 py-1 rounded text-xs font-medium inline-block"
-                      >
-                        <FaDownload size={20} />
-                      </a>
-                    ) : (
-                      <span className="text-gray-400">—</span>
-                    )}
-                  </td>
+  {incident.fichier_joint ? (
+    <a
+      href={`http://127.0.0.1:8000/incident/download/${incident.id}`}
+      title="Télécharger la pièce jointe"
+      className="inline-block"
+    >
+      <img
+        src="/file.png"
+        alt="Télécharger"
+        className="w-5 h-5 cursor-pointer"
+      />
+    </a>
+  ) : (
+    <span className="text-gray-400">—</span>
+  )}
+</td>
+
                 </tr>
               ))}
               {incidents.length === 0 && (
