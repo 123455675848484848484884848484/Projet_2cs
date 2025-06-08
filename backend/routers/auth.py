@@ -36,7 +36,7 @@ def create_user(db: Session, user: UtilisateurCreate):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)  # Optional: refresh to get the inserted user's ID
-    return "complete"
+    return db_user
 
 
 
@@ -79,8 +79,8 @@ def register_user(user: UtilisateurCreate, db: Session = Depends(get_db)):
     db_user = get_user_by_mail(user.email, db)
     if db_user:
         raise HTTPException(status_code=400, detail="Username already registered")
-    return create_user(db=db, user=user)
-
+    new_user = create_user(db=db, user=user)
+    return {"id": new_user.id}
 
 # Authenticate the user
 
