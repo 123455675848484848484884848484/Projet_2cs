@@ -43,7 +43,9 @@ def get_or_create_operation(db: Session, designation: str):
 async def inserer_rapport_journalier(
     user_id: int = Form(...),  
     projet_id: int = Form(...),  
+    commentaire: str = Form(...), 
     file: UploadFile = File(...)  
+
 ):
     
     db: Session = next(get_db())  
@@ -81,7 +83,7 @@ async def inserer_rapport_journalier(
         id_projet=projet_id,
         date_rapport=formatted_date,
         daily_cost=data["Daily Cost"],
-        commentaire=None,
+        commentaire=commentaire,
         profondeur=profondeur,
         fichier_excel=content, 
         userid=user_id,
