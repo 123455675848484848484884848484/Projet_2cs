@@ -18,6 +18,8 @@ import ConsulterPrevisionPhase from './ConsulterPrevisionPhase';
 import ConsulterPrevisionOperation from './ConsulterPrevisionOperation';
 import CreerUser from './Creeruser';
 import Moncompte from './Moncompte';
+import Mescomptes from './Mescomptes';
+import Solution from './solution';
 function App() {
   return (
    <Router>
@@ -27,6 +29,8 @@ function App() {
      <Route path="/moncompte" element={<Moncompte />} />
      <Route path="/info-puit" element={<InformationPuit />} />
      <Route path="/mespuits" element={<MesPuits />} />
+     <Route path="/mescomptes" element={<Mescomptes />} />
+     <Route path="/solution" element={<Solution />} />
      <Route path="/phasepre" element={<PhasesPrevision />} />
      <Route path="/operations" element={<OperationsPrevision />} />
      <Route path="/login" element={<Login />} />

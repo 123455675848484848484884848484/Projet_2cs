@@ -48,10 +48,10 @@ const Mescomptes = () => {
 
   return (
     <>
-      <Navbar role="manager" />
+      <Navbar role="admin" />
       <div className="min-h-screen bg-[#f9f9f9] px-20 py-12">
         <h1 className="text-[48px] font-bold text-[#EA5529] leading-[56px] mb-4">
-          Mes Comptes
+          Gestion des comptes
         </h1>
         <p className="text-[16px] text-gray-700 mb-10 max-w-xl">
           Gérer les comptes des managers associés à vos projets.
@@ -67,7 +67,7 @@ const Mescomptes = () => {
           />
           <button
             onClick={() => fetchComptes(searchTerm.trim())}
-            className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:brightness-90"
+            className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
           >
             Rechercher
           </button>
@@ -129,21 +129,21 @@ const Mescomptes = () => {
                     <div className="flex justify-center gap-2">
                       {editingId === compte.id ? (
                         <button
-                          className="bg-green-800 text-white px-4 py-2 rounded-md font-semibold hover:brightness-90"
+                          className="bg-[#EA5529] hover:bg-[#EA5529] text-white px-4 py-2 rounded-md font-semibold"
                           onClick={handleValidate}
                         >
                           Valider
                         </button>
                       ) : (
                         <button
-                          className="bg-green-800 text-white px-4 py-2 rounded-md font-semibold hover:brightness-90"
+                          className="bg-green-800 hover:bg-green-800 text-white px-4 py-2 rounded-md font-semibold"
                           onClick={() => handleEdit(compte)}
                         >
                           Modifier
                         </button>
                       )}
                       <button
-                        className="bg-[#EA5529] text-white px-4 py-2 rounded-md font-semibold "
+                        className="bg-[#EA5529] hover:bg-red-700 text-white px-4 py-2 rounded-md font-semibold"
                         onClick={() => handleDelete(compte.id)}
                       >
                         Supprimer
@@ -161,7 +161,16 @@ const Mescomptes = () => {
               )}
             </tbody>
           </table>
+          
         </div>
+        <div className="flex justify-center  mt-9 mb-6">
+  <button
+    onClick={() => navigate("/creeruser")} // Redirige vers une page de création
+    className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
+  >
+    Ajouter un nouveau utilisateur
+  </button>
+</div>
       </div>
     </>
   );
