@@ -73,23 +73,35 @@ const Mescomptes = () => {
         <p className="text-[16px] text-gray-700 mb-10 max-w-xl">
           Gérer les comptes des managers associés à vos projets.
         </p>
+        
+        <div className="flex mb-6 items-center justify-between w-full">
+  {/* Bouton Ajouter */}
+  <div >
+    <button
+      onClick={() => navigate("/creeruser")}
+      className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
+    >
+      Ajouter un nouveau utilisateur
+    </button>
+  </div>
 
-        <div className="flex justify-end mb-6 space-x-2">
-          <input
+  {/* Recherche */}
+  <div className="flex items-center space-x-2">
+     <input
             type="text"
             placeholder="Nom du compte..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-[250px] px-4 py-2 border rounded-full focus:outline-none"
           />
-          <button
+    <button
             onClick={() => fetchComptes(searchTerm.trim())}
             className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
           >
             Rechercher
           </button>
-        </div>
-
+  </div>
+</div>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left">
             <thead className="bg-gray-100">
@@ -181,14 +193,7 @@ const Mescomptes = () => {
           </table>
         </div>
 
-        <div className="flex justify-center mt-9 mb-6">
-          <button
-            onClick={() => navigate("/creeruser")}
-            className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
-          >
-            Ajouter un nouveau utilisateur
-          </button>
-        </div>
+        
       </div>
     </>
   );
