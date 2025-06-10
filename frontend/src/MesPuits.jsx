@@ -136,14 +136,6 @@ const MesPuits = () => {
             </tbody>
           </table>
         </div>
-        <div className="flex justify-center  mt-9 mb-6">
-  <button
-    onClick={() => navigate("/")} // Redirige vers une page de création
-    className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
-  >
-    Ajouter un nouveau puit
-  </button>
-  </div>
       </div>
     </>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./components/navbar";
 
@@ -9,21 +10,27 @@ const Mescomptes = () => {
   const [editedData, setEditedData] = useState({});
   const navigate = useNavigate();
 
-  const sampleData = [
-    { id: 1, name: "Fadel Nesrine", role: "Manager", adresse: "ln_fadel@esi.dz" },
-    { id: 2, name: "Guefaifia Rania", role: "Manager", adresse: "kr_guefaifia@esi.dz" },
-  ];
+  const apiBase = "http://localhost:8000/utilisateur"; // À adapter selon ton backend
 
-  const fetchComptes = (motCle = "") => {
-    const filtered = sampleData.filter((c) =>
-      c.name.toLowerCase().includes(motCle.toLowerCase())
-    );
-    setComptes(filtered.length > 0 ? filtered : sampleData);
+  const fetchComptes = async (motCle = "") => {
+    try {
+      const response = await axios.get(`${apiBase}/search`, {
+        params: { keyword: motCle },
+      });
+      setComptes(response.data);
+    } catch (error) {
+      console.error("Erreur lors du fetch des comptes :", error);
+    }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer ce compte ?")) {
-      setComptes((prev) => prev.filter((compte) => compte.id !== id));
+      try {
+        await axios.delete(`${apiBase}/${id}`);
+        setComptes((prev) => prev.filter((compte) => compte.id !== id));
+      } catch (error) {
+        console.error("Erreur lors de la suppression :", error);
+      }
     }
   };
 
@@ -32,14 +39,24 @@ const Mescomptes = () => {
     setEditedData({ ...compte });
   };
 
-  const handleValidate = () => {
-    setComptes((prev) =>
-      prev.map((compte) =>
-        compte.id === editingId ? { ...editedData } : compte
-      )
-    );
-    setEditingId(null);
-    setEditedData({});
+  const handleValidate = async () => {
+    try {
+      await axios.put(`${apiBase}/${editingId}`, {
+        name: editedData.name,
+        email: editedData.email,
+        pwd: "dummy", // Tu peux adapter selon le backend
+        role: editedData.role,
+      });
+      setComptes((prev) =>
+        prev.map((compte) =>
+          compte.id === editingId ? { ...editedData } : compte
+        )
+      );
+      setEditingId(null);
+      setEditedData({});
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour :", error);
+    }
   };
 
   useEffect(() => {
@@ -116,13 +133,14 @@ const Mescomptes = () => {
                     {editingId === compte.id ? (
                       <input
                         className="border px-2 py-1 rounded w-full"
-                        value={editedData.adresse}
+                        value={editedData.email}
                         onChange={(e) =>
-                          setEditedData({ ...editedData, adresse: e.target.value })
-                        }
+                     setEditedData({ ...editedData, email: e.target.value }) // ✅ CORRECT
+                            }
+
                       />
                     ) : (
-                      compte.adresse
+                      compte.email
                     )}
                   </td>
                   <td className="p-4">
@@ -161,16 +179,16 @@ const Mescomptes = () => {
               )}
             </tbody>
           </table>
-          
         </div>
-        <div className="flex justify-center  mt-9 mb-6">
-  <button
-    onClick={() => navigate("/creeruser")} // Redirige vers une page de création
-    className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
-  >
-    Ajouter un nouveau utilisateur
-  </button>
-</div>
+
+        <div className="flex justify-center mt-9 mb-6">
+          <button
+            onClick={() => navigate("/creeruser")}
+            className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
+          >
+            Ajouter un nouveau utilisateur
+          </button>
+        </div>
       </div>
     </>
   );
