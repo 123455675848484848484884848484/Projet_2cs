@@ -20,6 +20,7 @@ import CreerUser from './Creeruser';
 import Moncompte from './Moncompte';
 import Mescomptes from './Mescomptes';
 import Solution from './solution';
+import DashboardGeneral from './DashboardGeneral';
 function App() {
   return (
    <Router>
@@ -41,8 +42,9 @@ function App() {
      <Route path="/dashp/:id" element={<DashboardPuit />} />
      <Route path="/afficherfichierjouralier/:id" element={<ConsulterFichiersJournalier />} />
      <Route path="/afficherincident/:id" element={<ConsulterIncident />} />
-      <Route path="/afficherphase/:id" element={<ConsulterPrevisionPhase />} />
-       <Route path="/afficheroperations/:id" element={<ConsulterPrevisionOperation />} />
+    <Route path="/afficherphase/:id" element={<ConsulterPrevisionPhase />} />
+    <Route path="/afficheroperations/:id" element={<ConsulterPrevisionOperation />} />
+    <Route path="/dashg" element={<DashboardGeneral />} />
   </Routes>
     </Router> 
  
