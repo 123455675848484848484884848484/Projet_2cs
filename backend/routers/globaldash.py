@@ -1,9 +1,8 @@
-from models import Projet , UserProjet 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db  
-from models import Projet, UserProjet, RapportJournalier
-from sqlalchemy import func
+from sqlalchemy import func, desc
+from models import UserProjet, Projet, RapportJournalier, Incident  
 
 router = APIRouter(prefix="/globaldash", tags=["globaldash"])
 
@@ -62,3 +61,56 @@ def get_rapport_counts_by_user(user_id: int):
 
     return resultats
 
+
+
+
+
+@router.get("/{user_id}/details")
+def get_user_projets_details(user_id: int, db: Session = Depends(get_db)):
+    projets_ids = db.query(UserProjet.id_projet).filter(UserProjet.id_utilisateur == user_id).all()
+    
+    if not projets_ids:
+        raise HTTPException(status_code=404, detail="Aucun projet trouvé pour cet utilisateur")
+
+    resultats = []
+
+    for (id_projet,) in projets_ids:
+        projet = db.query(Projet).filter(Projet.id == id_projet).first()
+        if not projet:
+            continue
+
+        # Dernier rapport pour la profondeur
+        dernier_rapport = db.query(RapportJournalier).filter(
+            RapportJournalier.id_projet == id_projet
+        ).order_by(desc(RapportJournalier.date_rapport)).first()
+
+        profondeur = dernier_rapport.profondeur if dernier_rapport else None
+
+        # Coût réel = somme des daily_cost
+        cout_reel = db.query(func.coalesce(func.sum(RapportJournalier.daily_cost), 0)).filter(
+            RapportJournalier.id_projet == id_projet
+        ).scalar()
+
+        # Délai écoulé = nombre de rapports journaliers
+        delai_ecoule = db.query(func.count()).filter(
+            RapportJournalier.id_projet == id_projet
+        ).scalar()
+
+        # Incidents liés au projet
+        has_incident = db.query(Incident).filter(Incident.id_projet == id_projet).first() is not None
+
+        resultats.append({
+            "id": id_projet,
+            "nom": projet.name,
+            "localisation": projet.adresse,
+            "profondeur": profondeur,
+            "dateDebut": projet.date_debut.strftime("%d/%m/%Y") if projet.date_debut else None,
+            "coutPrevu": f"{projet.budget_total:,} DA" if projet.budget_total else "0 DA",
+            "coutActuel": f"{cout_reel:,} DA",
+            "delaiPrevu": f"{projet.duree_prevue} jours" if projet.duree_prevue else "N/A",
+            "delaiEcoule": f"{delai_ecoule} jours",
+            "closed": projet.closed,
+            "hasIncident": has_incident,
+        })
+
+    return resultats

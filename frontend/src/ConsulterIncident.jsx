@@ -1,35 +1,44 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Navbar from "./components/navbar";
 import { useParams } from "react-router-dom";
-import { FaDownload } from "react-icons/fa"; // si tu utilises react-icons
-
+import Navbar from "./components/navbar";
 
 const ConsulterIncident = () => {
+  const [allIncidents, setAllIncidents] = useState([]);
   const [incidents, setIncidents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const { id } = useParams(); // ce ci c'est l'id du projet by nesrine 
+  const { id } = useParams();
 
-  const fetchIncidents = async (projectId = "_") => {
-  try {
-    const response = await fetch(`http://127.0.0.1:8000/incident/projet/${id}`);
-    
-    if (!response.ok) {
-      throw new Error(`Erreur HTTP: ${response.status}`);
+  const fetchIncidents = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/incident/projet/${id}`);
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+      const data = await response.json();
+      setAllIncidents(data);
+      setIncidents(data); // on affiche tout au début
+    } catch (error) {
+      console.error("Erreur lors de la récupération des incidents :", error);
     }
-
-    const data = await response.json();
-    setIncidents(data);
-    console.log(data)
-  } catch (error) {
-    console.error("Erreur lors de la récupération des incidents :", error);
-  }
-};
-
+  };
 
   useEffect(() => {
     fetchIncidents();
   }, []);
+
+  const handleSearch = () => {
+    const search = searchTerm.trim().toLowerCase();
+    if (search === "") {
+      setIncidents(allIncidents);
+    } else {
+      setIncidents(
+        allIncidents.filter(incident =>
+          incident.description &&
+          incident.description.toLowerCase().includes(search)
+        )
+      );
+    }
+  };
 
   return (
     <>
@@ -45,13 +54,13 @@ const ConsulterIncident = () => {
         <div className="flex justify-end mb-4 space-x-2">
           <input
             type="text"
-            placeholder="ID incident..."
+            placeholder="Description incident..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-[250px] px-4 py-2 border rounded-full focus:outline-none"
           />
           <button
-            onClick={() => fetchIncidents(searchTerm.trim() !== "" ? searchTerm : "_")}
+            onClick={handleSearch}
             className="bg-[#EA5529] text-white px-4 py-2 rounded-full hover:bg-orange-600"
           >
             Rechercher
@@ -69,45 +78,41 @@ const ConsulterIncident = () => {
               </tr>
             </thead>
             <tbody>
-              {incidents.map((incident, index) => (
-                <tr key={index} className="border-t border-gray-200">
-                  <td className="p-4">› {incident.description}</td>
-                  <td className="p-4">{incident.date_incident}</td>
-                  <td className="p-4">
-                    <span
-                      className={`px-3 py-1 rounded-full font-medium ${
-                        incident.resolu === "Y"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                      
-                    >
-                      {incident.resolu === "Y" ? "Résolu" : "Non résolu"}
-                    </span>
-
-
-                  </td>
-                  <td className="p-4 text-center">
-  {incident.fichier_joint ? (
-    <a
-      href={`http://127.0.0.1:8000/incident/download/${incident.id}`}
-      title="Télécharger la pièce jointe"
-      className="inline-block"
-    >
-      <img
-        src="/file.png"
-        alt="Télécharger"
-        className="w-5 h-5 cursor-pointer"
-      />
-    </a>
-  ) : (
-    <span className="text-gray-400">—</span>
-  )}
-</td>
-
-                </tr>
-              ))}
-              {incidents.length === 0 && (
+              {incidents.length > 0 ? (
+                incidents.map((incident, index) => (
+                  <tr key={index} className="border-t border-gray-200">
+                    <td className="p-4">› {incident.description}</td>
+                    <td className="p-4">{incident.date_incident}</td>
+                    <td className="p-4">
+                      <span
+                        className={`px-3 py-1 rounded-full font-medium ${incident.resolu === "Y"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                          }`}
+                      >
+                        {incident.resolu === "Y" ? "Résolu" : "Non résolu"}
+                      </span>
+                    </td>
+                    <td className="p-4 text-center">
+                      {incident.fichier_joint ? (
+                        <a
+                          href={`http://127.0.0.1:8000/incident/download/${incident.id}`}
+                          title="Télécharger la pièce jointe"
+                          className="inline-block"
+                        >
+                          <img
+                            src="/file.png"
+                            alt="Télécharger"
+                            className="w-5 h-5 cursor-pointer"
+                          />
+                        </a>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              ) : (
                 <tr>
                   <td colSpan="4" className="text-center text-gray-500 py-6">
                     Aucun incident signalé pour le moment.

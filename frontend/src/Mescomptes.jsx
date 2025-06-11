@@ -10,7 +10,7 @@ const Mescomptes = () => {
   const [editedData, setEditedData] = useState({});
   const navigate = useNavigate();
 
-  const apiBase = "http://localhost:8000/utilisateur"; // À adapter selon ton backend
+  const apiBase = "http://localhost:8000/utilisateur";
 
   const fetchComptes = async (motCle = "") => {
     try {
@@ -44,7 +44,7 @@ const Mescomptes = () => {
       await axios.put(`${apiBase}/${editingId}`, {
         name: editedData.name,
         email: editedData.email,
-        pwd: "dummy", // Tu peux adapter selon le backend
+        pwd: "dummy",
         role: editedData.role,
       });
       setComptes((prev) =>
@@ -73,35 +73,33 @@ const Mescomptes = () => {
         <p className="text-[16px] text-gray-700 mb-10 max-w-xl">
           Gérer les comptes des managers associés à vos projets.
         </p>
-        
-        <div className="flex mb-6 items-center justify-between w-full">
-  {/* Bouton Ajouter */}
-  <div >
-    <button
-      onClick={() => navigate("/creeruser")}
-      className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
-    >
-      Ajouter un nouveau utilisateur
-    </button>
-  </div>
 
-  {/* Recherche */}
-  <div className="flex items-center space-x-2">
-     <input
-            type="text"
-            placeholder="Nom du compte..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-[250px] px-4 py-2 border rounded-full focus:outline-none"
-          />
-    <button
-            onClick={() => fetchComptes(searchTerm.trim())}
-            className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
-          >
-            Rechercher
-          </button>
-  </div>
-</div>
+        <div className="flex mb-6 items-center justify-between w-full">
+          <div >
+            <button
+              onClick={() => navigate("/creeruser")}
+              className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
+            >
+              Ajouter un nouveau utilisateur
+            </button>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="text"
+              placeholder="Nom du compte..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-[250px] px-4 py-2 border rounded-full focus:outline-none"
+            />
+            <button
+              onClick={() => fetchComptes(searchTerm.trim())}
+              className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
+            >
+              Rechercher
+            </button>
+          </div>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left">
             <thead className="bg-gray-100">
@@ -147,8 +145,8 @@ const Mescomptes = () => {
                         className="border px-2 py-1 rounded w-full"
                         value={editedData.email}
                         onChange={(e) =>
-                     setEditedData({ ...editedData, email: e.target.value }) // ✅ CORRECT
-                            }
+                          setEditedData({ ...editedData, email: e.target.value })
+                        }
 
                       />
                     ) : (
@@ -193,7 +191,7 @@ const Mescomptes = () => {
           </table>
         </div>
 
-        
+
       </div>
     </>
   );

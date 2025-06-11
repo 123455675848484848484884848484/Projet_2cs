@@ -4,7 +4,7 @@ import Navbar from "./components/navbar";
 
 const CreerUser = () => {
   const [name, setNom] = useState("");
-  const [role, setRole] = useState(""); // Remplace prénom par rôle
+  const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [pwd, setMotDePasse] = useState("");
   const [puits, setPuits] = useState([""]);
@@ -16,7 +16,6 @@ const CreerUser = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Remplace par ton URL d'API puits
     fetch("http://127.0.0.1:8000/projets")
       .then((response) => {
         if (!response.ok) {
@@ -25,7 +24,6 @@ const CreerUser = () => {
         return response.json();
       })
       .then((data) => {
-        // data est supposé être un tableau d'objets puits avec au moins id et name
         setPuitsDisponibles(data);
         setLoading(false);
       })
@@ -36,61 +34,61 @@ const CreerUser = () => {
       });
   }, []);
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!name || !role || !email || !pwd) {
-    alert("Veuillez remplir tous les champs !");
-    return;
-  }
-
-  try {
-    // 1. Création utilisateur
-    const userData = { name, email, role, pwd };
-
-    const response = await fetch("http://127.0.0.1:8000/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Erreur lors de la création de l'utilisateur");
+    if (!name || !role || !email || !pwd) {
+      alert("Veuillez remplir tous les champs !");
+      return;
     }
 
-    const createdUser = await response.json();
-    const userId = createdUser.id;
+    try {
+      // 1. Création utilisateur
+      const userData = { name, email, role, pwd };
 
-    // 2. Préparer les couples id_utilisateur, id_projet
-    const userProjetsData = puits
-      .filter(p => p) // enlever les puits vides
-      .map(id => ({
-        id_projet: parseInt(id, 10),
-        id_utilisateur: userId,
-      }));
-
-    // 3. Envoyer un POST par affectation
-    for (const userProjet of userProjetsData) {
-      const resUserProjet = await fetch("http://127.0.0.1:8000/projets/affecter", {
+      const response = await fetch("http://127.0.0.1:8000/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userProjet),
+        body: JSON.stringify(userData),
       });
 
-      if (!resUserProjet.ok) {
-        const errorData = await resUserProjet.json();
-        throw new Error(errorData.message || "Erreur lors de l'affectation d'un puits");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erreur lors de la création de l'utilisateur");
       }
+
+      const createdUser = await response.json();
+      const userId = createdUser.id;
+
+      // 2. Préparer les couples id_utilisateur, id_projet
+      const userProjetsData = puits
+        .filter(p => p)
+        .map(id => ({
+          id_projet: parseInt(id, 10),
+          id_utilisateur: userId,
+        }));
+
+      // 3. Envoyer un POST par affectation
+      for (const userProjet of userProjetsData) {
+        const resUserProjet = await fetch("http://127.0.0.1:8000/projets/affecter", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userProjet),
+        });
+
+        if (!resUserProjet.ok) {
+          const errorData = await resUserProjet.json();
+          throw new Error(errorData.message || "Erreur lors de l'affectation d'un puits");
+        }
+      }
+
+      alert("Utilisateur créé et puits affectés avec succès !");
+      navigate("/info-puit");
+
+    } catch (error) {
+      alert("Erreur : " + error.message);
     }
-
-    alert("Utilisateur créé et puits affectés avec succès !");
-    navigate("/info-puit");
-
-  } catch (error) {
-    alert("Erreur : " + error.message);
-  }
-};
+  };
 
 
 
@@ -119,7 +117,6 @@ const CreerUser = () => {
     <>
       <Navbar role="admin" />
       <div className="w-full flex">
-        {/* Left Column */}
         <div className="w-9/12 p-8 bg-[#f9f9f9] flex items-start justify-center">
           <div className="w-full max-w-3xl">
             <h1 className="text-[36px] font-bold text-[#EA5529] mb-6">
@@ -228,7 +225,6 @@ const CreerUser = () => {
           </div>
         </div>
 
-        {/* Right Column */}
         <div className="w-3/4 h-screen">
           <img
             src="/lma9am.jpg"

@@ -154,7 +154,7 @@ const FichierJournalier = () => {
             </option>
             {puits.map((puit) => (
               <option key={puit.id} value={puit.id}>
-                {puit.name } 
+                {puit.name}
               </option>
             ))}
           </select>

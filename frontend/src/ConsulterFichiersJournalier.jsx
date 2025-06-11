@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 const ConsulterFichiersJournalier = () => {
   const [fichiers, setFichiers] = useState([]);
-  const { id } = useParams(); // id du projet
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchFichiers = async () => {

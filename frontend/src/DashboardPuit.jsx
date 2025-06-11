@@ -16,7 +16,7 @@ import {
   Legend,
 } from "chart.js";
 
-import Navbar from "./components/navbar"; 
+import Navbar from "./components/navbar";
 
 ChartJS.register(
   CategoryScale,
@@ -42,21 +42,21 @@ const DashboardPuit = () => {
   useEffect(() => {
     // COÛTS
     fetch(`http://127.0.0.1:8000/projets/${id}/dates`)
-  .then((res) => res.json())
-  .then((data) => {
-    setPuit({ nom: data.projet, adresse: data.adresse });
-    setDelais({
-      planned: data.date_prevue,
-      expected: data.date_estimee,
-      remaining: data.jours_restants,
-    });
-    setCouts({
-      planned: data.cout_previsionnel,
-      expected: data.cout_reel,
-      remaining: data.montant_restant,
-    });
-  })
-  .catch((err) => console.error("Erreur récupération infos projet :", err));
+      .then((res) => res.json())
+      .then((data) => {
+        setPuit({ nom: data.projet, adresse: data.adresse });
+        setDelais({
+          planned: data.date_prevue,
+          expected: data.date_estimee,
+          remaining: data.jours_restants,
+        });
+        setCouts({
+          planned: data.cout_previsionnel,
+          expected: data.cout_reel,
+          remaining: data.montant_restant,
+        });
+      })
+      .catch((err) => console.error("Erreur récupération infos projet :", err));
     fetch(`http://127.0.0.1:8000/projets/${id}/prof_cout`)
       .then((res) => res.json())
       .then((data) => {
@@ -142,10 +142,10 @@ const DashboardPuit = () => {
             return isNaN(date.getTime())
               ? label
               : date.toLocaleDateString("fr-FR", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                });
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              });
           },
         },
       },

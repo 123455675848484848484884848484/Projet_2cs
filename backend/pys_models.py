@@ -147,7 +147,7 @@ class IncidentCreate(BaseModel):
     date_incident: date
     fichier_joint: Optional[bytes]
     resolu: str
-    description: Optional[str] = None  # ✅ Ajout du champ description
+    description: Optional[str] = None  
 
 class IncidentOut(IncidentCreate):
     id: int

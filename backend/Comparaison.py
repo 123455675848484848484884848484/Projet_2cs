@@ -32,7 +32,3 @@ def comparer_cout_phase(cout_reel: float, cout_planifie: float):
     }
 
     return resultat
-
-# Exemple d'utilisation :
-resultat = comparer_cout_phase(12000, 10000)
-print(resultat)

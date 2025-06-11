@@ -4,19 +4,18 @@ from database import get_db
 from pys_models import OperationOut, OperationCreate
 from models import Operation
 from typing import List  # Import nécessaire pour List
-from fastapi import HTTPException
 
 router = APIRouter(prefix="/operation", tags=["operation"])
 
-@router.post("/", response_model=List[OperationOut])  # Notez le List[OperationOut]
+@router.post("/", response_model=List[OperationOut]) 
 def create_operations(
-    operations: List[OperationCreate],  # Accepte une liste d'opérations
+    operations: List[OperationCreate],  
     db: Session = Depends(get_db)
 ):
     created_operations = []
     
     try:
-        for operation in operations:  # Itération sur la liste
+        for operation in operations:  
             # Validation des données
             if operation.categorie not in ["Fixe", "Variable"]:
                 raise HTTPException(
@@ -42,7 +41,7 @@ def create_operations(
         return created_operations
         
     except Exception as e:
-        db.rollback()  # Annulation des changements en cas d'erreur
+        db.rollback() 
         print(f"❌ Erreur critique : {str(e)}")
         raise HTTPException(
             status_code=500,

@@ -1,11 +1,10 @@
 from fastapi import FastAPI ,APIRouter , Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 from pydantic import BaseModel
 from typing import List
 from sqlalchemy import create_engine
 from database import get_db
-from sqlalchemy.orm import sessionmaker
-from  models import OperationJournaliere  # adapte ce chemin à ton modèle
+from  models import OperationJournaliere  
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np

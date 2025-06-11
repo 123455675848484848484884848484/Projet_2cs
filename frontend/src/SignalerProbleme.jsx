@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./components/navbar";
+import { useParams } from "react-router-dom";
 
 const SignalerProbleme = () => {
   const [problems, setProblems] = useState([
     { puit: "", probleme: "", date: "", resolu: "", file: null },
   ]);
+  const { id } = useParams();
   const [puits, setPuits] = useState([]);
 
   useEffect(() => {
-    // const userId = localStorage.getItem("user_id");
-    const userId = 12;
-    fetch(`http://localhost:8000/projets/${userId}`)
+    fetch(`http://localhost:8000/projets/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
         return res.json();
@@ -53,12 +53,10 @@ const SignalerProbleme = () => {
         formData.append("date_incident", problem.date);
         formData.append("description", problem.probleme);
         formData.append("utilisateur", userId);
-        // Ajouter le fichier uniquement s'il est sélectionné
         if (problem.file) {
           formData.append("fichier_joint", problem.file);
         }
 
-        // debug: afficher les données formData (optionnel)
         for (let pair of formData.entries()) {
           console.log(pair[0] + ": ", pair[1]);
         }

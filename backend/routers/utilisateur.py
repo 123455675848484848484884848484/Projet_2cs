@@ -50,7 +50,7 @@ def delete_utilisateur(utilisateur_id: int, db: Session = Depends(get_db)):
         db.commit()
         return {"message": "Utilisateur supprimé avec succès"}
     except Exception as e:
-        print("Erreur lors de la suppression :", str(e))  # s'affiche dans uvicorn
+        print("Erreur lors de la suppression :", str(e))  
         raise HTTPException(status_code=500, detail=f"Erreur serveur : {str(e)}")
 
 

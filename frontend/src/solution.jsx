@@ -73,7 +73,7 @@ const SignalerProbleme = () => {
                   <p className="font-semibold mt-2">Solution :</p>
                   <p>{sol.solution}</p>
                   <p className="text-sm text-gray-500 mt-1">
-                    Similarité : {sol.similarite * 100 } %
+                    Similarité : {sol.similarite * 100} %
                   </p>
                 </li>
               ))}

@@ -1,7 +1,7 @@
 
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer , OAuth2PasswordRequestForm
-from passlib.context import CryptContext # type: ignore
+from passlib.context import CryptContext 
 from models import Utilisateur
 from pys_models import UtilisateurCreate , UtilisateurOut
 from database import get_db
@@ -17,7 +17,7 @@ oauth2_schema = OAuth2PasswordBearer(tokenUrl="token")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Your JWT secret and algorithm
+
 SECRET_KEY = "xWgDCm9vtlW_hA4MP0gIpXzghEwvJyzAYKQtaY_Y0bI"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -35,7 +35,7 @@ def create_user(db: Session, user: UtilisateurCreate):
     )
     db.add(db_user)
     db.commit()
-    db.refresh(db_user)  # Optional: refresh to get the inserted user's ID
+    db.refresh(db_user) 
     return db_user
 
 
@@ -99,7 +99,6 @@ def login_for_access_token(
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-        # Debug print
         print("✅ User authenticated:", user.email, "| Role:", user.role)
 
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -111,7 +110,7 @@ def login_for_access_token(
         return JSONResponse(
         content={
             "access_token": access_token,
-            "token_type": "bearer",  # Ensure this is included
+            "token_type": "bearer",  
             "user_id": user.id,
             "role": user.role
         }

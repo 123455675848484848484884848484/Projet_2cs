@@ -47,14 +47,14 @@ const MesPuits = () => {
       const formattedData = data.map((projet) => ({
         id: projet.id,
         name: projet.name,
-        type: projet.type ,
+        type: projet.type,
         dateDebut: projet.date_debut,
         wilaya: projet.wilaya,
         adresse: projet.adresse,
         duree: projet.duree_prevue,
         budget: `${parseFloat(projet.budget_total || 0).toLocaleString()} DZD`,
       }));
-       
+
       setPuits(formattedData);
     } catch (error) {
       console.error("Erreur:", error);
@@ -76,34 +76,33 @@ const MesPuits = () => {
           For marketplace sellers looking to grow their business, metaverse offers the best platform.
         </p>
 
-       <div className="flex mb-6 items-center justify-between w-full">
-  {/* Bouton Ajouter */}
-  <div >
-    <button
-      onClick={() => navigate("/creeruser")}
-      className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
-    >
-      Ajouter un nouveau puit
-    </button>
-  </div>
+        <div className="flex mb-6 items-center justify-between w-full">
+          <div >
+            <button
+              onClick={() => navigate("/creeruser")}
+              className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
+            >
+              Ajouter un nouveau puit
+            </button>
+          </div>
 
-  {/* Recherche */}
-  <div className="flex items-center space-x-2">
-    <input
-      type="text"
-      placeholder="Nom du projet..."
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      className="w-[250px] px-4 py-2 border rounded-full focus:outline-none"
-    />
-    <button
-      onClick={() => fetchPuits(searchTerm.trim() !== "" ? searchTerm : "_")}
-      className="bg-[#EA5529] text-white px-4 py-2 rounded-full hover:bg-orange-600"
-    >
-      Rechercher
-    </button>
-  </div>
-</div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="text"
+              placeholder="Nom du projet..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-[250px] px-4 py-2 border rounded-full focus:outline-none"
+            />
+            <button
+              onClick={() => fetchPuits(searchTerm.trim() !== "" ? searchTerm : "_")}
+              className="bg-[#EA5529] text-white px-4 py-2 rounded-full hover:bg-orange-600"
+            >
+              Rechercher
+            </button>
+          </div>
+        </div>
 
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left">
@@ -112,7 +111,7 @@ const MesPuits = () => {
                 <th className="p-4">Nom</th>
                 <th className="p-4">Date début</th>
                 <th className="p-4">Région</th>
-                 <th className="p-4">Type</th>
+                <th className="p-4">Type</th>
                 <th className="p-4">Adresse</th>
                 <th className="p-4">Durée prévue</th>
                 <th className="p-4">Coût total</th>

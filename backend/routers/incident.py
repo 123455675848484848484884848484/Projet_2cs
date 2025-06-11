@@ -1,17 +1,13 @@
 from io import BytesIO
-from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from models import Incident  # ton modèle SQLAlchemy
-from pys_models import IncidentCreate, IncidentOut
-from database import get_db  # ta session SQLAlchemy
-from fastapi import HTTPException
+from models import Incident
+from pys_models import IncidentOut
+from database import get_db  
 from sqlalchemy.exc import SQLAlchemyError
-from fastapi import APIRouter, UploadFile, File, Form, Depends
+from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException
 from datetime import date
-from typing import Optional
-from typing import List
+from typing import Optional,List
 from fastapi.responses import StreamingResponse
-from fastapi import HTTPException
 
 import base64
 from typing import List
@@ -88,7 +84,6 @@ def download_fichier_incident(id_incident: int, db: Session = Depends(get_db)):
     if not incident.fichier_joint:
         raise HTTPException(status_code=404, detail="Aucun fichier joint pour cet incident")
 
-    # Préparer le fichier pour la réponse
     file_like = BytesIO(incident.fichier_joint)
     filename = f"incident_{id_incident}_fichier.pdf"
 

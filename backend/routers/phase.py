@@ -6,9 +6,9 @@ from database import get_db
 from models import Phase
 
 router = APIRouter(prefix="/phase", tags=["phase"])
-@router.post("/", response_model=List[PhaseOut])  # Supposons que vous avez un modèle PhaseOut
+@router.post("/", response_model=List[PhaseOut])  
 def create_phases(
-    phases: List[PhaseCreate],  # Liste d'objets PhaseCreate
+    phases: List[PhaseCreate],  
     db: Session = Depends(get_db)
 ):
     created_phases = []
@@ -24,7 +24,7 @@ def create_phases(
             
             # Création de la phase
             new_phase = Phase(
-                designation=phase.designation.upper()  # Conversion en majuscules si souhaité
+                designation=phase.designation.upper()  
             )
             
             db.add(new_phase)
@@ -40,7 +40,7 @@ def create_phases(
         
     except HTTPException:
         db.rollback()
-        raise  # Relance les erreurs HTTP personnalisées
+        raise  
         
     except Exception as e:
         db.rollback()

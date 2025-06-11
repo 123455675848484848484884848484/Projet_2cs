@@ -14,12 +14,6 @@ from sqlalchemy import func
 from fastapi import Query
 from datetime import date
 
-# Routes
-router_probleme = APIRouter(prefix="/probleme", tags=["probleme"])
-router_extraction = APIRouter(prefix="/extraction", tags=["extraction"])
-router_incident = APIRouter(prefix="/incident",tags=["incident"])
-router_operation_journaliere=APIRouter(prefix="/op_journaliere",tags=["op_journaliere"])
-router_excel=APIRouter(prefix="/excel", tags=["excel"])
 
 router = APIRouter(prefix="/fichier_excel",tags=["fichier_excel"])
 #Functions and apis 
