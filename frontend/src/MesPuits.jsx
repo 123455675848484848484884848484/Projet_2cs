@@ -73,7 +73,7 @@ const MesPuits = () => {
           Mes Puits
         </h1>
         <p className="text-[16px] text-gray-700 mb-10 max-w-xl">
-          For marketplace sellers looking to grow their business, metaverse offers the best platform.
+          La liste des puits (projets) en cours et ceux achevées
         </p>
 
         <div className="flex mb-6 items-center justify-between w-full">
