@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./components/navbar";
+import { FaPlus } from "react-icons/fa";
+
 
 const Mescomptes = () => {
   const [comptes, setComptes] = useState([]);
@@ -179,6 +181,14 @@ const Mescomptes = () => {
                       >
                         Supprimer
                       </button>
+                     <button 
+                     onClick={() => navigate(`/moncompte/${compte.id}`)}
+                     className="flex items-center justify-center w-10 h-10 bg-transparent rounded text-orange-500 hover:bg-orange-600 transition-all">
+  <FaPlus />
+</button>
+                     
+                    
+            
                     </div>
                   </td>
                 </tr>

@@ -36,12 +36,7 @@ const Navbar = ({ role, userid }) => {
 
           {role === "Decideur" && (
             <>
-            <li
-              className="hover:text-[#EA5529] cursor-pointer"
-              onClick={() => navigate("/moncompte")}
-            >
-              Mon compte
-            </li>
+           
             <li
                 className="hover:text-[#EA5529] cursor-pointer"
                 onClick={() => navigate("/mespuits")}
@@ -82,23 +77,46 @@ const Navbar = ({ role, userid }) => {
 
           {/* 🔓 Li de déconnexion pour tous les rôles sauf guest */}
           {role !== "guest" && (
+            <>
+            <li
+              className="hover:text-[#EA5529] cursor-pointer"
+              onClick={() => navigate(`/moncompte/${userid}`)}
+            >
+              Mon compte
+            </li>
+            
             <li
               className="hover:text-red-500 cursor-pointer"
               onClick={handleLogout}
             >
               Se déconnecter
             </li>
+            <li
+              className="hover:text-[#EA5529] cursor-pointer"
+              onClick={() => navigate(`/moncompte/${userid}`)}
+            >
+              Mon compte
+            </li>
+            </>
           )}
         </ul>
 
         {/* Role-based Button */}
         {role === "Decideur" && (
+          <>
           <button
             onClick={() => navigate("/mespuits")}
             className="bg-[#EA5529] text-white px-4 py-2 rounded-lg hover:bg-[#d1441f] transition"
           >
             Consulter Mes puits
           </button>
+          <li
+              className="hover:text-[#EA5529] cursor-pointer"
+              onClick={() => navigate(`/moncompte/${userid}`)}
+            >
+              Mon compte
+            </li>
+            </>
         )}
 
         {role === "guest" && (
@@ -108,15 +126,19 @@ const Navbar = ({ role, userid }) => {
           >
             Se connecter
           </button>
+
+
         )}
 
         {role === "Agent" && (
+          
           <button
             onClick={() => navigate("/file")}
             className="bg-[#EA5529] text-white px-4 py-2 rounded-lg hover:bg-[#d1441f] transition"
           >
             Insérer fichier journalier
           </button>
+          
         )}
 
         {role === "Admin" && (

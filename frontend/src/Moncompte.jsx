@@ -1,171 +1,207 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate  , useParams} from "react-router-dom";
 import Navbar from "./components/navbar";
 
-const Mescomptes = () => {
-  const [comptes, setComptes] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [editingId, setEditingId] = useState(null);
-  const [editedData, setEditedData] = useState({});
+const CreerUser = () => {
+  const [userInfo, setUserInfo] = useState(null);
+  const [affectations, setAffectations] = useState([]);
+  const [puitsDisponibles, setPuitsDisponibles] = useState([]);
+  const [puits, setPuits] = useState([""]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { id_user } = useParams();
+
+  const userId = localStorage.getItem("user_id");
+  const role = localStorage.getItem("role");
+
   const navigate = useNavigate();
 
-  const sampleData = [
-    { id: 1, name: "Fadel Nesrine", role: "Manager", adresse: "ln_fadel@esi.dz" },
-    { id: 2, name: "Guefaifia Rania", role: "Manager", adresse: "kr_guefaifia@esi.dz" },
-  ];
+  // Charger les infos utilisateur et les projets
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/utilisateur/${id_user}`);
+        if (!res.ok) throw new Error("Erreur récupération utilisateur");
+        const data = await res.json();
+        setUserInfo(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
 
-  const fetchComptes = (motCle = "") => {
-    const filtered = sampleData.filter((c) =>
-      c.name.toLowerCase().includes(motCle.toLowerCase())
+    const fetchPuitsDisponibles = async () => {
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/utilisateur/non_affectes/${id_user}`);
+        if (!res.ok) throw new Error("Erreur récupération puits");
+        const data = await res.json();
+        setPuitsDisponibles(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    const fetchAffectations = async () => {
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/utilisateur/${id_user}/projets`);
+        if (!res.ok) throw new Error("Erreur récupération affectations");
+        const data = await res.json();
+        setAffectations(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    Promise.all([fetchUserInfo(), fetchPuitsDisponibles(), fetchAffectations()]).finally(() =>
+      setLoading(false)
     );
-    setComptes(filtered.length > 0 ? filtered : sampleData);
+  }, [id_user]);
+
+  const handlePuitChange = (index, value) => {
+    const newPuits = [...puits];
+    newPuits[index] = value;
+    setPuits(newPuits);
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("Êtes-vous sûr de vouloir supprimer ce compte ?")) {
-      setComptes((prev) => prev.filter((compte) => compte.id !== id));
+  const addPuitField = (e) => {
+    e.preventDefault();
+    setPuits([...puits, ""]);
+  };
+
+  const removePuitField = (index) => {
+    if (puits.length <= 1) return;
+    const newPuits = [...puits];
+    newPuits.splice(index, 1);
+    setPuits(newPuits);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const userProjetsData = puits
+        .filter((p) => p)
+        .map((id) => ({
+          id_projet: parseInt(id, 10),
+          id_utilisateur: parseInt(id_user),
+        }));
+
+      for (const userProjet of userProjetsData) {
+        const resUserProjet = await fetch("http://127.0.0.1:8000/projets/affecter", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userProjet),
+        });
+
+        if (!resUserProjet.ok) {
+          const errorData = await resUserProjet.json();
+          throw new Error(errorData.message || "Erreur affectation");
+        }
+      }
+
+      alert("Puits affectés avec succès !");
+      navigate("/mescomptes");
+    } catch (err) {
+      alert("Erreur : " + err.message);
     }
   };
 
-  const handleEdit = (compte) => {
-    setEditingId(compte.id);
-    setEditedData({ ...compte });
-  };
-
-  const handleValidate = () => {
-    setComptes((prev) =>
-      prev.map((compte) =>
-        compte.id === editingId ? { ...editedData } : compte
-      )
-    );
-    setEditingId(null);
-    setEditedData({});
-  };
-
-  useEffect(() => {
-    fetchComptes();
-  }, []);
+  if (loading) return <p>Chargement...</p>;
+  if (error) return <p>Erreur : {error}</p>;
 
   return (
     <>
-       
+      <Navbar role={role} userid={userId} />
+      <div className="w-full flex">
+        <div className="w-2/5 p-8 bg-[#f9f9f9] flex items-start justify-center">
+          <div className="w-full max-w-3xl">
+            <h1 className="text-[36px] font-bold text-[#EA5529] mb-6">
+              Informations du compte
+            </h1>
 
-      <div className="min-h-screen bg-[#f9f9f9] px-20 py-12">
-        <h1 className="text-[48px] font-bold text-[#EA5529] leading-[56px] mb-4">
-          Mes Comptes
-        </h1>
-        <p className="text-[16px] text-gray-700 mb-10 max-w-xl">
-          Gérer les comptes des managers associés à vos projets.
-        </p>
+            <div className="space-y-4 text-base text-gray-800">
+              <p><strong>Nom :</strong> {userInfo?.name}</p>
+              <p><strong>Email :</strong> {userInfo?.email}</p>
+              <p><strong>Rôle :</strong> {userInfo?.role}</p>
+            </div>
 
-        <div className="flex justify-end mb-6 space-x-2">
-          <input
-            type="text"
-            placeholder="Nom du compte..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-[250px] px-4 py-2 border rounded-full focus:outline-none"
-          />
+            <h2 className="text-[28px] font-bold text-[#EA5529] mt-6 mb-2">
+              Projets affectés
+            </h2>
+            <ul className="list-disc list-inside text-gray-700 mb-6">
+              {affectations.length > 0 ? (
+                affectations.map((p) => (
+                  <li key={p.id}>{p.name || p.projet?.name || "Nom inconnu"}</li>
+                ))
+              ) : (
+                <li>Aucun puits affecté.</li>
+              )}
+            </ul>
+
+            {role === "Admin" && (
+  <form onSubmit={handleSubmit} className="space-y-6">
+    <h2 className="text-[22px] font-bold text-[#EA5529]">
+      Affecter de nouveaux puits
+    </h2>
+
+    {puits.map((puit, index) => (
+      <div key={index} className="flex items-center gap-2 mt-3">
+        <select
+          value={puit}
+          onChange={(e) => handlePuitChange(index, e.target.value)}
+          className="w-64 border border-gray-300 rounded px-3 py-2 bg-white"
+        >
+          <option value="">-- Choisir un puits --</option>
+          {puitsDisponibles.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.name}
+            </option>
+          ))}
+        </select>
+
+        {index === puits.length - 1 ? (
           <button
-            onClick={() => fetchComptes(searchTerm.trim())}
-            className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:brightness-90"
+            onClick={addPuitField}
+            className="p-1 text-gray-600 hover:text-gray-800"
+            type="button"
           >
-            Rechercher
+            <img src="/Add.png" alt="Ajouter un puits" className="w-5 h-5" />
           </button>
+        ) : (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              removePuitField(index);
+            }}
+            className="p-1 text-gray-600 hover:text-gray-800"
+            type="button"
+          >
+            <img src="/remove.png" alt="Supprimer" className="w-5 h-5" />
+          </button>
+        )}
+      </div>
+    ))}
+
+    <div className="mt-5">
+      <button
+        type="submit"
+        className="bg-[#EA5529] text-white py-2 px-6 rounded-md font-semibold hover:bg-[#d04420] transition"
+      >
+        Affecter les puits
+      </button>
+    </div>
+  </form> )}
+          </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-left">
-            <thead className="bg-gray-100">
-              <tr className="text-gray-700">
-                <th className="p-4">Nom complet</th>
-                <th className="p-4">Rôle</th>
-                <th className="p-4">Adresse mail</th>
-                <th className="p-4 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {comptes.map((compte) => (
-                <tr key={compte.id} className="border-t border-gray-200">
-                  <td className="p-4">
-                    {editingId === compte.id ? (
-                      <input
-                        className="border px-2 py-1 rounded w-full"
-                        value={editedData.name}
-                        onChange={(e) =>
-                          setEditedData({ ...editedData, name: e.target.value })
-                        }
-                      />
-                    ) : (
-                      <>› {compte.name}</>
-                    )}
-                  </td>
-                  <td className="p-4">
-                    {editingId === compte.id ? (
-                      <input
-                        className="border px-2 py-1 rounded w-full"
-                        value={editedData.role}
-                        onChange={(e) =>
-                          setEditedData({ ...editedData, role: e.target.value })
-                        }
-                      />
-                    ) : (
-                      compte.role
-                    )}
-                  </td>
-                  <td className="p-4">
-                    {editingId === compte.id ? (
-                      <input
-                        className="border px-2 py-1 rounded w-full"
-                        value={editedData.adresse}
-                        onChange={(e) =>
-                          setEditedData({ ...editedData, adresse: e.target.value })
-                        }
-                      />
-                    ) : (
-                      compte.adresse
-                    )}
-                  </td>
-                  <td className="p-4">
-                    <div className="flex justify-center gap-2">
-                      {editingId === compte.id ? (
-                        <button
-                          className="bg-green-800 text-white px-4 py-2 rounded-md font-semibold hover:brightness-90"
-                          onClick={handleValidate}
-                        >
-                          Valider
-                        </button>
-                      ) : (
-                        <button
-                          className="bg-green-800 text-white px-4 py-2 rounded-md font-semibold hover:brightness-90"
-                          onClick={() => handleEdit(compte)}
-                        >
-                          Modifier
-                        </button>
-                      )}
-                      <button
-                        className="bg-[#EA5529] text-white px-4 py-2 rounded-md font-semibold "
-                        onClick={() => handleDelete(compte.id)}
-                      >
-                        Supprimer
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-              {comptes.length === 0 && (
-                <tr>
-                  <td colSpan="4" className="text-center text-gray-500 py-6">
-                    Aucun compte trouvé.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+        <div className="w-3/5 h-screen">
+          <img
+            src="/image.png"
+            alt="Illustration industrielle"
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
     </>
   );
 };
 
-export default Mescomptes;
+export default CreerUser;

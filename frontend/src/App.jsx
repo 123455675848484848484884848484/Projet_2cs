@@ -27,7 +27,7 @@ function App() {
       <Routes>
         <Route path="/lancerPuit" element={<LancerPuit />} />
         <Route path="/creeruser" element={<CreerUser />} />
-        <Route path="/moncompte" element={<Moncompte />} />
+        <Route path="/moncompte/:id_user" element={<Moncompte />} />
         <Route path="/info-puit" element={<InformationPuit />} />
         <Route path="/mespuits" element={<MesPuits />} />
         <Route path="/mescomptes" element={<Mescomptes />} />

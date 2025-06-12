@@ -8,6 +8,7 @@ const MesPuits = () => {
   const navigate = useNavigate();
    const userId = localStorage.getItem("user_id");
    const role = localStorage.getItem("role");
+   
 
   useEffect(() => {
     const verifyToken = async () => {
