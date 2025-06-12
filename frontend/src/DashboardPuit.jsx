@@ -37,6 +37,8 @@ const DashboardPuit = () => {
   const [graphCouts, setGraphCouts] = useState({ prevision: [], reel: [] });
   const { id } = useParams();
   const navigate = useNavigate();
+   const userId = localStorage.getItem("user_id");
+   const role = localStorage.getItem("role");
 
 
   useEffect(() => {
@@ -200,7 +202,8 @@ const DashboardPuit = () => {
 
   return (
     <>
-      <Navbar role="manager" />
+       <Navbar role={role} userid={userId} />
+
       <div className="p-8">
         <h1 className="text-4xl font-bold text-[#EA5529]">{puit.nom}</h1>
         <p className="text-gray-700 mb-4">{puit.adresse}</p>

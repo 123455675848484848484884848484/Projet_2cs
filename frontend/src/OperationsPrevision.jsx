@@ -11,6 +11,8 @@ const OperationsPrevision = () => {
   const { projetid } = location.state || {};
   const { cout } = location.state || {};
   const { delai } = location.state || {};
+   const userId = localStorage.getItem("user_id");
+   const role = localStorage.getItem("role");
 
 
   useEffect(() => {
@@ -82,7 +84,8 @@ const OperationsPrevision = () => {
 
   return (
     <>
-      <Navbar role="manager" />
+      <Navbar role={role} userid={userId} />
+
       <div className="min-h-screen bg-[#f9f9f9] px-28 pt-12 pb-20">
         <h1 className="text-[54px] font-bold text-[#EA5529] leading-[60px] mb-12">
           Vos prévisions

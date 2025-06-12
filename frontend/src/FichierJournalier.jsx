@@ -12,6 +12,7 @@ const FichierJournalier = () => {
   const [selectedPuitId, setSelectedPuitId] = useState("");
   const userId = localStorage.getItem("user_id");
 
+   const role = localStorage.getItem("role");
 
   // 1. Charger les puits au montage du composant
   useEffect(() => {
@@ -134,7 +135,8 @@ const FichierJournalier = () => {
 
   return (
     <>
-      <Navbar role="agent" />
+      <Navbar role={role} userid={userId} />
+
       <div className="min-h-screen px-24 py-12 bg-[#f4f4f4]">
         <h1 className="text-[54px] font-bold text-[#EA5529] leading-[60px] mb-2">
           Fichier journalier

@@ -7,6 +7,8 @@ const ConsulterIncident = () => {
   const [incidents, setIncidents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const { id } = useParams();
+  const userId = localStorage.getItem("user_id");
+  const role = localStorage.getItem("role");
 
   const fetchIncidents = async () => {
     try {
@@ -42,7 +44,7 @@ const ConsulterIncident = () => {
 
   return (
     <>
-      <Navbar role="manager" />
+      <Navbar role={role} userid={userId} />
       <div className="min-h-screen bg-[#f9f9f9] px-20 py-12">
         <h1 className="text-[48px] font-bold text-[#EA5529] leading-[56px] mb-4">
           Incidents détectés

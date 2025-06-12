@@ -6,6 +6,8 @@ const MesPuits = () => {
   const [puits, setPuits] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+   const userId = localStorage.getItem("user_id");
+   const role = localStorage.getItem("role");
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -67,7 +69,7 @@ const MesPuits = () => {
 
   return (
     <>
-      <Navbar role="manager" />
+      <Navbar role={role} userid={userId} />
       <div className="min-h-screen bg-[#f9f9f9] px-20 py-12">
         <h1 className="text-[48px] font-bold text-[#EA5529] leading-[56px] mb-4">
           Mes Puits
@@ -79,7 +81,7 @@ const MesPuits = () => {
         <div className="flex mb-6 items-center justify-between w-full">
           <div >
             <button
-              onClick={() => navigate("/creeruser")}
+              onClick={() => navigate("/lancerPuit")}
               className="bg-[#EA5529] text-white px-6 py-2 rounded-full hover:bg-orange-600"
             >
               Ajouter un nouveau puit

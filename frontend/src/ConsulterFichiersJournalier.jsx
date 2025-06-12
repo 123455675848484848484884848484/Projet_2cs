@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 const ConsulterFichiersJournalier = () => {
   const [fichiers, setFichiers] = useState([]);
   const { id } = useParams();
+  const userId = localStorage.getItem("user_id");
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
     const fetchFichiers = async () => {
@@ -47,9 +49,9 @@ const ConsulterFichiersJournalier = () => {
 
   return (
     <>
-      <Navbar role="manager" />
+      <Navbar role={role} userid={userId} />
       <div className="px-20 py-10 bg-[#f9f9f9] min-h-screen">
-        <h1 className="text-[32px] font-bold text-[#EA5529] mb-6">Fichiers Journaliers</h1>
+        <h1 className="text-[48px] font-bold text-[#EA5529] mb-6">Fichiers Journaliers</h1>
 
         <div className="bg-white shadow-md rounded-lg p-6">
           {fichiers.length === 0 ? (

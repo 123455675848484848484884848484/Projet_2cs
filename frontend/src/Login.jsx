@@ -40,28 +40,42 @@ const Login = () => {
 
       setLoading(false);
 
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('token', data.access_token);
-        localStorage.setItem('user_id', data.user_id);
-        localStorage.setItem('role', data.role);
-        const userid = localStorage.getItem('user_id');
-        const role = localStorage.getItem('role');
-        console.log(data.user_id);
-        console.log(data.role);
-        navigate('/manager');
-      } else {
-        const errorData = await response.json();
-        const errorMessage = typeof errorData === 'object'
-          ? JSON.stringify(errorData)
-          : errorData.detail || 'Authentication failed!';
-        setError(errorMessage);
-      }
-    } catch (error) {
-      setLoading(false);
-      setError('An error occurred. Please try again later.');
-    }
-  };
+     if (response.ok) {
+  const data = await response.json();
+
+  // Stockage des infos
+  localStorage.setItem('token', data.access_token);
+  localStorage.setItem('user_id', data.user_id);
+  localStorage.setItem('role', data.role);
+
+  const userid = data.user_id;
+  const role = data.role;
+
+  console.log(userid);
+  console.log(role);
+
+  // Redirection selon le rôle
+  if (role === 'Decideur') {
+    navigate(`/manager`);
+  } else if (role === 'Admin') {
+    navigate("/mespuits");
+  } else if (role === 'Agent') {
+    navigate("/agent");
+  } else {
+    // Rôle inconnu ou non prévu
+    setError('Rôle utilisateur non reconnu.');
+  }
+} else {
+    const errorData = await response.json();
+    const errorMessage = typeof errorData === 'object'
+      ? JSON.stringify(errorData)
+      : errorData.detail || 'Authentication failed!';
+    setError(errorMessage);
+  }
+} catch (error) {
+  setLoading(false);
+  setError('Une erreur est survenue. Veuillez réessayer plus tard.');
+}}
 
   return (
     <>

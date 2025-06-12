@@ -6,7 +6,8 @@ const SignalerProbleme = () => {
   const [probleme, setProbleme] = useState("");
   const [solutions, setSolutions] = useState([]);
   const navigate = useNavigate();
-
+   const userId = localStorage.getItem("user_id");
+   const role = localStorage.getItem("role");
   const handleSubmit = async () => {
     console.log("Problème soumis :", probleme);
     try {
@@ -33,7 +34,8 @@ const SignalerProbleme = () => {
 
   return (
     <>
-      <Navbar role="manager" />
+       <Navbar role={role} userid={userId} />
+
       <div className="min-h-screen bg-[#f4f4f4] px-24 py-12">
         <h1 className="text-[42px] font-bold text-[#EA5529] mb-4">
           Trouvez des solutions à vos incidents de forage

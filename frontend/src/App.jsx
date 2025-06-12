@@ -25,7 +25,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LancerPuit />} />
+        <Route path="/lancerPuit" element={<LancerPuit />} />
         <Route path="/creeruser" element={<CreerUser />} />
         <Route path="/moncompte" element={<Moncompte />} />
         <Route path="/info-puit" element={<InformationPuit />} />
@@ -34,9 +34,9 @@ function App() {
         <Route path="/solution" element={<Solution />} />
         <Route path="/phasepre" element={<PhasesPrevision />} />
         <Route path="/operations" element={<OperationsPrevision />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/file" element={<FichierJournalier />} />
-        <Route path="/signal/:id" element={<SignalerProbleme />} />
+        <Route path="/signal" element={<SignalerProbleme />} />
         <Route path="/agent" element={<Homeagent />} />
         <Route path="/manager" element={<Homemanager />} />
         <Route path="/dashp/:id" element={<DashboardPuit />} />

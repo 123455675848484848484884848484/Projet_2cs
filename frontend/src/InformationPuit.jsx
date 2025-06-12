@@ -14,6 +14,8 @@ const InformationPuit = () => {
   const location = useLocation();
   const { dateDebut } = location.state || {};
   const userid = localStorage.getItem('user_id');
+   
+   const role = localStorage.getItem("role");
 
 
 
@@ -66,7 +68,8 @@ const InformationPuit = () => {
 
   return (
     <>
-      <Navbar role="manager" />
+      <Navbar role={role} userid={userid} />
+
       <div className="flex h-screen px-20 bg-[#f9f9f9] items-center">
         {/* Colonne gauche : texte */}
         <div className="w-1/2 pr-10 h-full flex flex-col justify-center">

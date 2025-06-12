@@ -8,6 +8,9 @@ const Mescomptes = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editedData, setEditedData] = useState({});
+   const userId = localStorage.getItem("user_id");
+   const role = localStorage.getItem("role");
+
   const navigate = useNavigate();
 
   const apiBase = "http://localhost:8000/utilisateur";
@@ -65,7 +68,7 @@ const Mescomptes = () => {
 
   return (
     <>
-      <Navbar role="admin" />
+      <Navbar role={role} userid={userId} />
       <div className="min-h-screen bg-[#f9f9f9] px-20 py-12">
         <h1 className="text-[48px] font-bold text-[#EA5529] leading-[56px] mb-4">
           Gestion des comptes

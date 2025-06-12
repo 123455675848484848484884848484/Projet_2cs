@@ -12,6 +12,8 @@ const CreerUser = () => {
   const [puitsDisponibles, setPuitsDisponibles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+   const userId = localStorage.getItem("user_id");
+   const rolee = localStorage.getItem("role");
 
   const navigate = useNavigate();
 
@@ -83,7 +85,7 @@ const CreerUser = () => {
       }
 
       alert("Utilisateur créé et puits affectés avec succès !");
-      navigate("/info-puit");
+      navigate("/mescomptes");
 
     } catch (error) {
       alert("Erreur : " + error.message);
@@ -115,9 +117,9 @@ const CreerUser = () => {
 
   return (
     <>
-      <Navbar role="admin" />
+      <Navbar role={role} userid={userId} />
       <div className="w-full flex">
-        <div className="w-9/12 p-8 bg-[#f9f9f9] flex items-start justify-center">
+        <div className="w-2/5 p-8 bg-[#f9f9f9] flex items-start justify-center">
           <div className="w-full max-w-3xl">
             <h1 className="text-[36px] font-bold text-[#EA5529] mb-6">
               Créer un utilisateur
@@ -171,7 +173,7 @@ const CreerUser = () => {
                 />
               </div>
 
-              <h2 className="text-[32px] font-bold text-[#EA5529] mt-3">
+              <h2 className="text-[28px] font-bold text-[#EA5529] mt-3">
                 Affecter l'utilisateur à des puits
               </h2>
 
@@ -225,9 +227,9 @@ const CreerUser = () => {
           </div>
         </div>
 
-        <div className="w-3/4 h-screen">
+        <div className="w-3/5 h-screen">
           <img
-            src="/lma9am.jpg"
+            src="/image.png"
             alt="Illustration industrielle"
             className="w-full h-full object-cover"
           />

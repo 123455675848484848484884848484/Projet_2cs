@@ -8,6 +8,8 @@ const LancerPuit = () => {
   const [dateDebut, setDateDebut] = useState("");
   const navigate = useNavigate();
   const userid = localStorage.getItem('user_id');
+   
+   const role = localStorage.getItem("role");
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -38,7 +40,8 @@ const LancerPuit = () => {
   };
   return (
     <>
-      <Navbar role="manager" />
+      <Navbar role={role} userid={userid} />
+
       <div className="flex h-screen overflow-hidden">
         <div className="w-1/2 bg-[#f9f9f9] flex items-center justify-center px-[80px]">
           <div className="w-full max-w-[400px]">

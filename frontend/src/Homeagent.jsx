@@ -5,10 +5,13 @@ import Navbar from "./components/navbar";
 
 export default function Homeagent() {
   const navigate = useNavigate();
+   const userId = localStorage.getItem("user_id");
+   const role = localStorage.getItem("role");
 
   return (
     <>
-      <Navbar role="agent" />
+       <Navbar role={role} userid={userId} />
+
       <div className="flex h-screen bg-white">
         <div className="w-1/2 flex flex-col justify-center items-start px-16">
           <img src="/corex.png" alt="Corex Logo" className="w-32 mb-8" />
@@ -17,7 +20,7 @@ export default function Homeagent() {
           <h1 className="text-5xl font-bold text-green-900 mb-6">Corex 360°</h1>
 
           <p className="text-lg text-gray-700 mb-10 max-w-md">
-            For marketplace sellers looking to grow their business, metaverse offers the best platform.
+            Pilotez vos puits en toute simplicité grâce à une vision 360° de vos données terrain.
           </p>
 
           <div className="flex flex-col space-y-4 w-full max-w-sm">

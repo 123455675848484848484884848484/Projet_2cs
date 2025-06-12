@@ -8,9 +8,11 @@ const SignalerProbleme = () => {
   ]);
   const { id } = useParams();
   const [puits, setPuits] = useState([]);
+   const userId = localStorage.getItem("user_id");
+   const role = localStorage.getItem("role");
 
   useEffect(() => {
-    fetch(`http://localhost:8000/projets/${id}`)
+    fetch(`http://localhost:8000/projets/${userId}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
         return res.json();
@@ -83,7 +85,8 @@ const SignalerProbleme = () => {
 
   return (
     <>
-      <Navbar role="agent" />
+      <Navbar role={role} userid={userId} />
+
       <div className="min-h-screen px-24 py-12 bg-[#f4f4f4]">
         <h1 className="text-[54px] font-bold text-[#EA5529] leading-[60px] mb-2">
           Signaler un incident

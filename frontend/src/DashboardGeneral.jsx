@@ -7,6 +7,8 @@ const DashboardGeneral = () => {
   const [puitsData, setPuitsData] = useState([]);
   const [selectedPuits, setSelectedPuits] = useState(null);
   const { id } = useParams()
+   const userId = localStorage.getItem("user_id");
+   const role = localStorage.getItem("role");
 
   useEffect(() => {
     fetch(`http://localhost:8000/globaldash/${id}/details`)
@@ -265,7 +267,8 @@ const DashboardGeneral = () => {
 
   return (
     <>
-      <Navbar role="manager" />
+      <Navbar role={role} userid={userId} />
+
       <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-7xl mx-auto">
           {/* Section Coût */}

@@ -7,6 +7,8 @@ const ConsulterPrevisionOperation = () => {
   const [operations, setOperations] = useState([]);
   const location = useLocation();
   const { id } = useParams();
+   const userId = localStorage.getItem("user_id");
+   const role = localStorage.getItem("role");
   useEffect(() => {
     const fetchPrevisions = async () => {
       try {
@@ -23,7 +25,7 @@ const ConsulterPrevisionOperation = () => {
 
   return (
     <>
-      <Navbar role="manager" />
+      <Navbar role={role} userid={userId} />
       <div className="min-h-screen bg-[#f9f9f9] px-28 pt-12 pb-20">
         <h1 className="text-[54px] font-bold text-[#EA5529] leading-[60px] mb-12">
           Prévisions des opérations

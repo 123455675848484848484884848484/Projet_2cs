@@ -48,7 +48,8 @@ const Mescomptes = () => {
 
   return (
     <>
-      <Navbar role="manager" />
+       
+
       <div className="min-h-screen bg-[#f9f9f9] px-20 py-12">
         <h1 className="text-[48px] font-bold text-[#EA5529] leading-[56px] mb-4">
           Mes Comptes
