@@ -258,7 +258,7 @@ const DashboardPuit = () => {
             <div className="flex flex-col items-end mb-4">
               <div className="border border-[#EA5529] rounded-md p-4 mb-2 w-fit text-sm text-gray-800">
                 <p><strong>Coût prévu :</strong> {couts.planned.toLocaleString()} DA</p>
-                <p><strong>Coût estimé :</strong> {couts.expected.toLocaleString()} DA</p>
+                <p><strong>Coût réel :</strong> {couts.expected.toLocaleString()} DA</p>
               </div>
               {couts.expected > couts.planned && (
                 <p className="text-red-600 text-sm font-semibold mb-2">

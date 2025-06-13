@@ -91,12 +91,7 @@ const Navbar = ({ role, userid }) => {
             >
               Se déconnecter
             </li>
-            <li
-              className="hover:text-[#EA5529] cursor-pointer"
-              onClick={() => navigate(`/moncompte/${userid}`)}
-            >
-              Mon compte
-            </li>
+           
             </>
           )}
         </ul>

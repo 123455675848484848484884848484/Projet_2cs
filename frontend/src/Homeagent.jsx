@@ -36,6 +36,12 @@ export default function Homeagent() {
             >
               Signaler un incident
             </button>
+             <button
+              className="bg-green-900 text-white py-3 rounded-md font-semibold hover:bg-green-800 transition"
+              onClick={() => navigate("/solution")}
+            >
+              Solutions aux problèmes 
+            </button>
           </div>
         </div>
 
