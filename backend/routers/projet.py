@@ -3,7 +3,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from sqlalchemy import asc, func
 from database import get_db
-from models import Projet, UserProjet, Utilisateur , PrevisionPhase ,RapportJournalier , Incident
+from pydantic import BaseModel, condecimal
+
+from models import Projet, UserProjet, Utilisateur , PrevisionPhase ,RapportJournalier , Incident , Phase
 from pys_models import ProjetCreate, ProjetOut,AffectationCreate
 from datetime import timedelta
 from datetime import date , datetime
@@ -398,3 +400,56 @@ def rechercher_projets(user_id: int, mot_cle: str, db: Session = Depends(get_db)
         }
         for p in projets
     ]
+
+
+
+class ProjetPhaseInfo(BaseModel):
+    phase: str
+    profondeur: float
+    cout_phase: float
+
+    class Config:
+        orm_mode = True
+
+
+
+@router.get("/dernieres_phases/{id_projet}", response_model=ProjetPhaseInfo)
+def get_last_phase_and_cost_by_projet(id_projet: int, db: Session = Depends(get_db)):
+    """
+    Pour un projet donné (id dans l’URL), retourne :
+    - la dernière phase (par date_rapport),
+    - la profondeur de cette ligne,
+    - le coût total de la phase dans ce projet.
+    """
+
+    # 1) Chercher la dernière ligne du rapport pour ce projet
+    last_report = (
+        db.query(RapportJournalier)
+        .filter(RapportJournalier.id_projet == id_projet)
+        .order_by(RapportJournalier.date_rapport.desc())
+        .first()
+    )
+
+    if not last_report:
+        raise HTTPException(status_code=404, detail="Aucun rapport trouvé pour ce projet.")
+
+    # 2) Récupérer la désignation de la phase
+    phase = db.query(Phase).filter(Phase.id == last_report.phase).first()
+    if not phase:
+        raise HTTPException(status_code=404, detail="Phase non trouvée.")
+
+    # 3) Calcul du coût total pour ce projet et cette phase
+    cout_total = (
+        db.query(func.sum(RapportJournalier.daily_cost))
+        .filter(
+            RapportJournalier.id_projet == id_projet,
+            RapportJournalier.phase == last_report.phase
+        )
+        .scalar() or 0
+    )
+
+    return ProjetPhaseInfo(
+        phase=phase.designation,
+        profondeur=last_report.profondeur,
+        cout_phase=cout_total
+    )

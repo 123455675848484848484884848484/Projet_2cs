@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { Line } from "react-chartjs-2";
 import { useParams } from "react-router-dom";
-
+import DrillingOverview from "./visualisateur";
 
 import {
   Chart as ChartJS,
@@ -275,6 +275,34 @@ const DashboardPuit = () => {
             />
           </div>
         </section>
+
+        <section className="mt-16 mb-12">
+  <h2 className="text-3xl font-bold text-[#EA5529]">
+    Visualisation <br />
+    <span className="text-green-900">par phase</span>
+  </h2>
+
+  <div className="bg-white border p-4 rounded mt-4 shadow" style={{ height: "600px", position: "relative" }}>
+    <DrillingOverview projetid={id} />
+
+    {/* ✅ Légende en bas, centrée */}
+    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-6">
+      <div className="flex items-center gap-2">
+        <span className="w-5 h-5 bg-[#EA5529] inline-block border border-gray-400"></span>
+        <span className="text-m">Phase forée</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="w-5 h-5 bg-[#166534] inline-block border border-gray-400"></span>
+        <span className="text-m">Phase actuelle</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="w-5 h-5 bg-white inline-block border border-gray-400"></span>
+        <span className="text-m">Phase à venir</span>
+      </div>
+    </div>
+  </div>
+</section>
+
       </div>
     </>
   );

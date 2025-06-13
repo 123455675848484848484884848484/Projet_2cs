@@ -21,6 +21,7 @@ import Moncompte from './Moncompte';
 import Mescomptes from './Mescomptes';
 import Solution from './solution';
 import DashboardGeneral from './DashboardGeneral';
+import VisualisateurPhases  from './visualisateur';
 function App() {
   return (
     <Router>
@@ -45,6 +46,7 @@ function App() {
         <Route path="/afficherphase/:id" element={<ConsulterPrevisionPhase />} />
         <Route path="/afficheroperations/:id" element={<ConsulterPrevisionOperation />} />
         <Route path="/dashg/:id" element={<DashboardGeneral />} />
+        <Route path="/visualisateur/:puitId" element={<VisualisateurPhases />} />
       </Routes>
     </Router>
 
