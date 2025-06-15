@@ -20,7 +20,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 SECRET_KEY = "xWgDCm9vtlW_hA4MP0gIpXzghEwvJyzAYKQtaY_Y0bI"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 def get_user_by_mail(mail: str, db: Session = Depends(get_db)):
     return db.query(Utilisateur).filter(Utilisateur.email == mail).first()

@@ -105,18 +105,12 @@ const Navbar = ({ role, userid }) => {
           >
             Consulter Mes puits
           </button>
-          <li
-              className="hover:text-[#EA5529] cursor-pointer"
-              onClick={() => navigate(`/moncompte/${userid}`)}
-            >
-              Mon compte
-            </li>
             </>
         )}
 
         {role === "guest" && (
           <button
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/")}
             className="bg-[#EA5529] text-white px-4 py-2 rounded-lg hover:bg-[#d1441f] transition"
           >
             Se connecter

@@ -29,7 +29,7 @@ const PhasesPrevision = () => {
         }
       } catch (error) {
         localStorage.removeItem('token');
-        navigate('/login');
+        navigate('/');
       }
     };
 

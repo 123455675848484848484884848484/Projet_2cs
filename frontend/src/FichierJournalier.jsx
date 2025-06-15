@@ -297,12 +297,7 @@ const FichierJournalier = () => {
           + Ajouter
         </button>
 
-        <h2 className="text-xl font-semibold mb-2">Autres problèmes</h2>
-        <textarea
-          className="w-full h-24 border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-0 focus:border-[#EA5529]"
-          value={autresProblemes}
-          onChange={(e) => setAutresProblemes(e.target.value)}
-        />
+        
 
         <div className="flex justify-end">
           <button
