@@ -28,7 +28,7 @@ export default function Homeagent() {
               className="bg-[#EA5529] text-white py-3 rounded-md font-semibold hover:bg-[#EA5529] transition"
               onClick={() => navigate("/file")}
             >
-              Insirer le fichier journalier
+              Insérer le fichier journalier
             </button>
             <button
               className="bg-green-900 text-white py-3 rounded-md font-semibold hover:bg-green-800 transition"

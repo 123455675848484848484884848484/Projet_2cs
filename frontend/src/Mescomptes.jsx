@@ -23,6 +23,7 @@ const Mescomptes = () => {
         params: { keyword: motCle },
       });
       setComptes(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Erreur lors du fetch des comptes :", error);
     }
