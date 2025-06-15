@@ -141,7 +141,7 @@ const PhasesPrevision = () => {
       <div className="min-h-screen bg-[#f9f9f9] px-28 pt-12 pb-20">
         <h1 className="text-[54px] font-bold text-[#EA5529] leading-[60px] mb-12">
           Vos prévisions
-          {id}
+          
 
         </h1>
 

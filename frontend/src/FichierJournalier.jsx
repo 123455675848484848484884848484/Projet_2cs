@@ -125,7 +125,7 @@ const FichierJournalier = () => {
     },
     {
       label: "Drilling Operations & Equipment",
-      items: ["Drilling Mud", "Cementing", "Well Head", "Csg, Tubing, Liner", "DHT, Csg access, run Casing", "Drilling Bits"],
+      items: ["Drilling Mud", "CEMENTING CASING & TUBING", "Well Head", "Csg, Tubing, Liner", "DHT, Csg access, run Casing", "Drilling Bits"],
     },
     {
       label: "Non principales",

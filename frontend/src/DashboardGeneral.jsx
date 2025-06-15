@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Navbar from "./components/navbar";
 import { useParams } from 'react-router-dom';
 
-
 const DashboardGeneral = () => {
   const [puitsData, setPuitsData] = useState([]);
   const [selectedPuits, setSelectedPuits] = useState(null);
-  const { id } = useParams()
-   const userId = localStorage.getItem("user_id");
-   const role = localStorage.getItem("role");
+  const { id } = useParams();
+  const userId = localStorage.getItem("user_id");
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
     fetch(`http://localhost:8000/globaldash/${id}/details`)
@@ -34,10 +33,8 @@ const DashboardGeneral = () => {
             delaiPrevu: projet.delaiPrevu,
             delaiEcoule: projet.delaiEcoule,
             statut: projet.closed ? "Terminé" : "En cours"
-
           }
         }));
-
         setPuitsData(transformed);
       })
       .catch((error) => {
@@ -54,20 +51,11 @@ const DashboardGeneral = () => {
     const actuelNum = extractNumber(actuel);
     const prevuNum = extractNumber(prevu);
     if (!prevuNum || prevuNum === 0) return 0;
-    console.log(Math.round((actuelNum / prevuNum) * 100));
     return Math.round((actuelNum / prevuNum) * 100);
   }
 
-  const handlePuitsClick = (puits) => {
-    setSelectedPuits(puits);
-  };
-
-  const closeModal = () => {
-    setSelectedPuits(null);
-  };
-
   const ChartSection = ({ title, data, type }) => {
-    const [selectedPuits, setSelectedPuits] = React.useState(null);
+    const [selectedPuits, setSelectedPuits] = useState(null);
 
     const handlePuitsClick = (puits) => setSelectedPuits(puits);
     const closeModal = () => setSelectedPuits(null);
@@ -79,7 +67,6 @@ const DashboardGeneral = () => {
 
     return (
       <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-        {/* En-tête */}
         <div className="flex justify-between items-start mb-6">
           <div>
             <h2 className="text-3xl font-bold text-gray-800 mb-2">{title}</h2>
@@ -112,108 +99,6 @@ const DashboardGeneral = () => {
               </div>
             </div>
           </div>
-
-
-
-
-          {/* Modal */}
-          {selectedPuits && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg shadow-2xl p-6 max-w-lg w-full mx-4 max-h-96 overflow-y-auto">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-bold text-gray-800">
-                    Détails du Puits: {selectedPuits.nom}
-                  </h3>
-                  <button onClick={closeModal} className="text-gray-500 hover:text-gray-700 text-2xl font-bold">×</button>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <span className="font-semibold text-gray-600">Localisation:</span>
-                      <p className="text-gray-800">{selectedPuits.details.localisation}</p>
-                    </div>
-                    <div>
-                      <span className="font-semibold text-gray-600">Profondeur:</span>
-                      <p className="text-gray-800">{selectedPuits.details.profondeur}</p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <span className="font-semibold text-gray-600">Date début:</span>
-                      <p className="text-gray-800">{selectedPuits.details.dateDebut}</p>
-                    </div>
-                    <div>
-                      <span className="font-semibold text-gray-600">Statut:</span>
-                      <p className={`font-semibold ${selectedPuits.hasIncident ? 'text-red-600' : 'text-green-600'}`}>
-                        {selectedPuits.details.statut}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="border-t pt-3">
-                    <h4 className="font-semibold text-gray-700 mb-2">Coût</h4>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-gray-600">Prévu:</span>
-                        <p className="font-semibold">{selectedPuits.details.coutPrevu}</p>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">Actuel:</span>
-                        <p className="font-semibold">{selectedPuits.details.coutActuel}</p>
-                      </div>
-                    </div>
-                    <div className="mt-2">
-                      <span className="text-gray-600">Progression:</span>
-                      <div className="w-full bg-gray-200 rounded-full h-2 ml-2 inline-block">
-                        <div
-                          className="bg-blue-600 h-2 rounded-full"
-                          style={{ width: `${selectedPuits.coutPourcentage}%` }}
-                        ></div>
-                      </div>
-                      <span className="ml-2 text-sm font-semibold">{selectedPuits.coutPourcentage}%</span>
-                    </div>
-                  </div>
-
-                  <div className="border-t pt-3">
-                    <h4 className="font-semibold text-gray-700 mb-2">Délai</h4>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-gray-600">Prévu:</span>
-                        <p className="font-semibold">{selectedPuits.details.delaiPrevu}</p>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">Écoulé:</span>
-                        <p className="font-semibold">{selectedPuits.details.delaiEcoule}</p>
-                      </div>
-                    </div>
-                    <div className="mt-2">
-                      <span className="text-gray-600">Progression:</span>
-                      <div className="w-full bg-gray-200 rounded-full h-2 ml-2 inline-block">
-                        <div
-                          className="bg-[#EA5529] h-2 rounded-full"
-                          style={{ width: `${selectedPuits.delaiPourcentage}%` }}
-                        ></div>
-                      </div>
-                      <span className="ml-2 text-sm font-semibold">{selectedPuits.delaiPourcentage}%</span>
-                    </div>
-                  </div>
-
-                  {selectedPuits.hasIncident && selectedPuits.details.incidents && (
-                    <div className="border-t pt-3">
-                      <h4 className="font-semibold text-red-600 mb-2">Incidents signalés</h4>
-                      <ul className="list-disc list-inside text-sm text-gray-700">
-                        {selectedPuits.details.incidents.map((incident, index) => (
-                          <li key={index}>{incident}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Graphe */}
@@ -237,7 +122,7 @@ const DashboardGeneral = () => {
           </div>
 
           {/* Barres */}
-          <div className="flex items-end justify-between h-64 pt-4 ml-10 mr-16 relative">
+          <div className="flex flex-wrap gap-10 items-end h-64 pt-4 ml-10 mr-10 relative">
             {data.map((puits) => (
               <div key={puits.id} className="flex flex-col items-center justify-end h-full">
                 <div
@@ -253,7 +138,7 @@ const DashboardGeneral = () => {
           </div>
 
           {/* Titres */}
-          <div className="flex justify-between ml-10 mr-16 mt-2">
+          <div className="flex flex-wrap gap-10 ml-10 mr-10 mt-2">
             {data.map((puits) => (
               <div key={puits.id} className="w-12 text-xs text-gray-600 text-center">
                 {puits.nom}
@@ -261,6 +146,94 @@ const DashboardGeneral = () => {
             ))}
           </div>
         </div>
+
+        {/* Modal */}
+        {selectedPuits && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-2xl p-6 max-w-lg w-full mx-4 max-h-96 overflow-y-auto">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-gray-800">
+                  Détails du Puits: {selectedPuits.nom}
+                </h3>
+                <button onClick={closeModal} className="text-gray-500 hover:text-gray-700 text-2xl font-bold">×</button>
+              </div>
+
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="font-semibold text-gray-600">Localisation:</span>
+                    <p className="text-gray-800">{selectedPuits.details.localisation}</p>
+                  </div>
+                  <div>
+                    <span className="font-semibold text-gray-600">Profondeur:</span>
+                    <p className="text-gray-800">{selectedPuits.details.profondeur}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="font-semibold text-gray-600">Date début:</span>
+                    <p className="text-gray-800">{selectedPuits.details.dateDebut}</p>
+                  </div>
+                  <div>
+                    <span className="font-semibold text-gray-600">Statut:</span>
+                    <p className={`font-semibold ${selectedPuits.hasIncident ? 'text-red-600' : 'text-green-600'}`}>
+                      {selectedPuits.details.statut}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="border-t pt-3">
+                  <h4 className="font-semibold text-gray-700 mb-2">Coût</h4>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-600">Prévu:</span>
+                      <p className="font-semibold">{selectedPuits.details.coutPrevu}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Actuel:</span>
+                      <p className="font-semibold">{selectedPuits.details.coutActuel}</p>
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <span className="text-gray-600">Progression:</span>
+                    <div className="w-full bg-gray-200 rounded-full h-2 ml-2 inline-block">
+                      <div
+                        className="bg-blue-600 h-2 rounded-full"
+                        style={{ width: `${selectedPuits.coutPourcentage}%` }}
+                      ></div>
+                    </div>
+                    <span className="ml-2 text-sm font-semibold">{selectedPuits.coutPourcentage}%</span>
+                  </div>
+                </div>
+
+                <div className="border-t pt-3">
+                  <h4 className="font-semibold text-gray-700 mb-2">Délai</h4>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-600">Prévu:</span>
+                      <p className="font-semibold">{selectedPuits.details.delaiPrevu}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Écoulé:</span>
+                      <p className="font-semibold">{selectedPuits.details.delaiEcoule}</p>
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <span className="text-gray-600">Progression:</span>
+                    <div className="w-full bg-gray-200 rounded-full h-2 ml-2 inline-block">
+                      <div
+                        className="bg-[#EA5529] h-2 rounded-full"
+                        style={{ width: `${selectedPuits.delaiPourcentage}%` }}
+                      ></div>
+                    </div>
+                    <span className="ml-2 text-sm font-semibold">{selectedPuits.delaiPourcentage}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -268,23 +241,10 @@ const DashboardGeneral = () => {
   return (
     <>
       <Navbar role={role} userid={userId} />
-
       <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-7xl mx-auto">
-          {/* Section Coût */}
-          <ChartSection
-            title="Coût"
-            data={puitsData}
-            type="coutPourcentage"
-          />
-
-          {/* Section Délai */}
-          <ChartSection
-            title="Délai"
-            data={puitsData}
-            type="delaiPourcentage"
-          />
-
+          <ChartSection title="Coût" data={puitsData} type="coutPourcentage" />
+          <ChartSection title="Délai" data={puitsData} type="delaiPourcentage" />
         </div>
       </div>
     </>
