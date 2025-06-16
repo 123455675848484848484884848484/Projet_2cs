@@ -153,6 +153,7 @@ async def inserer_incident(
     id_projet: int = Form(...),
     utilisateur: int = Form(...),
     date_incident: str = Form(...),  
+    resolu: str = Form(...),  
     description : str = Form(...) ,
     fichier_joint: UploadFile = File(None)
 ):
@@ -171,6 +172,7 @@ async def inserer_incident(
             id_utilisateur=utilisateur,
             date_incident=date_incident_parsed,
             fichier_joint=contenu_fichier, 
+            resolu = resolu ,
             description = description 
 
         )

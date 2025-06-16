@@ -55,6 +55,7 @@ const SignalerProbleme = () => {
         formData.append("date_incident", problem.date);
         formData.append("description", problem.probleme);
         formData.append("utilisateur", userId);
+        formData.append("resolu", problem.resolu);
         if (problem.file) {
           formData.append("fichier_joint", problem.file);
         }
@@ -162,8 +163,8 @@ const SignalerProbleme = () => {
                         className="appearance-none w-full border border-gray-300 bg-white text-gray-700 py-2 pl-3 pr-8 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#EA5529] focus:border-[#EA5529]"
                       >
                         <option value="">Choisir</option>
-                        <option value="oui">Oui</option>
-                        <option value="non">Non</option>
+                        <option value="Y">Oui</option>
+                        <option value="N">Non</option>
                       </select>
                       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                         <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
