@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Path, Depends ,HTTPException,APIRouter
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List , Dict
 
 from models import PrevisionOperation ,PrevisionPhase ,Operation , Phase
 from pys_models import PrevisionOperationCreate ,PrevisionPhaseCreate , PrevisionPhaseOut , PrevisionOperationOut
@@ -56,21 +56,40 @@ def get_phases(db: Session = Depends(get_db)):
 
 
 
-@router.get("/prevision_phases/{projet_id}", response_model=List[PrevisionPhaseOut])
-
+@router.get("/prevision_phases/{projet_id}")
 def get_previsions_phase(projet_id: int, db: Session = Depends(get_db)):
-    previsions = db.query(PrevisionPhase).filter(PrevisionPhase.id_projet == projet_id).all()
-    for p in previsions:
-        phase = db.query(Phase).filter(Phase.id == p.id_phase).first()
-        p.nom_phase = phase.designation if phase else None
-    return previsions
+    rows = (
+        db.query(
+            PrevisionPhase.id,
+            PrevisionPhase.cout_prevu,
+            PrevisionPhase.delais,
+            PrevisionPhase.profondeur,
+            Phase.designation.label("nom_phase")
+        )
+        .join(Phase, PrevisionPhase.id_phase == Phase.id)
+        .filter(PrevisionPhase.id_projet == projet_id)
+        .all()
+    )
 
+    return [row._asdict() for row in rows]
 
-@router.get("/prevision_operations/{id_projet}", response_model=List[PrevisionOperationOut])
-def get_prevision_operations(id_projet: int, db: Session = Depends(get_db)):
-    previsions = db.query(PrevisionOperation).filter(PrevisionOperation.id_projet == id_projet).all()
-    for p in previsions:
-        operation = db.query(Operation).filter(Operation.id == p.id_operation).first()
-        p.nom_operation = operation.designation if operation else None
-    return previsions
+@router.get("/prevision_operations/{projet_id}")
+def get_prevision_operations(
+    projet_id: int,
+    db: Session = Depends(get_db)
+) -> List[Dict]:
+    # Une seule requête SQL avec JOIN pour récupérer la désignation
+    rows = (
+        db.query(
+            PrevisionOperation.id,
+            PrevisionOperation.cout_prevu,
+            PrevisionOperation.delais,
+            Operation.designation.label("nom_operation")   # ← le nom de l’opération
+        )
+        .join(Operation, PrevisionOperation.id_operation == Operation.id)
+        .filter(PrevisionOperation.id_projet == projet_id)
+        .all()
+    )
 
+    # rows = liste de namedtuples → on les convertit en dict lisibles par FastAPI
+    return [row._asdict() for row in rows]
