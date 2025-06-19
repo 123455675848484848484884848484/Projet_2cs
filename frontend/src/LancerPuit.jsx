@@ -50,7 +50,8 @@ const LancerPuit = () => {
             </h1>
 
             <p className="text-[16px] text-gray-600 mt-6 mb-10 leading-[24px]">
-              For marketplace sellers looking to grow their business, metaverse offers the best platform.
+                          Pilotez vos puits en toute simplicité grâce à une vision 360° de vos données terrain.
+
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">

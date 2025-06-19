@@ -178,7 +178,7 @@ const DashboardGeneral = () => {
                   <div>
                     <span className="font-semibold text-gray-600">Statut:</span>
                     <p className={`font-semibold ${selectedPuits.hasIncident ? 'text-red-600' : 'text-green-600'}`}>
-                      {selectedPuits.details.statut}
+                      En cours
                     </p>
                   </div>
                 </div>
